@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Quality Enforcer"
+  short_description: "Stage deterministic TypeScript quality enforcement"
+  default_prompt: "Use $typescript-quality-enforcer to audit TypeScript quality, propose staged deterministic enforcement, and wait for approval before changing lint policy or source files."

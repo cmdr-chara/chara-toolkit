@@ -4,6 +4,8 @@
 
 - Add `codebase-improvement-planner` for open-ended repository improvement discovery, Major/Medium/Minor magnitude classification, and evidence-backed next-upgrade selection.
 - Add a ranking rubric that keeps change magnitude separate from priority, plus routing, workflow, catalog, and responsibility-matrix coverage.
+- Add `typescript-quality-enforcer` for evidence-backed TypeScript/JavaScript quality audits, staged lint/type-safety enforcement, and approval-gated remediation without diagnostic laundering.
+- Vendor the MIT-licensed `dmmulroy/anti-slop` Oxlint runtime at pinned revision `446268e5d15baa968eaec669ff65358d36ae6259`, preserving its license and provenance while adding toolkit-specific staged adoption, routing, inventory, and verification.
 
 ## 0.4.1 - 2026-08-16
 

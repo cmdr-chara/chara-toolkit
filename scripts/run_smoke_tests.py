@@ -42,7 +42,6 @@ def write_json(path: Path, value: Any) -> None:
 
 
 
-
 def remove_generated_tree(root: Path) -> None:
     """Remove only the workspace created by this process."""
     if not root.exists():
@@ -58,6 +57,7 @@ def remove_generated_tree(root: Path) -> None:
             else:
                 child.rmdir()
     root.rmdir()
+
 
 def fixture_digest(root: Path) -> str:
     digest = hashlib.sha256()
@@ -82,9 +82,36 @@ def build_fixtures(base: Path) -> dict[str, Path]:
             "name": "sample-monorepo",
             "private": True,
             "workspaces": ["apps/*", "packages/*"],
+            "scripts": {"lint": "oxlint .", "typecheck": "tsc --noEmit", "test": "vitest run"},
             "dependencies": {"react": "0.0.0-fixture", "zod": "0.0.0-fixture"},
-            "devDependencies": {"typescript": "0.0.0-fixture"},
+            "devDependencies": {"typescript": "0.0.0-fixture", "oxlint": "0.0.0-fixture"},
         },
+    )
+    write_json(
+        repo / "tsconfig.json",
+        {
+            "compilerOptions": {
+                "strict": True,
+                "noImplicitAny": True,
+                "useUnknownInCatchVariables": True,
+                "noUncheckedIndexedAccess": False,
+                "exactOptionalPropertyTypes": False,
+            }
+        },
+    )
+    write_text(repo / "oxlint.config.ts", "export default { rules: {} };\n")
+    write_text(
+        repo / "packages/auth/src/unsafe.ts",
+        """type User = { id: string };
+export function decode(input: unknown): unknown {
+  // Fixture intentionally contains quality signals for the read-only scanner.
+  const user = input as unknown as User;
+  const metadata: Record<string, unknown> = {};
+  Reflect.get(metadata, "id");
+  return user;
+}
+vi.mock("./user-store");
+""",
     )
     write_text(
         repo / "pyproject.toml",
@@ -277,6 +304,7 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
         "web_inventory": pack_root / "skills/production-web-builder/scripts/web_project_inventory.py",
         "flutter_inventory": pack_root / "skills/flutter-production-builder/scripts/flutter_project_inventory.py",
         "expo_inventory": pack_root / "skills/expo-react-native-builder/scripts/expo_project_inventory.py",
+        "typescript_quality_inventory": pack_root / "skills/typescript-quality-enforcer/scripts/typescript_quality_inventory.py",
     }
     missing = [str(path) for path in scripts.values() if not path.is_file()]
     if missing:
@@ -323,6 +351,7 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
     commands.append(run_command("web_inventory", [py, str(scripts["web_inventory"]), str(paths["web"]), "--format", "json"], {0}))
     commands.append(run_command("flutter_inventory", [py, str(scripts["flutter_inventory"]), str(paths["flutter"]), "--format", "json"], {0}))
     commands.append(run_command("expo_inventory", [py, str(scripts["expo_inventory"]), str(paths["expo"]), "--format", "json"], {0}))
+    commands.append(run_command("typescript_quality_inventory", [py, str(scripts["typescript_quality_inventory"]), str(paths["repo"]), "--format", "json"], {0}))
 
     parsed = {item.name: parse_json_output(item) for item in commands}
     assertions: list[str] = []
@@ -351,6 +380,17 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
     check(set(parsed["flutter_inventory"]["platform_directories"]) == {"android", "ios"}, "Flutter inventory detects platform directories")
     check(parsed["expo_inventory"]["eas"]["build_profiles"] == ["production"], "Expo inventory detects EAS build profile")
     check(parsed["expo_inventory"]["route_signals"] == ["app"], "Expo inventory detects router signal")
+
+    ts_quality = parsed["typescript_quality_inventory"]
+    check(ts_quality["package"]["tool_dependencies"]["typescript"] == "0.0.0-fixture", "TypeScript quality inventory reports manifest TypeScript without recommending a version")
+    check(ts_quality["package"]["tool_dependencies"]["oxlint"] == "0.0.0-fixture", "TypeScript quality inventory detects existing Oxlint")
+    check(ts_quality["tsconfigs"][0]["strict"] is True and ts_quality["tsconfigs"][0]["noUncheckedIndexedAccess"] is False, "TypeScript quality inventory records compiler enforcement state")
+    quality_counts = ts_quality["heuristic_counts"]
+    check(quality_counts["chained_assertion"] >= 1, "TypeScript quality inventory detects chained assertion signal")
+    check(quality_counts["module_mock"] >= 1, "TypeScript quality inventory detects module-mocking signal")
+    check(quality_counts["unsafe_record"] >= 1, "TypeScript quality inventory detects unsafe dictionary signal")
+    check(quality_counts["reflect_get"] >= 1, "TypeScript quality inventory detects reflection signal")
+    check("Heuristic text signals only" in ts_quality["disclaimer"], "TypeScript quality inventory labels heuristic evidence limits")
 
     after = fixture_digest(fixtures)
     check(before == after, "all helper executions preserve fixture inputs byte-for-byte")

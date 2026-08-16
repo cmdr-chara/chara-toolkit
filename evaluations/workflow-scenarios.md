@@ -332,3 +332,28 @@ Each scenario tests the complete operating contract of one skill. A passing run 
 **Verification:** every recommendation resolves to repository evidence; magnitude and priority remain separate; speculative/style-only items are rejected; broad discovery changes no files; any approved execution stays inside the proposed slice and reports evidence gained or improved.
 
 **Stop/escalate:** stop when evidence is too weak to rank candidates, a selected candidate becomes a specialist-owned workflow, repository state materially changes, approval is absent, or implementation would exceed the proposed magnitude/scope.
+
+## 16. `typescript-quality-enforcer` — Stage anti-slop adoption without lint laundering
+
+**Situation:** A mature TypeScript monorepo uses strict mode and CI typechecks, but it contains chained assertions, broad `unknown`/`any` contracts, unsafe dictionaries, test module mocks, and scattered suppressions. Oxlint is present in one workspace, anti-slop is not installed, and the team wants stronger permanent enforcement without a repository-wide rewrite.
+
+**Inputs:** repository root and working-tree state; TypeScript/JavaScript source and generated/vendor boundaries; package manager and lockfile; tsconfig/lint/test/CI configuration; baseline typecheck/lint results; protected public contracts; approval state.
+
+**Expected workflow:**
+
+1. Freeze scope, user work, generated/vendor exclusions, protected contracts, existing enforcement, and whether the run is audit-only or an approved stage.
+2. Run the read-only TypeScript quality inventory as a heuristic breadth pass; manually verify representative matches and use parser-backed lint evidence where available.
+3. Classify findings by invariant—assertion safety, contract precision, boundary discipline, dynamic access, test architecture, and compiler/lint gaps—rather than merely counting rule names.
+4. Determine whether anti-slop is already enforced, partially enforced, compatible for staged adoption, blocked on a toolchain migration, or not a fit.
+5. Build stages with measured/estimated findings, affected packages, mechanical versus architectural remediation, risk, effort, reversibility, verification, and specialist handoffs.
+6. Recommend the smallest high-signal stage that can become permanently green and stop at `AWAITING_APPROVAL` before installing dependencies, copying the plugin, changing lint policy, or editing source.
+7. After explicit approval, refresh repository state; copy the pinned vendored runtime without overwriting an existing copy, verify current compatible Oxlint/plugin versions from primary sources, merge only the approved configuration, and preserve the MIT license/provenance.
+8. Remediate by restoring evidence—precise inference, `satisfies`, boundary parsing, owner types, or real dependency seams—not by replacing `unknown` with `any`, adding blanket suppressions, weakening rules, or broadening ignores.
+9. Run selected anti-slop rules, typecheck, focused tests, and CI-relevant checks; record before/after counts, legitimate exceptions, residual debt, and permanent recurrence prevention.
+10. Hand widespread module-mocking architecture to `review-and-refactor-code`, toolchain/version transitions to `codebase-evolution-controller`, and concrete observed failures to `debugging-investigator` rather than disguising them as lint cleanup.
+
+**Expected artifacts:** current enforcement state; heuristic and verified evidence ledger; staged adoption proposal; recommended first stage and approval boundary; vendored-runtime/configuration record when approved; before/after finding counts; no-laundering verification; upstream license/provenance record; specialist handoffs.
+
+**Verification:** the first broad run changes no files; heuristic matches are not presented as parser-proven violations; the approved stage stays within named rules/files; selected rules are green or every exception is explicitly justified; typecheck/tests are no worse than baseline; no new unsafe casts, blanket suppressions, broad ignores, or downgraded severity appear; CI can prevent recurrence; the pinned Dillon Mulroy MIT notice remains present.
+
+**Stop/escalate:** stop when source/generated boundaries are unclear, toolchain compatibility cannot be established, a local anti-slop copy differs without a reviewed migration plan, approval is absent, findings explode beyond the proposed stage, or remediation crosses into a public contract migration, causal debugging task, or architectural refactor.

@@ -785,6 +785,58 @@
           "reason": "The review/refactor scope is already defined."
         }
       ]
+    },
+    {
+      "skill": "typescript-quality-enforcer",
+      "positive": [
+        {
+          "id": "typescript-quality-enforcer-p1",
+          "prompt": "Audit this TypeScript repository for type-evidence loss, unsafe assertions, broad any/unknown contracts, suppressions, boundary-parsing debt, and weak test seams. Propose staged deterministic enforcement and do not edit yet.",
+          "expected": "activate",
+          "reason": "Requests repository-specific TypeScript quality evidence and a staged enforcement proposal."
+        },
+        {
+          "id": "typescript-quality-enforcer-p2",
+          "prompt": "We want to adopt anti-slop in this existing TypeScript monorepo. Measure the current debt, decide which rule families should come first, and stop for approval before installing or changing lint policy.",
+          "expected": "activate",
+          "reason": "Explicit anti-slop adoption with audit-first staged rollout is owned by the quality enforcer."
+        },
+        {
+          "id": "typescript-quality-enforcer-p3",
+          "prompt": "I approve the exact assertion-safety stage you proposed. Install the vendored anti-slop runtime if needed, enable only that stage, remediate violations without suppressions or type laundering, and verify lint, typecheck, and focused tests.",
+          "expected": "activate",
+          "reason": "Explicit approval advances a bounded TypeScript enforcement stage to execution."
+        },
+        {
+          "id": "typescript-quality-enforcer-p4",
+          "prompt": "Migrate our existing local anti-slop copy to the toolkit's pinned vendor baseline, preserve project-specific rule changes and attribution, and show the configuration and verification diff instead of overwriting blindly.",
+          "expected": "activate",
+          "reason": "Existing anti-slop migration and provenance-preserving policy integration are part of this skill."
+        }
+      ],
+      "negative": [
+        {
+          "id": "typescript-quality-enforcer-n1",
+          "prompt": "Inspect this repository and decide what the highest-value technical improvement should be across architecture, reliability, testing, tooling, and operations.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-improvement-planner",
+          "reason": "The primary decision is open-ended repository prioritization, not TypeScript quality enforcement."
+        },
+        {
+          "id": "typescript-quality-enforcer-n2",
+          "prompt": "Upgrade TypeScript and Oxlint to their next major versions across the monorepo and plan compatibility, rollback, and staged adoption.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "A known toolchain version transition owns compatibility and rollback."
+        },
+        {
+          "id": "typescript-quality-enforcer-n3",
+          "prompt": "Production crashes when this asserted user payload is missing a field. Reproduce the crash and establish whether the cast is actually causal.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "A concrete observed failure with unknown cause requires causal debugging before quality-policy remediation."
+        }
+      ]
     }
   ]
 }

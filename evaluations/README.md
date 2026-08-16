@@ -6,12 +6,12 @@ This suite tests routing, overlap resolution, complete workflows, resource integ
 
 ## Files
 
-- `routing-cases.json`: 60 positive and 45 negative trigger cases—four positive and three negative per production skill.
+- `routing-cases.json`: 64 positive and 48 negative trigger cases—four positive and three negative per production skill.
 - `overlap-cases.json`: adversarial prompts that require a primary skill or an explicit sequence/handoff rather than accidental multi-skill activation.
 - `workflow-scenarios.md`: one realistic end-to-end scenario per production skill with inputs, workflow, artifacts, verification, and stop conditions.
 - `adversarial-review.md`: self-review findings, corrections, and remaining refresh obligations.
 - `package-claim-review.md`: manual protocol for time-sensitive compatibility, maintenance, license, security, cost, and deprecation claims.
-- `post-install-routing-smoke.md`: a compact live-client check for all fifteen production skill routes and the highest-risk overlaps.
+- `post-install-routing-smoke.md`: a compact live-client check for all sixteen production skill routes and the highest-risk overlaps.
 
 ## Structural run
 
@@ -21,7 +21,7 @@ From the pack root:
 python scripts/validate_skill_pack.py . --as-of 2026-08-16
 ```
 
-The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, dated references, source URLs, unsafe command strings, Python syntax, provenance, and obvious long-paragraph duplication.
+The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, dated references, source URLs, unsafe command strings, Python syntax, vendored anti-slop integrity/provenance, licensing, and obvious long-paragraph duplication.
 
 ## Model routing run
 
@@ -48,6 +48,7 @@ Execute each scenario against a representative fixture or real repository. Revie
 - expected output schemas and stop conditions;
 - explicit unknowns and calibrated confidence;
 - conditional package/platform decisions;
+- TypeScript quality findings verified beyond heuristic text matches and remediated without lint laundering;
 - feature-level verification by builders and integrated release judgment only by `verification-and-release`;
 - no destructive Git/data action or invented command.
 
@@ -59,5 +60,6 @@ Execute each scenario against a representative fixture or real repository. Revie
 - No missing workflow scenario.
 - No broken local reference or script.
 - No stale dated reference beyond the configured review window without an explicit warning/block.
-- No unlicensed copied material or missing adaptation notice.
+- No unlicensed copied material or missing adaptation/vendor notice.
 - No unconditional platform or package mandate unsupported by repository evidence.
+- No anti-slop vendor drift without a matching pinned-revision/provenance update.

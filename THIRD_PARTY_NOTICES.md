@@ -46,3 +46,37 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## dmmulroy/anti-slop
+
+**Upstream:** https://github.com/dmmulroy/anti-slop  
+**Vendored revision:** `446268e5d15baa968eaec669ff65358d36ae6259`  
+**Information checked:** 2026-08-16
+
+The deterministic Oxlint runtime under `skills/typescript-quality-enforcer/assets/anti-slop/` is vendored from the upstream `skills/install-anti-slop/assets/anti-slop/` runtime at the revision above. The vendored surface contains `index.ts`, fifteen rule modules, and three shared helper modules. Upstream package metadata, tests, lockfiles, CI, and repository development configuration are not redistributed.
+
+The surrounding `typescript-quality-enforcer` workflow, staged-adoption guidance, read-only inventory helper, non-overwriting installer behavior, toolkit routing/evaluations, and verification policy are integration work authored for this repository. The vendored runtime is kept source-equivalent to the pinned upstream asset; future refreshes must update the pinned revision and provenance together.
+
+No endorsement by Dillon Mulroy is stated or implied.
+
+### MIT License
+
+Copyright (c) 2026 Dillon Mulroy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

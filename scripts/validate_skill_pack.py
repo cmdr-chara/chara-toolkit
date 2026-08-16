@@ -33,6 +33,7 @@ EXPECTED_SKILLS = [
     "review-and-refactor-code",
     "optimize-codebase-performance",
     "codebase-improvement-planner",
+    "typescript-quality-enforcer",
 ]
 
 TOOLKIT_SKILLS = ["delegate-with-mission-cards", *EXPECTED_SKILLS]
@@ -98,6 +99,30 @@ URL_RE = re.compile(r"https://[^\s)>]+")
 MD_LINK_RE = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 DATED_RE = re.compile(r"-(\d{4}-\d{2}-\d{2})\.md$")
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+ANTI_SLOP_RULE_FILES = {
+    "no-chained-type-assertions.ts",
+    "no-conditional-empty-object-spread.ts",
+    "no-known-value-widening.ts",
+    "no-module-mocking.ts",
+    "no-object-parameters.ts",
+    "no-reflect-apply.ts",
+    "no-reflect-get.ts",
+    "no-runtime-typeof.ts",
+    "no-shape-in-symbol-names.ts",
+    "no-unknown-parameters.ts",
+    "no-unknown-returns.ts",
+    "no-unknown-type-aliases.ts",
+    "no-unsafe-dictionary-type.ts",
+    "no-widen-then-assert.ts",
+    "require-safety-comment-for-type-assertion.ts",
+}
+ANTI_SLOP_SHARED_FILES = {
+    "dictionary-types.ts",
+    "lexical-type-parameters.ts",
+    "reflect-method.ts",
+}
+ANTI_SLOP_REVISION = "446268e5d15baa968eaec669ff65358d36ae6259"
 
 
 @dataclass
@@ -300,7 +325,6 @@ def validate_skills(result: Result) -> dict[str, str]:
                 result.error(f"{rel(path, result.root)}: contains banned placeholder/generic phrase {phrase!r}")
         for pattern in DESTRUCTIVE_PATTERNS:
             if re.search(pattern, low):
-                # Prohibitive prose may name an unsafe command. Require explicit negation nearby; scripts are stricter.
                 for match in re.finditer(pattern, low):
                     nearby = low[max(0, match.start() - 100) : match.end() + 100]
                     if not re.search(r"\b(do not|never|avoid|prohibit|forbid|without)\b", nearby):
@@ -362,7 +386,6 @@ def normalize_link_target(raw: str) -> str:
     value = raw.strip()
     if value.startswith("<") and value.endswith(">"):
         value = value[1:-1]
-    # Markdown permits an optional quoted title after a whitespace separator.
     value = re.split(r"\s+[\"']", value, maxsplit=1)[0]
     return unquote(value)
 
@@ -521,7 +544,7 @@ def validate_dated_references(result: Result, max_age_days: int) -> None:
             result.error("docs/research-ledger.md: missing or unexpected Information checked date")
         urls = URL_RE.findall(text)
         if len(urls) < 25:
-            result.error(f"docs/research-ledger.md: source ledger is too sparse ({len(urls)} URLs)")
+            result.error(f"{rel(path, result.root)}: source ledger is too sparse ({len(urls)} URLs)")
         for term in ("compatibility", "maintenance", "license", "security/deprecation", "runtime/build cost", "built-in alternative", "popularity"):
             if term.lower() not in text.lower():
                 result.error(f"docs/research-ledger.md: research method omits {term!r}")
@@ -624,6 +647,11 @@ def validate_responsibility_and_provenance(result: Result) -> None:
             "skills/screenshot-to-interface/SKILL.md",
             "No endorsement by Leonxlnx is stated or implied",
             "Meaningful modifications include",
+            "Copyright (c) 2026 Dillon Mulroy",
+            "dmmulroy/anti-slop",
+            "skills/typescript-quality-enforcer/assets/anti-slop/",
+            ANTI_SLOP_REVISION,
+            "No endorsement by Dillon Mulroy is stated or implied",
         ]
         for phrase in required:
             if phrase not in text:
@@ -635,6 +663,46 @@ def validate_responsibility_and_provenance(result: Result) -> None:
         for phrase in ("MIT License", "Copyright (c) 2026 cmdr-chara", "Permission is hereby granted"):
             if phrase not in text:
                 result.error(f"LICENSE: missing target toolkit MIT text {phrase!r}")
+
+
+def validate_typescript_quality_vendor(result: Result) -> None:
+    skill_root = result.root / "skills" / "typescript-quality-enforcer"
+    asset_root = skill_root / "assets" / "anti-slop"
+    rules_root = asset_root / "rules"
+    shared_root = asset_root / "shared"
+    expected_top = {"LICENSE", "index.ts", "rules", "shared"}
+    if not asset_root.is_dir():
+        result.error("typescript-quality-enforcer: missing vendored anti-slop asset")
+        return
+    actual_top = {path.name for path in asset_root.iterdir()}
+    if actual_top != expected_top:
+        result.error(
+            "typescript-quality-enforcer: anti-slop top-level asset set differs from pinned runtime: "
+            f"expected {sorted(expected_top)!r}, got {sorted(actual_top)!r}"
+        )
+    if not rules_root.is_dir() or {path.name for path in rules_root.iterdir() if path.is_file()} != ANTI_SLOP_RULE_FILES:
+        result.error("typescript-quality-enforcer: vendored anti-slop rule set is incomplete or unexpected")
+    if not shared_root.is_dir() or {path.name for path in shared_root.iterdir() if path.is_file()} != ANTI_SLOP_SHARED_FILES:
+        result.error("typescript-quality-enforcer: vendored anti-slop shared helper set is incomplete or unexpected")
+
+    upstream_license = read_text(asset_root / "LICENSE", result)
+    for phrase in ("MIT License", "Copyright (c) 2026 Dillon Mulroy", "Permission is hereby granted"):
+        if phrase not in upstream_license:
+            result.error(f"typescript-quality-enforcer: vendored anti-slop LICENSE missing {phrase!r}")
+
+    provenance = read_text(skill_root / "references" / "upstream-provenance.md", result)
+    for phrase in ("dmmulroy/anti-slop", ANTI_SLOP_REVISION, "Copyright (c) 2026 Dillon Mulroy", "assets/anti-slop/LICENSE"):
+        if phrase not in provenance:
+            result.error(f"typescript-quality-enforcer: upstream provenance missing {phrase!r}")
+
+    skill = read_text(skill_root / "SKILL.md", result)
+    for term in ("anti-slop", "laundering", "AWAITING_APPROVAL", "current primary sources"):
+        if term.lower() not in skill.lower():
+            result.error(f"typescript-quality-enforcer: workflow missing enforcement concept {term!r}")
+    if not (skill_root / "scripts" / "install.mjs").is_file():
+        result.error("typescript-quality-enforcer: missing non-overwriting vendored-runtime installer")
+    result.metrics["anti_slop_rule_files"] = len(ANTI_SLOP_RULE_FILES)
+    result.metrics["anti_slop_shared_files"] = len(ANTI_SLOP_SHARED_FILES)
 
 
 def extract_paragraphs(body: str) -> Iterable[str]:
@@ -742,6 +810,7 @@ def write_report(result: Result, target: Path) -> None:
         f"- Research source URLs: {result.metrics.get('research_source_urls', 0)}",
         f"- Local links checked: {result.metrics.get('local_links_checked', 0)}",
         f"- Duplicated long paragraphs: {result.metrics.get('duplicated_long_paragraphs', 0)}",
+        f"- anti-slop rules: {result.metrics.get('anti_slop_rule_files', 0)}",
         "",
         "## Metrics",
         "",
@@ -760,7 +829,7 @@ def write_report(result: Result, target: Path) -> None:
     lines += [
         "## Interpretation",
         "",
-        "A structural pass confirms pack shape, routing/evaluation coverage, local resources, dated-evidence fields, script syntax/safety heuristics, and provenance text. It does not replace model-routing trials, real repository integration, browser/device tests, current registry/advisory checks, or store review.",
+        "A structural pass confirms pack shape, routing/evaluation coverage, local resources, dated-evidence fields, script syntax/safety heuristics, vendored anti-slop provenance, and licensing text. It does not replace model-routing trials, real repository integration, browser/device tests, current registry/advisory checks, or store review.",
         "",
     ]
     target.write_text("\n".join(lines), encoding="utf-8")
@@ -818,6 +887,7 @@ def main() -> int:
     validate_dated_references(result, args.max_reference_age)
     validate_evaluations(result)
     validate_responsibility_and_provenance(result)
+    validate_typescript_quality_vendor(result)
     validate_duplication(result)
     validate_catalog(result, descriptions)
     validate_conditional_decisions(result)
