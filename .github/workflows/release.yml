@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - package.json
+      - CHANGELOG.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Validate skill pack
+        run: python scripts/validate_skill_pack.py . --as-of 2026-08-16
+
+      - name: Verify anti-slop vendor integrity
+        run: python scripts/verify_anti_slop_vendor.py .
+
+      - name: Run TypeScript quality regressions
+        run: python scripts/test_typescript_quality_regressions.py .
+
+      - name: Verify release metadata
+        run: python scripts/verify_release_metadata.py .
+
+      - name: Run helper smoke tests
+        run: python scripts/run_smoke_tests.py . --as-of 2026-08-16
+
+      - name: Inspect package contents
+        run: npm pack --dry-run
+
+      - name: Prepare release notes
+        id: release
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          tag="v${version}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          python - "$version" "$RUNNER_TEMP/release-notes.md" <<'PY'
+          import re
+          import sys
+          from pathlib import Path
+
+          version, output = sys.argv[1], Path(sys.argv[2])
+          text = Path("CHANGELOG.md").read_text(encoding="utf-8")
+          pattern = rf"(?ms)^## {re.escape(version)} - [^\n]+\n\n(.*?)(?=^## |\Z)"
+          match = re.search(pattern, text)
+          if match is None:
+              raise SystemExit(f"missing CHANGELOG section for {version}")
+          notes = match.group(1).strip()
+          if not notes:
+              raise SystemExit(f"empty CHANGELOG section for {version}")
+          output.write_text(notes + "\n", encoding="utf-8")
+          PY
+
+      - name: Check existing tag and release
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+        shell: bash
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=false" >> "$GITHUB_OUTPUT"
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create version tag
+        if: steps.existing.outputs.tag != 'true'
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          git tag "$TAG" "$GITHUB_SHA"
+          git push origin "refs/tags/$TAG"
+
+      - name: Create GitHub release
+        if: steps.existing.outputs.release != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: >-
+          gh release create "$TAG"
+          --verify-tag
+          --title "Codex Toolkit $VERSION"
+          --notes-file "$RUNNER_TEMP/release-notes.md"
+
+      - name: Remove known merged release branches
+        shell: bash
+        run: |
+          for branch in \
+            feat/codebase-improvement-planner \
+            feat/typescript-quality-enforcer \
+            noop-do-not-create
+          do
+            if git ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null 2>&1; then
+              git push origin --delete "$branch"
+            fi
+          done

@@ -13,5 +13,8 @@
     "DejaVu Sans fallback"
   ],
   "purpose": "GitHub repository social preview",
-  "copy_reviewed": true
+  "copy_reviewed": true,
+  "version": "0.5.0",
+  "skill_count": 17,
+  "image_sha256": "2fe2609a40fa1908eef24088a5056ff95a0ab6ce2f9775309103648ae742031d"
 }

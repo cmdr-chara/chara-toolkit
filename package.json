@@ -1,6 +1,6 @@
 {
   "name": "@cmdr-chara/codex-toolkit",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Reusable Codex skills, custom agents, and offline validation for real software projects",
   "repository": {
     "type": "git",

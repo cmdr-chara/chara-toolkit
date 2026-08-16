@@ -2,10 +2,16 @@
 
 ## Unreleased
 
-- Add `codebase-improvement-planner` for open-ended repository improvement discovery, Major/Medium/Minor magnitude classification, and evidence-backed next-upgrade selection.
-- Add a ranking rubric that keeps change magnitude separate from priority, plus routing, workflow, catalog, and responsibility-matrix coverage.
+## 0.5.0 - 2026-08-16
+
+- Add `codebase-improvement-planner` for open-ended repository improvement discovery, Major/Medium/Minor magnitude classification, evidence-backed ranking, and next-upgrade selection.
 - Add `typescript-quality-enforcer` for evidence-backed TypeScript/JavaScript quality audits, staged lint/type-safety enforcement, and approval-gated remediation without diagnostic laundering.
-- Vendor the MIT-licensed `dmmulroy/anti-slop` Oxlint runtime at pinned revision `446268e5d15baa968eaec669ff65358d36ae6259`, preserving its license and provenance while adding toolkit-specific staged adoption, routing, inventory, and verification.
+- Vendor the MIT-licensed `dmmulroy/anti-slop` Oxlint runtime from pinned base revision `446268e5d15baa968eaec669ff65358d36ae6259`, preserve attribution, and document three local correctness patches with a checked-in integrity manifest.
+- Harden the TypeScript quality inventory with directory pruning, JSONC tsconfig parsing, nested workspace tsconfig discovery, and focused regression coverage.
+- Enforce vendored anti-slop content integrity file-by-file in CI rather than validating filenames alone.
+- Refresh the repository social preview for seventeen skills and derive its version/skill count from canonical package/catalog metadata.
+- Add automatic GitHub release publishing on package-version changes to `main`: validate the pack, create the version tag, publish changelog-backed release notes, and clean up the known merged feature branches.
+- Include the 0.4.1 Mission Control routing refresh already present on `main`, with Luna Max for general subagents and Sol reserved for higher-consequence escalation.
 
 ## 0.4.1 - 2026-08-16
 

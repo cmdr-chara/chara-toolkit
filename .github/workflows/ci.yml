@@ -37,6 +37,9 @@ jobs:
       - name: Run TypeScript quality regressions
         run: python scripts/test_typescript_quality_regressions.py .
 
+      - name: Verify release metadata
+        run: python scripts/verify_release_metadata.py .
+
       - name: Run helper smoke tests
         run: python scripts/run_smoke_tests.py . --as-of 2026-08-16
 

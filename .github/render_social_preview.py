@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -11,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / ".github" / "assets"
 OUTPUT = ASSET_DIR / "codex-toolkit-social-preview.png"
 MANIFEST = ASSET_DIR / "social-preview-manifest.json"
+PACKAGE = ROOT / "package.json"
+CATALOG = ROOT / "skills" / "llms.txt"
 
 PAPER = "#F1EFE8"
 INK = "#101820"
@@ -18,6 +21,18 @@ BLUE = "#245BE8"
 TEAL = "#159D91"
 WHITE = "#F8F7F2"
 MUTED = "#AAB4BD"
+
+
+def release_metadata() -> tuple[str, int]:
+    """Resolve release version and skill count from canonical repository metadata."""
+    package = json.loads(PACKAGE.read_text(encoding="utf-8"))
+    version = package.get("version")
+    if not isinstance(version, str) or not version:
+        raise ValueError("package.json must contain a non-empty version")
+    skill_count = sum(1 for line in CATALOG.read_text(encoding="utf-8").splitlines() if line.strip())
+    if skill_count < 1:
+        raise ValueError("skills/llms.txt must contain at least one skill")
+    return version, skill_count
 
 
 def font(size: int, *, bold: bool = False, mono: bool = False) -> ImageFont.FreeTypeFont:
@@ -48,6 +63,7 @@ def font(size: int, *, bold: bool = False, mono: bool = False) -> ImageFont.Free
 
 def render() -> Path:
     """Render a 1280 by 640 social card without external assets."""
+    version, skill_count = release_metadata()
     image = Image.new("RGB", (1280, 640), PAPER)
     draw = ImageDraw.Draw(image)
 
@@ -55,7 +71,12 @@ def render() -> Path:
     draw.rectangle((18, 0, 28, 640), fill=TEAL)
 
     draw.text((70, 48), "CODEX TOOLKIT", font=font(19, bold=True, mono=True), fill=BLUE)
-    draw.text((70, 84), "15 SKILLS  /  6 AGENTS  /  OFFLINE CHECKS", font=font(15, mono=True), fill=INK)
+    draw.text(
+        (70, 84),
+        f"{skill_count} SKILLS  /  6 AGENTS  /  OFFLINE CHECKS",
+        font=font(15, mono=True),
+        fill=INK,
+    )
     draw.line((70, 124, 610, 124), fill="#B6B7B1", width=2)
 
     draw.text((68, 166), "Inspect.", font=font(65, bold=True), fill=INK)
@@ -78,7 +99,7 @@ def render() -> Path:
     panel = (666, 42, 1230, 546)
     draw.rectangle(panel, fill=INK)
     draw.text((702, 72), "FIELD MANUAL", font=font(14, bold=True, mono=True), fill=TEAL)
-    draw.text((1100, 72), "v0.4.0", font=font(14, mono=True), fill=MUTED)
+    draw.text((1100, 72), f"v{version}", font=font(14, mono=True), fill=MUTED)
 
     rows = [
         ("01", "MAP THE REPOSITORY", "repository-intelligence"),
@@ -112,6 +133,9 @@ def render() -> Path:
         "fonts": ["Segoe UI", "Consolas", "DejaVu Sans fallback"],
         "purpose": "GitHub repository social preview",
         "copy_reviewed": True,
+        "version": version,
+        "skill_count": skill_count,
+        "image_sha256": hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),
     }
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return OUTPUT
