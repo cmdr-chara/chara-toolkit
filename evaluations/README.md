@@ -1,26 +1,26 @@
 # Evaluation Suite
 
-**Information checked:** 2026-08-16
+**Information checked:** 2026-08-17
 
 This suite tests routing, overlap resolution, complete workflows, resource integrity, volatile package claims, and provenance. It is designed for deterministic structural validation plus model-based execution review.
 
 ## Files
 
-- `routing-cases.json` plus `routing-cases-content-provenance.json`: 72 positive and 54 negative trigger cases—four positive and three negative per production skill.
+- `routing-cases.json` plus `routing-cases-content-provenance.json`: 76 positive and 57 negative trigger cases—four positive and three negative per production skill.
 - `overlap-cases.json` plus `overlap-cases-content-provenance.json`: adversarial prompts that require a primary skill or an explicit sequence/handoff rather than accidental multi-skill activation.
 - `workflow-scenarios.md` plus `workflow-scenarios-content-provenance.md`: one realistic end-to-end scenario per production skill with inputs, workflow, artifacts, verification, and stop conditions.
 - `adversarial-review.md`: self-review findings, corrections, and remaining refresh obligations.
 - `package-claim-review.md`: manual protocol for time-sensitive compatibility, maintenance, license, security, cost, and deprecation claims.
-- `post-install-routing-smoke.md`: a compact live-client check for all eighteen production skill routes and the highest-risk overlaps.
+- `post-install-routing-smoke.md`: a compact live-client check for all nineteen production skill routes and the highest-risk overlaps.
 
-The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance and unlazy routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
+The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, and bug-finder routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
 
 ## Structural run
 
 From the pack root:
 
 ```sh
-python scripts/validate_skill_pack.py . --as-of 2026-08-16
+python scripts/validate_skill_pack.py . --as-of 2026-08-17
 ```
 
 The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, dated references, source URLs, unsafe command strings, Python syntax, vendored anti-slop integrity/provenance, licensing, and obvious long-paragraph duplication.
@@ -53,6 +53,7 @@ Execute each scenario against a representative fixture or real repository. Revie
 - TypeScript quality findings verified beyond heuristic text matches and remediated without lint laundering;
 - provenance hygiene that inspects before mutation, preserves authorization/scope, checks runtime capabilities, and never equates sanitation with human authorship;
 - unlazy completion ledgers that keep blocked work visible, preserve specialist approval boundaries, rerun stale high-value checks, and re-measure final quantitative claims;
+- bug-finder hunts that derive real invariants, distinguish confirmed/plausible/retired candidates, prove observable contract violations, and disclose material unexamined surfaces;
 - feature-level verification by builders and integrated release judgment only by `verification-and-release`;
 - no destructive Git/data action or invented command.
 
@@ -69,3 +70,4 @@ Execute each scenario against a representative fixture or real repository. Revie
 - No anti-slop vendor drift without a matching pinned-revision/provenance update.
 - No provenance sanitation claim that overstates the available inspection surface or implies proof of human authorship.
 - No unlazy completion claim with open/blocked required gates, stale final-state evidence, or unmeasured exhaustive/count claims.
+- No bug-finder confirmation based only on suspicious code, severity intuition, or missing tests without an observable contract violation and deciding evidence.

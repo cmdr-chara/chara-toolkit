@@ -24,6 +24,7 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | R16 | Audit this TypeScript repository for unsafe assertions, broad unknown/any contracts, suppressions, boundary-parsing debt, and staged deterministic anti-slop enforcement; stop before changing policy or source. | `typescript-quality-enforcer` |
 | R17 | Inspect this user-owned PDF for Content Credentials and document metadata, preserve the original, propose only the smallest deterministic cleanup, and verify any approved cleaned copy without claiming it proves human authorship. | `content-provenance-hygiene` |
 | R18 | This substantial task is already scoped. Use explicit completion gates, prove every requested deliverable, rerun stale checks on the final candidate, and re-measure every count before reporting success. | `unlazy` |
+| R19 | Hunt this repository for important correctness bugs we do not know about yet. Derive invariants, inspect high-risk lifecycle/concurrency/persistence boundaries, and prove or retire concrete candidates rather than listing code smells. | `bug-finder` |
 
 ## High-risk overlaps
 
@@ -41,10 +42,11 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | O10 | We do not know what to improve first; after the repository planner identifies recurring TypeScript type-evidence loss as the best next upgrade, stage deterministic enforcement without turning it into a toolchain migration. | `codebase-improvement-planner` then `typescript-quality-enforcer` |
 | O11 | The provenance service corrupts a PDF during an authorized metadata cleanup; first preserve the failed artifact and establish the sanitation evidence, then investigate why the service produced an invalid file. | `content-provenance-hygiene` then `debugging-investigator` |
 | O12 | The approved refactor has five required slices and keeps getting reported done early; preserve the refactor approval boundary, then use completion gates to prove every slice and integration invariant. | `review-and-refactor-code` then `unlazy` |
+| O13 | We do not have a known provider bug. Hunt for one, prove the strongest candidate, and only then determine the causal chain for that confirmed failure. | `bug-finder` then `debugging-investigator` |
 
 ## Acceptance
 
-- Pass all 18 primary routes.
-- Pass at least ten of twelve overlap sequences with no incorrect co-primary activation.
+- Pass all 19 primary routes.
+- Pass at least eleven of thirteen overlap sequences with no incorrect co-primary activation.
 - Treat a missing skill, stale display label, or wrong primary route as a failure even if the eventual answer is plausible.
 - If a case fails, record client version, installed skill path, selected skills, and rationale; fix metadata or trigger boundaries, then rerun only the failed case and its nearest overlap case.

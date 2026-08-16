@@ -1,7 +1,7 @@
 {
   "name": "@cmdr-chara/codex-toolkit",
-  "version": "0.7.0",
-  "description": "Reusable Codex skills, custom agents, automatic updates, and offline validation for real software projects",
+  "version": "0.8.0",
+  "description": "Reusable Codex skills, custom agents, automatic updates, workflow routing, and offline validation for real software projects",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cmdr-chara/codex-toolkit.git"
@@ -16,6 +16,7 @@
     "subagents",
     "multi-agent",
     "auto-update",
+    "workflow-routing",
     "flutter",
     "react-native",
     "web-development",
@@ -26,13 +27,14 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "codex-toolkit": "bin/install.mjs"
+    "codex-toolkit": "bin/toolkit.mjs"
   },
   "files": [
     "agents",
     "bin",
     "docs",
     "evaluations",
+    "orchestration",
     "scripts",
     "skills",
     "CHANGELOG.md",

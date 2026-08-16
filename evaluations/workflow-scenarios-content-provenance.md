@@ -1,6 +1,6 @@
 # Supplemental End-to-End Workflow Scenarios
 
-**Information checked:** 2026-08-16
+**Information checked:** 2026-08-17
 
 ## 17. `content-provenance-hygiene` — Inspect and sanitize a user-owned PDF
 
@@ -49,3 +49,27 @@
 **Verification:** no required gate disappears silently; blocked work is not counted as success; safe checks target the intended outcomes; final-state evidence supersedes stale intermediate results; every stated count is re-measured; user work and specialist stop conditions remain preserved.
 
 **Stop/escalate:** stop at the owning specialist's `AWAITING_APPROVAL` boundary; hand multi-agent write ownership to `multi-agent-work-coordinator`; hand flaky or causally unexplained checks to `debugging-investigator`; hand final integrated ship/no-ship judgment to `verification-and-release`. Completion pressure never authorizes scope expansion or safety bypass.
+
+## 19. `bug-finder` — Hunt an unfamiliar provider runtime for unknown correctness defects
+
+**Situation:** A mature agent runtime has several provider adapters and no specific currently reported failure. The user wants a proactive correctness hunt focused on lifecycle, streaming, cancellation, retries, persistence, and cross-provider invariants, with concrete proof rather than a list of suspicious code smells.
+
+**Inputs:** repository/candidate identity; in-scope provider/runtime surfaces; architecture map when needed; provider contracts and schemas; existing adapter/runtime tests; safe fixture and test commands; exclusions and protected user data; permission boundary for any runtime experiment.
+
+**Expected workflow:**
+
+1. Freeze the hunting scope, candidate identity, exclusions, and available proof surfaces; use `repository-intelligence` first if component boundaries or ownership are unclear.
+2. Derive observable invariants such as terminal-event cardinality, idempotent cleanup, cancellation settlement, no post-stop events, lossless text assembly, bounded retry behavior, and persisted-state consistency.
+3. Rank stateful high-risk surfaces before leaf code: lifecycle/ownership, concurrency, retry/cancellation, persistence/replay, streaming/snapshot merge, schema boundaries, and error paths.
+4. Create concrete candidates with violated invariant, mechanism, trigger, expected failure, evidence pointers, and the cheapest safe proof/falsification step.
+5. Use focused tests, synthetic event sequences, temporary filesystem/state fixtures, or read-only traces to prove or retire candidates. Record negative results rather than deleting failed theories.
+6. Check false-positive guards: downstream normalization, unreachable schema paths, intentional best-effort semantics, platform differences, and existing tests that already close the suspected gap.
+7. Mark a finding `CONFIRMED` only when an observable contract violation is demonstrated; keep evidence-bearing but unproven theories `PLAUSIBLE` and falsified ones `RETIRED`.
+8. Rank confirmed findings by impact, reachability, and confidence without inflating severity to compensate for weak evidence.
+9. Hand confirmed findings with uncertain causal chains to `debugging-investigator`; hand an already-explained bounded remedy to the owning specialist when edits are authorized.
+
+**Expected artifacts:** hunting-scope record; invariant list; surface-coverage ledger; candidate ledger with `CONFIRMED`/`PLAUSIBLE`/`RETIRED` states; proof artifacts; ranked confirmed findings; explicit coverage gaps; per-finding next-owner recommendation.
+
+**Verification:** every confirmed finding has a real contract, reachable trigger or demonstrated path, observable failure, and deciding evidence; plausible theories are not reported as bugs; retired candidates remain visible when useful; unexamined high-risk surfaces are disclosed; the hunt does not mutate production state or user data merely to produce findings.
+
+**Stop/escalate:** stop with `BUGS_FOUND` when confirmed defects have reproducible/bounded proof and clear next owners; stop with `NO_CONFIRMED_BUGS` only for the agreed examined scope, never as a claim that the repository is bug-free; stop with `BOUNDED` when decisive platform/runtime evidence is unavailable. Use `debugging-investigator` only after a concrete symptom exists and `verification-and-release` only after integrated remediation exists.

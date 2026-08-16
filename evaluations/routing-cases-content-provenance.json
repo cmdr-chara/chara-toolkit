@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "information_checked": "2026-08-16",
+  "information_checked": "2026-08-17",
   "skills": [
     {
       "skill": "content-provenance-hygiene",
@@ -103,6 +103,58 @@
           "expected": "do_not_activate",
           "route_to": "verification-and-release",
           "reason": "Final release readiness remains owned by verification-and-release even if task gates are complete."
+        }
+      ]
+    },
+    {
+      "skill": "bug-finder",
+      "positive": [
+        {
+          "id": "bug-finder-p1",
+          "prompt": "Hunt for important correctness bugs we do not know about yet. Focus on lifecycle, retries, persistence, streaming, and concurrency, and prove or retire every candidate instead of listing suspicious code.",
+          "expected": "activate",
+          "reason": "The user requests open-ended unknown-defect discovery with evidence-backed candidate proof."
+        },
+        {
+          "id": "bug-finder-p2",
+          "prompt": "Search this provider runtime for hidden races, duplicate terminal events, stuck ownership, or dropped output. I do not have a specific failing issue yet.",
+          "expected": "activate",
+          "reason": "The task is proactive correctness hunting across high-risk lifecycle invariants without a pre-existing symptom."
+        },
+        {
+          "id": "bug-finder-p3",
+          "prompt": "Audit this persistence and recovery subsystem for unknown data-loss or resurrection bugs. Derive invariants first and use synthetic fixtures to prove any finding.",
+          "expected": "activate",
+          "reason": "Unknown persistence correctness defects and proof-oriented exploration are owned by bug-finder."
+        },
+        {
+          "id": "bug-finder-p4",
+          "prompt": "Find real bugs in this repository before users report them. Rank confirmed defects separately from plausible theories and tell me which ones need causal debugging next.",
+          "expected": "activate",
+          "reason": "Explicitly requests bug discovery, evidence grading, and handoff of confirmed findings."
+        }
+      ],
+      "negative": [
+        {
+          "id": "bug-finder-n1",
+          "prompt": "Checkout intermittently returns stale totals after retries. Reproduce that exact failure, find why it happens, and design a regression test.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "A concrete known symptom with unknown cause belongs to causal debugging, not open-ended bug discovery."
+        },
+        {
+          "id": "bug-finder-n2",
+          "prompt": "Review this pull request for actionable correctness defects and tell me whether the parser refactor is safe.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "A defined diff/PR review belongs to the review skill rather than repository-wide unknown-bug hunting."
+        },
+        {
+          "id": "bug-finder-n3",
+          "prompt": "Inspect this codebase and tell me the highest-value improvement we should make next across architecture, quality, performance, and maintenance.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-improvement-planner",
+          "reason": "Broad improvement prioritization is not the same decision as correctness-defect discovery."
         }
       ]
     }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bug Finder"
+  short_description: "Find and prove previously unknown correctness bugs"
+  default_prompt: "Use $bug-finder to hunt for previously unknown correctness defects in this repository. Derive invariants, prioritize high-risk stateful boundaries, prove or retire concrete bug candidates, and hand confirmed defects to the correct next specialist."

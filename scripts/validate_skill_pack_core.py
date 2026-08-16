@@ -13,8 +13,9 @@ try:
 except ImportError:  # Direct script execution puts scripts/ on sys.path.
     import _validate_skill_pack_impl as impl
 
-if "unlazy" not in impl.EXPECTED_SKILLS:
-    impl.EXPECTED_SKILLS = [*impl.EXPECTED_SKILLS, "unlazy"]
+for _skill in ("unlazy", "bug-finder"):
+    if _skill not in impl.EXPECTED_SKILLS:
+        impl.EXPECTED_SKILLS = [*impl.EXPECTED_SKILLS, _skill]
 impl.TOOLKIT_SKILLS = ["delegate-with-mission-cards", *impl.EXPECTED_SKILLS]
 
 
@@ -51,7 +52,7 @@ _original_evaluation_validation = impl.validate_evaluations
 
 
 def validate_evaluations(result):
-    """Run canonical evaluations plus required overlap coverage for new routes."""
+    """Run canonical evaluations plus required overlap coverage for newer routes."""
     _original_evaluation_validation(result)
     supplemental_path = (
         result.root / "evaluations/overlap-cases-content-provenance.json"
@@ -66,7 +67,7 @@ def validate_evaluations(result):
                 "overlap-cases-content-provenance.json: expected_sequence must be "
                 f"a non-empty string list in {case.get('id')!r}"
             )
-    for skill in ("content-provenance-hygiene", "unlazy"):
+    for skill in ("content-provenance-hygiene", "unlazy", "bug-finder"):
         if not any(
             isinstance(case.get("expected_sequence"), list)
             and skill in case["expected_sequence"]
@@ -83,7 +84,7 @@ _original_provenance_validation = impl.validate_responsibility_and_provenance
 
 
 def validate_responsibility_and_provenance(result):
-    """Run core checks plus provenance contracts added after the stable snapshot."""
+    """Run core checks plus provenance and orchestration contracts."""
     _original_provenance_validation(result)
 
     unlazy_reference = result.root / "skills/unlazy/references/upstream-provenance.md"
@@ -123,6 +124,65 @@ def validate_responsibility_and_provenance(result):
     ):
         if phrase not in notice:
             result.error(f"THIRD_PARTY_NOTICES.md: missing {phrase!r}")
+
+    managed = result.root / "orchestration/managed-agents.md"
+    workflows = result.root / "orchestration/workflows.md"
+    for path in (managed, workflows):
+        if not path.is_file():
+            result.error(f"missing orchestration resource: {impl.rel(path, result.root)}")
+
+    managed_text = impl.read_text(managed, result)
+    for phrase in (
+        "repository-intelligence",
+        "bug-finder",
+        "debugging-investigator",
+        "unlazy",
+        "verification-and-release",
+        "workflows.md",
+    ):
+        if phrase not in managed_text:
+            result.error(f"orchestration/managed-agents.md: missing {phrase!r}")
+
+    workflows_text = impl.read_text(workflows, result)
+    for phrase in (
+        "Bug hunt — unknown defects",
+        "Known bug — diagnose and fix",
+        "Build or change a feature",
+        "Improve an existing codebase",
+        "Performance hunt",
+        "Multi-agent execution",
+        "bug-finder",
+        "debugging-investigator",
+        "unlazy",
+        "verification-and-release",
+    ):
+        if phrase not in workflows_text:
+            result.error(f"orchestration/workflows.md: missing {phrase!r}")
+
+    package = result.root / "package.json"
+    if package.is_file():
+        try:
+            package_data = impl.json.loads(impl.read_text(package, result))
+        except impl.json.JSONDecodeError as exc:
+            result.error(f"package.json: invalid JSON: {exc}")
+        else:
+            if package_data.get("bin", {}).get("codex-toolkit") != "bin/toolkit.mjs":
+                result.error("package.json: codex-toolkit bin must route through bin/toolkit.mjs")
+            files = package_data.get("files", [])
+            if not isinstance(files, list) or "orchestration" not in files:
+                result.error("package.json: orchestration directory must be included in package files")
+
+    wrapper = result.root / "bin/toolkit.mjs"
+    wrapper_text = impl.read_text(wrapper, result)
+    for phrase in (
+        "<!-- codex-toolkit:start -->",
+        "<!-- codex-toolkit:end -->",
+        "managed-agents.md",
+        "workflows.md",
+        "Refusing to edit",
+    ):
+        if phrase not in wrapper_text:
+            result.error(f"bin/toolkit.mjs: missing managed-routing guard {phrase!r}")
 
 
 impl.validate_responsibility_and_provenance = validate_responsibility_and_provenance

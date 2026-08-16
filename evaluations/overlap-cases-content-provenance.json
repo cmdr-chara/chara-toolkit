@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "information_checked": "2026-08-16",
+  "information_checked": "2026-08-17",
   "cases": [
     {
       "id": "overlap-content-provenance-01",
@@ -21,6 +21,16 @@
       ],
       "primary_decision": "The refactor specialist owns what may change; unlazy overlays the accepted execution with measurable completion gates.",
       "anti_route": "Do not let completion pressure expand the approved refactor or bypass its behavior-parity constraints."
+    },
+    {
+      "id": "overlap-bug-finder-01",
+      "prompt": "We do not have a known bug yet. Hunt this provider subsystem for hidden correctness defects, prove the strongest candidates, then take any confirmed candidate whose cause is still uncertain through causal diagnosis.",
+      "expected_sequence": [
+        "bug-finder",
+        "debugging-investigator"
+      ],
+      "primary_decision": "Bug Finder owns unknown-defect discovery and proof; Debugging Investigator begins only after a concrete confirmed symptom needs causal explanation.",
+      "anti_route": "Do not start causal debugging before there is a specific failure candidate, and do not call suspicious code a confirmed bug without an observable contract violation."
     }
   ]
 }
