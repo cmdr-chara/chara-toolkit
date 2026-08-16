@@ -16,5 +16,5 @@
   "copy_reviewed": true,
   "version": "0.5.0",
   "skill_count": 17,
-  "image_sha256": "2fe2609a40fa1908eef24088a5056ff95a0ab6ce2f9775309103648ae742031d"
+  "image_git_blob_sha1": "a98a00dbdd0b1d0f6008a418a2d7a3e4bd22f37d"
 }

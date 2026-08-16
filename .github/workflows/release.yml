@@ -6,6 +6,11 @@ on:
     paths:
       - package.json
       - CHANGELOG.md
+      - .github/assets/social-preview-manifest.json
+      - .github/assets/codex-toolkit-social-preview.png
+      - .github/render_social_preview.py
+      - scripts/verify_release_metadata.py
+      - .github/workflows/release.yml
   workflow_dispatch:
 
 permissions:

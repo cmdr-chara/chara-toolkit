@@ -14,6 +14,11 @@ def fail(message: str) -> int:
     return 1
 
 
+def git_blob_sha1(data: bytes) -> str:
+    header = f"blob {len(data)}\0".encode("utf-8")
+    return hashlib.sha1(header + data).hexdigest()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", nargs="?", default=".", help="codex-toolkit repository root")
@@ -64,9 +69,11 @@ def main() -> int:
     width, height = struct.unpack(">II", preview[16:24])
     if (width, height) != (1280, 640):
         return fail(f"social preview dimensions are {(width, height)}, expected (1280, 640)")
-    actual_sha = hashlib.sha256(preview).hexdigest()
-    if manifest.get("image_sha256") != actual_sha:
-        return fail("social preview image_sha256 does not match the committed PNG")
+    actual_blob = git_blob_sha1(preview)
+    if manifest.get("image_git_blob_sha1") != actual_blob:
+        return fail(
+            f"social preview Git blob id {actual_blob} does not match manifest {manifest.get('image_git_blob_sha1')!r}"
+        )
 
     try:
         renderer = renderer_path.read_text(encoding="utf-8")
@@ -78,10 +85,12 @@ def main() -> int:
             return fail(f"renderer still contains stale hard-coded release copy {stale!r}")
     if "release_metadata()" not in renderer or "skill_count" not in renderer or "version" not in renderer:
         return fail("renderer must derive release metadata from package.json and skills/llms.txt")
+    if "image_git_blob_sha1" not in renderer or "git_blob_sha1(OUTPUT)" not in renderer:
+        return fail("renderer must record the committed preview using Git blob identity")
     if f"## {version} - " not in changelog:
         return fail(f"CHANGELOG.md has no release section for {version}")
 
-    print(f"release metadata: PASS (v{version}, {skill_count} skills, {width}x{height})")
+    print(f"release metadata: PASS (v{version}, {skill_count} skills, {width}x{height}, blob {actual_blob})")
     return 0
 
 

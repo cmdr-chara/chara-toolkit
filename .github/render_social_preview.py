@@ -35,6 +35,13 @@ def release_metadata() -> tuple[str, int]:
     return version, skill_count
 
 
+def git_blob_sha1(path: Path) -> str:
+    """Return the Git object identity for a file's current bytes."""
+    data = path.read_bytes()
+    header = f"blob {len(data)}\0".encode("utf-8")
+    return hashlib.sha1(header + data).hexdigest()
+
+
 def font(size: int, *, bold: bool = False, mono: bool = False) -> ImageFont.FreeTypeFont:
     """Load a local font with Windows and Linux fallbacks."""
     if mono:
@@ -135,7 +142,7 @@ def render() -> Path:
         "copy_reviewed": True,
         "version": version,
         "skill_count": skill_count,
-        "image_sha256": hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),
+        "image_git_blob_sha1": git_blob_sha1(OUTPUT),
     }
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return OUTPUT
