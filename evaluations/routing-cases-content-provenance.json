@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "information_checked": "2026-08-16",
+  "skills": [
+    {
+      "skill": "content-provenance-hygiene",
+      "positive": [
+        {
+          "id": "content-provenance-hygiene-p1",
+          "prompt": "Inspect this PDF I own for Content Credentials, XMP, document properties, and other provenance metadata. Do not change it; report evidence and what could be removed safely.",
+          "expected": "activate",
+          "reason": "The requested decision is provenance/metadata inspection of an authorized artifact."
+        },
+        {
+          "id": "content-provenance-hygiene-p2",
+          "prompt": "Remove the C2PA and EXIF metadata from my own exported image, keep the visible pixels unchanged, and verify the cleaned copy afterwards.",
+          "expected": "activate",
+          "reason": "Explicitly requests deterministic metadata sanitation plus before/after verification."
+        },
+        {
+          "id": "content-provenance-hygiene-p3",
+          "prompt": "Check this DOCX for invisible Unicode and document metadata, clean only confirmed hygiene issues, preserve the visible text and structure, and keep the original file.",
+          "expected": "activate",
+          "reason": "Combines inspect-first text/container hygiene with a bounded authorized sanitation request."
+        },
+        {
+          "id": "content-provenance-hygiene-p4",
+          "prompt": "Before cleaning this user-owned PDF, query the configured provenance service capabilities and tell me whether the current deployment can inspect and rebuild the container safely.",
+          "expected": "activate",
+          "reason": "Runtime capability sufficiency for provenance sanitation is owned by this skill."
+        }
+      ],
+      "negative": [
+        {
+          "id": "content-provenance-hygiene-n1",
+          "prompt": "Rewrite this AI-generated essay so automated detectors will classify it as human-written.",
+          "expected": "do_not_activate",
+          "route_to": "no-skill",
+          "reason": "Detector evasion and authorship misrepresentation are outside the deterministic metadata-hygiene boundary."
+        },
+        {
+          "id": "content-provenance-hygiene-n2",
+          "prompt": "Retouch this product photo, remove the background, recolor the object, and sharpen it for an ad campaign.",
+          "expected": "do_not_activate",
+          "route_to": "no-skill",
+          "reason": "Ordinary visual editing is not provenance or metadata sanitation."
+        },
+        {
+          "id": "content-provenance-hygiene-n3",
+          "prompt": "The local metadata service now corrupts some PDFs after cleaning. Reproduce the failure, find the cause, and design a regression test.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "A concrete service failure with an unknown cause is a causal debugging task."
+        }
+      ]
+    },
+    {
+      "skill": "unlazy",
+      "positive": [
+        {
+          "id": "unlazy-p1",
+          "prompt": "Use an explicit gate ledger for this substantial task. I want every requested deliverable completed and every final count re-measured before you say it is done.",
+          "expected": "activate",
+          "reason": "The user explicitly requests evidence-backed completion discipline rather than ordinary best-effort execution."
+        },
+        {
+          "id": "unlazy-p2",
+          "prompt": "Do not stop at 80 percent. Turn these twelve already-defined migration follow-ups into measurable completion gates, finish every authorized item, and report any genuine blocker instead of silently dropping it.",
+          "expected": "activate",
+          "reason": "The domain work is already defined; the primary requested control is exhaustive gate-based follow-through."
+        },
+        {
+          "id": "unlazy-p3",
+          "prompt": "Apply unlazy discipline to this long documentation cleanup: prove that all in-scope files were enumerated, all stale terms were checked, and the final report's file counts are measured from the final tree.",
+          "expected": "activate",
+          "reason": "Explicit unlazy invocation plus exhaustive-scope and final-claim audit requirements."
+        },
+        {
+          "id": "unlazy-p4",
+          "prompt": "Build a natural-joint depth tree for these already-approved deliverables, give each leaf observable gates, add integration gates, and do not call the parent complete just because the leaves say they passed.",
+          "expected": "activate",
+          "reason": "Directly requests the adapted Depth Tree and branch-gate completion model."
+        }
+      ],
+      "negative": [
+        {
+          "id": "unlazy-n1",
+          "prompt": "What is the capital of Portugal?",
+          "expected": "do_not_activate",
+          "route_to": "no-skill",
+          "reason": "A simple factual answer does not need a completion ledger."
+        },
+        {
+          "id": "unlazy-n2",
+          "prompt": "We have not chosen a mobile stack. Decide whether Flutter or Expo fits this product and explain the tradeoffs.",
+          "expected": "do_not_activate",
+          "route_to": "mobile-architecture-director",
+          "reason": "The unresolved domain decision belongs to the mobile architecture specialist; completion discipline cannot decide it."
+        },
+        {
+          "id": "unlazy-n3",
+          "prompt": "All implementation work is integrated. Decide whether this release candidate can ship to production today.",
+          "expected": "do_not_activate",
+          "route_to": "verification-and-release",
+          "reason": "Final release readiness remains owned by verification-and-release even if task gates are complete."
+        }
+      ]
+    }
+  ]
+}

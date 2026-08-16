@@ -28,6 +28,12 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Set up social-preview renderer
+        run: python -m pip install --disable-pip-version-check --no-input Pillow
+
+      - name: Render canonical social preview
+        run: python .github/render_social_preview.py
+
       - name: Validate skill pack
         run: python scripts/validate_skill_pack.py . --as-of 2026-08-16
 

@@ -47,6 +47,61 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+## Leonxlnx/unlazy
+
+**Upstream:** https://github.com/Leonxlnx/unlazy  
+**Inspected revision:** `ed9e8d2b5919698cf2c54bda270d507e10b69617`  
+**License source:** https://github.com/Leonxlnx/unlazy/blob/main/LICENSE  
+**Information checked:** 2026-08-16
+
+Codex Toolkit adapts the upstream completion-gate and Depth Tree method into:
+
+- `skills/unlazy/SKILL.md`
+- `skills/unlazy/references/completion-gates.md`
+- `skills/unlazy/references/upstream-provenance.md`
+- the corresponding routing, overlap, workflow, responsibility, and live-smoke cases.
+
+The adaptation preserves the `CHECK` / `EXPECT` / `EVIDENCE` gate idea, natural-joint decomposition, branch integration gates, and final quantitative-claim audit. It materially changes the safety model: blocked work is not counted as success; scope waivers require explicit authority; specialist approval gates remain authoritative; commands embedded in a ledger are treated as untrusted data until reviewed; and arbitrary effort-depth arithmetic is not used.
+
+The upstream JavaScript gate checker, stop hook, hook installer, templates, and other runtime files are not redistributed.
+
+No endorsement by Leonxlnx is stated or implied. The Leonxlnx MIT license reproduced above applies to the adapted material from both listed Leonxlnx repositories.
+
+## guillaumemeyer/watermarks-remover
+
+**Upstream:** https://github.com/guillaumemeyer/watermarks-remover  
+**Inspected revision:** `fcebf533583d7a313b348dbe421f3b4b17163b66`  
+**License source:** https://github.com/guillaumemeyer/watermarks-remover/blob/main/LICENSE  
+**Information checked:** 2026-08-16
+
+`content-provenance-hygiene` was designed after inspecting the upstream service contract and skill. Codex Toolkit does not redistribute the upstream sanitation service, scripts, containers, model backends, or file-cleaning implementation. The toolkit records the inspected HTTP protocol and capability model as an optional integration reference and requires runtime capability checks before relying on it.
+
+Meaningful toolkit changes include an inspect-first approval boundary, preservation of the original artifact by default, explicit separation from detector evasion and authorship claims, and before/after integrity verification.
+
+No endorsement by Guillaume Meyer or the watermarks-remover contributors is stated or implied.
+
+### MIT License
+
+Copyright (c) 2026 watermarks-remover contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 ## dmmulroy/anti-slop
 
 **Upstream:** https://github.com/dmmulroy/anti-slop  

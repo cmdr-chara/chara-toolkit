@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Provenance Hygiene"
+  short_description: "Inspect and sanitize provenance metadata safely"
+  default_prompt: "Use $content-provenance-hygiene to inspect provenance or metadata first, propose only the smallest authorized sanitation, and verify the cleaned artifact without claiming human authorship."

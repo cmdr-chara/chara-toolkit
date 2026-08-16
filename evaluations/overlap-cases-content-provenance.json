@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "information_checked": "2026-08-16",
+  "cases": [
+    {
+      "id": "overlap-content-provenance-01",
+      "prompt": "I own this PDF and asked for a metadata-only cleanup. The cleaned copy is now structurally invalid. Preserve the evidence, determine what sanitation actually happened, then find why the service corrupted the file.",
+      "expected_sequence": [
+        "content-provenance-hygiene",
+        "debugging-investigator"
+      ],
+      "primary_decision": "Establish the authorized sanitation result and artifact evidence before causal service debugging.",
+      "anti_route": "Do not keep applying broader cleanup options or treat the corruption as proof that the metadata target was removed."
+    },
+    {
+      "id": "overlap-unlazy-01",
+      "prompt": "The refactor scope and approval are already settled. Apply the approved slices, but use explicit completion gates so every invariant and final count is proven before you report success.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "unlazy"
+      ],
+      "primary_decision": "The refactor specialist owns what may change; unlazy overlays the accepted execution with measurable completion gates.",
+      "anti_route": "Do not let completion pressure expand the approved refactor or bypass its behavior-parity constraints."
+    }
+  ]
+}

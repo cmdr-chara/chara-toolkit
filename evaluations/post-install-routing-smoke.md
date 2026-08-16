@@ -22,6 +22,8 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | R14 | Profile this API's p99 under a representative workload, identify falsifiable bottlenecks, and stop with a bounded optimization proposal before editing. | `optimize-codebase-performance` |
 | R15 | Inspect this repository without a predefined change, group the best improvement opportunities into Major, Medium, and Minor, and recommend the highest-value next upgrade. | `codebase-improvement-planner` |
 | R16 | Audit this TypeScript repository for unsafe assertions, broad unknown/any contracts, suppressions, boundary-parsing debt, and staged deterministic anti-slop enforcement; stop before changing policy or source. | `typescript-quality-enforcer` |
+| R17 | Inspect this user-owned PDF for Content Credentials and document metadata, preserve the original, propose only the smallest deterministic cleanup, and verify any approved cleaned copy without claiming it proves human authorship. | `content-provenance-hygiene` |
+| R18 | This substantial task is already scoped. Use explicit completion gates, prove every requested deliverable, rerun stale checks on the final candidate, and re-measure every count before reporting success. | `unlazy` |
 
 ## High-risk overlaps
 
@@ -37,10 +39,12 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | O8 | Measure and optimize p99, then decide whether the integrated release can ship. | `optimize-codebase-performance` then `verification-and-release` |
 | O9 | We do not know what to improve yet; inspect the repository, choose the best upgrade, then route that concrete task to the specialist that owns it. | `codebase-improvement-planner` then the selected specialist skill |
 | O10 | We do not know what to improve first; after the repository planner identifies recurring TypeScript type-evidence loss as the best next upgrade, stage deterministic enforcement without turning it into a toolchain migration. | `codebase-improvement-planner` then `typescript-quality-enforcer` |
+| O11 | The provenance service corrupts a PDF during an authorized metadata cleanup; first preserve the failed artifact and establish the sanitation evidence, then investigate why the service produced an invalid file. | `content-provenance-hygiene` then `debugging-investigator` |
+| O12 | The approved refactor has five required slices and keeps getting reported done early; preserve the refactor approval boundary, then use completion gates to prove every slice and integration invariant. | `review-and-refactor-code` then `unlazy` |
 
 ## Acceptance
 
-- Pass all 16 primary routes.
-- Pass at least eight of ten overlap sequences with no incorrect co-primary activation.
+- Pass all 18 primary routes.
+- Pass at least ten of twelve overlap sequences with no incorrect co-primary activation.
 - Treat a missing skill, stale display label, or wrong primary route as a failure even if the eventual answer is plausible.
 - If a case fails, record client version, installed skill path, selected skills, and rationale; fix metadata or trigger boundaries, then rerun only the failed case and its nearest overlap case.

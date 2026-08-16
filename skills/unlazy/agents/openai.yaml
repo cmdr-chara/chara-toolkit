@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unlazy"
+  short_description: "Prove substantial tasks are actually complete"
+  default_prompt: "Use $unlazy to turn this substantial task into explicit completion gates, execute only the authorized scope, and do not report success until every required gate is backed by evidence."

@@ -17,15 +17,74 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  preview:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      changed: ${{ steps.refresh.outputs.changed }}
+      target_sha: ${{ steps.refresh.outputs.target_sha }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Set up social-preview renderer
+        run: python -m pip install --disable-pip-version-check --no-input Pillow
+
+      - name: Render and persist canonical social preview
+        id: refresh
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .github/render_social_preview.py
+          if git diff --quiet -- \
+            .github/assets/codex-toolkit-social-preview.png \
+            .github/assets/social-preview-manifest.json
+          then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            .github/assets/codex-toolkit-social-preview.png \
+            .github/assets/social-preview-manifest.json
+          version="$(node -p "require('./package.json').version")"
+          git commit -m "chore: refresh v${version} social preview"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out release candidate
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.preview.outputs.target_sha }}
+
+      - name: Assert candidate identity
+        env:
+          TARGET_SHA: ${{ needs.preview.outputs.target_sha }}
+        run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -102,8 +161,9 @@ jobs:
         if: steps.existing.outputs.tag != 'true'
         env:
           TAG: ${{ steps.release.outputs.tag }}
+          TARGET_SHA: ${{ needs.preview.outputs.target_sha }}
         run: |
-          git tag "$TAG" "$GITHUB_SHA"
+          git tag "$TAG" "$TARGET_SHA"
           git push origin "refs/tags/$TAG"
 
       - name: Create GitHub release
@@ -124,6 +184,7 @@ jobs:
           for branch in \
             feat/codebase-improvement-planner \
             feat/typescript-quality-enforcer \
+            feat/content-provenance-hygiene \
             noop-do-not-create
           do
             if git ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null 2>&1; then
