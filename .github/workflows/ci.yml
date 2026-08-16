@@ -49,13 +49,55 @@ jobs:
       - name: Run helper smoke tests
         run: python scripts/run_smoke_tests.py . --as-of 2026-08-16
 
+      - name: Validate updater scripts
+        run: |
+          node --check bin/install.mjs
+          node --check scripts/auto-update-runner.mjs
+
       - name: Inspect package contents
         run: npm pack --dry-run
 
-      - name: Test Mission Control installer in isolation
+      - name: Test full toolkit installer in isolation
+        shell: bash
+        run: |
+          temp_home="$(mktemp -d)"
+          node bin/install.mjs setup --no-auto-update --codex-home "$temp_home"
+          test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 19
+          test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
+
+      - name: Test legacy Mission Control installer
         shell: bash
         run: |
           temp_home="$(mktemp -d)"
           node bin/install.mjs --codex-home "$temp_home"
           test -f "$temp_home/skills/delegate-with-mission-cards/SKILL.md"
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
+
+      - name: Validate automatic-update scheduler plan
+        shell: bash
+        run: |
+          temp_home="$(mktemp -d)"
+          node bin/install.mjs auto-update install --dry-run --codex-home "$temp_home"
+
+      - name: Validate release-pinned update runner
+        shell: bash
+        run: |
+          runner_dir="$(mktemp -d)"
+          cp scripts/auto-update-runner.mjs "$runner_dir/update-runner.mjs"
+          cat > "$runner_dir/auto-update.json" <<'JSON'
+          {
+            "schema_version": 1,
+            "repository": "cmdr-chara/codex-toolkit",
+            "codex_home": "/tmp/codex-home",
+            "npx_path": "/usr/bin/npx"
+          }
+          JSON
+          cat > "$runner_dir/state.json" <<'JSON'
+          {
+            "schema_version": 1,
+            "release": "v0.6.0"
+          }
+          JSON
+          node "$runner_dir/update-runner.mjs" --dry-run --tag v0.7.0 | tee "$runner_dir/plan.txt"
+          grep -F 'github:cmdr-chara/codex-toolkit#v0.7.0' "$runner_dir/plan.txt"
+          grep -F '"setup"' "$runner_dir/plan.txt"
