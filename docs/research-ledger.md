@@ -1,6 +1,6 @@
 # Ecosystem Research Ledger
 
-**Information checked:** 2026-07-17; Next.js security refresh 2026-07-31
+**Information checked:** 2026-07-17; Next.js security refresh 2026-07-31; Codex model routing refresh 2026-08-16
 **Research mode:** current public web, repository tree/raw-file inspection, official documentation, official package registries/repositories, and release/advisory pages.  
 **Refresh policy:** stable workflow principles remain in `SKILL.md`; changing version/package/platform facts remain in dated references and must be rechecked before use.
 
@@ -42,6 +42,7 @@ The original 0.2.0 build could not clone the repository in its runtime. The 0.3.
 | https://agentskills.io/skill-creation/best-practices | Keep the operational body focused (under roughly 500 lines/5,000 tokens recommended) and point to specific resources only when needed. | Authoring guidance |
 | https://agentskills.io/skill-creation/optimizing-descriptions | The description is a routing contract and should state concrete positive conditions. | Authoring guidance |
 | https://developers.openai.com/blog/skills-agents-sdk | Narrow, repository-grounded trigger descriptions outperform vague capability labels in real maintenance workflows. | Current implementation guidance |
+| https://developers.openai.com/api/docs/guides/latest-model | GPT-5.6 Luna targets efficient, high-volume workloads; GPT-5.6 Sol is the frontier tier; `max` reasoning is supported and should be reserved for quality-first work. The page does not currently use the “Subagents V2” label. | Current model guidance; checked 2026-08-16 |
 
 ## Web platform and production interface research
 

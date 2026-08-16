@@ -1,4 +1,4 @@
-delegate-with-mission-cards: Mission Control for bounded multi-agent work. Gate delegation, select the lightest capable reader or writer, issue scoped mission cards, run safe parallel waves, and independently verify every handoff. The full toolkit installer also provides Luna, Terra, and Sol custom-agent roles.
+delegate-with-mission-cards: Mission Control for bounded multi-agent work. Gate delegation, select the lightest capable reader or writer, issue scoped mission cards, run safe parallel waves, and independently verify every handoff. The full toolkit installer routes general work to Luna Max, high-risk review to Sol High, and extreme-risk implementation to Sol Max.
 repository-intelligence: Evidence-backed architecture, ownership, dependency, hotspot, change-impact, and edit-conflict mapping.
 multi-agent-work-coordinator: Safe repository work graphs with exclusive write ownership, dependency waves, integration order, and handoff verification.
 codebase-evolution-controller: Dependency, framework, schema, and API evolution with compatibility stages, rollout, rollback, and evidence.

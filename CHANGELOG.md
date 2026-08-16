@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1 - 2026-08-16
+
+- Route the four general Mission Control roles through GPT-5.6 Luna with `max` reasoning for the current Codex Subagents V2 runtime.
+- Route high-risk read-only review through GPT-5.6 Sol High and reserve Sol Max for extreme-risk implementation.
+- Remove Terra from Mission Control routing and validate the model-tier policy as part of the structural check.
+- Document the distinction between verified public model guidance and the newer Subagents V2 runtime label.
+
 ## 0.4.0 - 2026-08-11
 
 - Add public CI for structural validation, helper smoke tests, package inspection, and an isolated Mission Control install.

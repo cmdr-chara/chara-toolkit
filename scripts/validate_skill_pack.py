@@ -9,6 +9,7 @@ import json
 import os
 import re
 import sys
+import tomllib
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -34,6 +35,15 @@ EXPECTED_SKILLS = [
 ]
 
 TOOLKIT_SKILLS = ["delegate-with-mission-cards", *EXPECTED_SKILLS]
+
+MISSION_CONTROL_ROUTES = {
+    "pathfinder-reader": ("gpt-5.6-luna", "max", "read-only"),
+    "patcher-writer": ("gpt-5.6-luna", "max", "workspace-write"),
+    "investigator-reader": ("gpt-5.6-luna", "max", "read-only"),
+    "builder-writer": ("gpt-5.6-luna", "max", "workspace-write"),
+    "sentinel-reader": ("gpt-5.6-sol", "high", "read-only"),
+    "architect-writer": ("gpt-5.6-sol", "max", "workspace-write"),
+}
 
 REQUIRED_ROOT = [
     "README.md",
@@ -178,7 +188,45 @@ def validate_root_structure(result: Result) -> None:
     if forbidden_runtime_shared.exists():
         result.error("skills/shared exists despite the documented no-hidden-runtime-coupling decision")
 
-    pycache = list(root.rglob("__pycache__"))
+
+def validate_mission_control(result: Result) -> None:
+    agents_root = result.root / "agents" / "mission-control"
+    if not agents_root.is_dir():
+        result.error("missing agents/mission-control directory")
+        return
+
+    actual = {path.stem: path for path in agents_root.glob("*.toml")}
+    missing = sorted(set(MISSION_CONTROL_ROUTES) - set(actual))
+    unexpected = sorted(set(actual) - set(MISSION_CONTROL_ROUTES))
+    if missing:
+        result.error(f"missing Mission Control agents: {', '.join(missing)}")
+    if unexpected:
+        result.error(f"unexpected Mission Control agents: {', '.join(unexpected)}")
+
+    for name, expected in MISSION_CONTROL_ROUTES.items():
+        path = actual.get(name)
+        if path is None:
+            continue
+        try:
+            data = tomllib.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
+            result.error(f"{rel(path, result.root)}: invalid TOML: {exc}")
+            continue
+        observed = (
+            data.get("model"),
+            data.get("model_reasoning_effort"),
+            data.get("sandbox_mode"),
+        )
+        if data.get("name") != name:
+            result.error(f"{rel(path, result.root)}: name must match filename stem {name!r}")
+        if observed != expected:
+            result.error(
+                f"{rel(path, result.root)}: expected model/effort/sandbox {expected!r}, got {observed!r}"
+            )
+
+    result.metrics["mission_control_agents"] = len(actual)
+
+    pycache = list(result.root.rglob("__pycache__"))
     if pycache:
         result.warn(f"generated __pycache__ directories should be removed before packaging: {len(pycache)}")
 
@@ -762,6 +810,7 @@ def main() -> int:
         generated_targets.add(report_target)
 
     validate_root_structure(result)
+    validate_mission_control(result)
     descriptions = validate_skills(result)
     validate_links(result, generated_targets)
     validate_scripts(result)

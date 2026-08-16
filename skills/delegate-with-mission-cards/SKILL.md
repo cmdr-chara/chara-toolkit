@@ -36,6 +36,10 @@ Mark each `Ready`, `Blocked`, or `Parent-owned`. Launch only Ready missions and 
 
 Escalate for ambiguity, blast radius, irreversibility, hidden coupling, or difficult validation. Never escalate merely because work contains many repetitive items.
 
+## Model tiers
+
+Use Luna Max for the four general roles: `pathfinder-reader`, `patcher-writer`, `investigator-reader`, and `builder-writer`. Escalate high-risk read-only review to `sentinel-reader` on Sol High. Reserve Sol Max for `architect-writer`, where irreversible migrations, architectural risk, security hardening, or failure-sensitive integration justify the highest tier. Do not escalate merely because a mission is long, repetitive, or important.
+
 ## Parallelism
 
 Use the smallest useful fan-out, normally two to four Ready missions. Favor parallel readers. Give every writer a mutually exclusive write set. Treat lockfiles, schemas, migrations, generated artifacts, shared configuration, and release files as single-owner surfaces. Wait for a wave before launching dependent work. Do not permit recursive delegation unless explicitly designed and authorized.

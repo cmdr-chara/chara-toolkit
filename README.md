@@ -90,6 +90,8 @@ The builder verifies its own change. Verification-and-release makes the final de
 
 Mission Control is optional and separate from the individual skill install above. It adds six custom agents plus `delegate-with-mission-cards` for tasks that are already understood well enough to split safely.
 
+The current routing is designed for Codex Subagents V2: Luna Max is the default tier for ordinary reader and writer missions, Sol High handles high-risk read-only review, and Sol Max is reserved for extreme-risk implementation. OpenAI's public model guide documents Luna, Sol, and these reasoning controls; it does not yet use the public label “Subagents V2.”
+
 Install it directly from GitHub:
 
     npx --yes github:cmdr-chara/codex-toolkit
@@ -100,14 +102,14 @@ On Windows, a cloned checkout can use:
 
 Existing Mission Control files are backed up under ~/.codex/backups before replacement.
 
-| Agent | Best for |
-| --- | --- |
-| pathfinder-reader | Fast file, symbol, and fact lookup |
-| patcher-writer | Small isolated edits |
-| investigator-reader | Debugging, tracing, and focused reviews |
-| builder-writer | Features, tests, fixes, docs, and configuration |
-| sentinel-reader | Security, privacy, migrations, and other high-risk analysis |
-| architect-writer | Difficult architecture and failure-sensitive changes |
+| Agent | Best for | Route |
+| --- | --- | --- |
+| pathfinder-reader | Fast file, symbol, and fact lookup | Luna Max |
+| patcher-writer | Small isolated edits | Luna Max |
+| investigator-reader | Debugging, tracing, and focused reviews | Luna Max |
+| builder-writer | Features, tests, fixes, docs, and configuration | Luna Max |
+| sentinel-reader | Security, privacy, migrations, and other high-risk analysis | Sol High |
+| architect-writer | Difficult architecture and failure-sensitive changes | Sol Max |
 
 The coordinator decides how work is divided. Mission Control chooses an agent for each approved task. The parent Codex task still owns integration and final verification.
 
@@ -128,11 +130,11 @@ The checks run without network access and do not modify their fixture projects.
 
 Run the structural validator:
 
-    python scripts/validate_skill_pack.py . --as-of 2026-08-11
+    python scripts/validate_skill_pack.py . --as-of 2026-08-16
 
 Run the network-free helper smoke tests:
 
-    python scripts/run_smoke_tests.py . --as-of 2026-08-11
+    python scripts/run_smoke_tests.py . --as-of 2026-08-16
 
 The structural check covers skill metadata, links, routing cases, references, licensing, and Python safety rules. The smoke suite runs every helper against temporary sample projects and confirms that fixture inputs do not change.
 
@@ -152,7 +154,7 @@ See [the evaluation guide](evaluations/README.md) for routing and workflow tests
 
 ## Research and credit
 
-Web research was refreshed on 2026-07-31; mobile research was checked on 2026-07-17. Always compare it with the versions and lockfiles in the project you are changing.
+Codex model routing was refreshed on 2026-08-16; broader web research was refreshed on 2026-07-31, and mobile research was checked on 2026-07-17. Always compare it with the versions and lockfiles in the project you are changing.
 
 Product design and screenshot reconstruction include adaptations from Leonxlnx's MIT-licensed Taste Skill project. [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) contains the license and source mapping.
 

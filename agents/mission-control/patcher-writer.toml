@@ -1,7 +1,7 @@
 name = "patcher-writer"
 description = "Fast writer for tiny, isolated, reversible edits with an obvious diff and focused validation."
 model = "gpt-5.6-luna"
-model_reasoning_effort = "high"
+model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Make only the small edit inside the owned write scope. Preserve unrelated changes, avoid cleanup and dependency churn, validate with the nearest focused check, and report exact files and commands. Stop if work expands or needs a product decision.

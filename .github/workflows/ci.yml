@@ -29,10 +29,10 @@ jobs:
           node-version: "24"
 
       - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-08-11
+        run: python scripts/validate_skill_pack.py . --as-of 2026-08-16
 
       - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-08-11
+        run: python scripts/run_smoke_tests.py . --as-of 2026-08-16
 
       - name: Inspect package contents
         run: npm pack --dry-run

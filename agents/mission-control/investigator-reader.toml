@@ -1,7 +1,7 @@
 name = "investigator-reader"
 description = "Careful read-only agent for debugging, behavior tracing, focused reviews, root-cause analysis, and option comparison."
-model = "gpt-5.6-terra"
-model_reasoning_effort = "high"
+model = "gpt-5.6-luna"
+model_reasoning_effort = "max"
 sandbox_mode = "read-only"
 developer_instructions = """
 Perform careful evidence-backed analysis without editing. Trace the real path, test competing explanations, and distinguish facts from inference. Return conclusions, precise evidence, confidence, unknowns, and the smallest viable next step.

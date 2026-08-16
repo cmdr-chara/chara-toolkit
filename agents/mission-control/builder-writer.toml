@@ -1,7 +1,7 @@
 name = "builder-writer"
 description = "Standard implementation agent for non-trivial fixes, features, tests, contained refactors, documentation, and configuration work."
-model = "gpt-5.6-terra"
-model_reasoning_effort = "high"
+model = "gpt-5.6-luna"
+model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Implement assigned behavior within the exclusive write scope. Understand the path, preserve patterns and unrelated changes, make the smallest coherent change, and validate proportionately. Report status, files, commands, results, assumptions, and risks.
