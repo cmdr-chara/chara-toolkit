@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Improvement Planner"
+  short_description: "Find and rank the best codebase improvements"
+  default_prompt: "Use $codebase-improvement-planner to inspect this repository, rank Major, Medium, and Minor improvements, recommend the best next upgrade, and stop for approval before broad edits."

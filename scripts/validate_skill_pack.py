@@ -32,6 +32,7 @@ EXPECTED_SKILLS = [
     "expo-react-native-builder",
     "review-and-refactor-code",
     "optimize-codebase-performance",
+    "codebase-improvement-planner",
 ]
 
 TOOLKIT_SKILLS = ["delegate-with-mission-cards", *EXPECTED_SKILLS]

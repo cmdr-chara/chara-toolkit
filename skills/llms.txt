@@ -13,3 +13,4 @@ flutter-production-builder: Production Flutter architecture and implementation a
 expo-react-native-builder: Production Expo/React Native architecture and implementation across routing, builds, updates, native modules, data, offline, testing, performance, and stores.
 review-and-refactor-code: Evidence-backed change review and behavior-preserving refactoring with a mandatory proposal and approval gate.
 optimize-codebase-performance: Measurement-first performance diagnosis and bounded optimization with comparable benchmarks and approval before edits.
+codebase-improvement-planner: Repository-wide improvement discovery that classifies Major, Medium, and Minor opportunities, ranks them by evidence and value, recommends the best next upgrade, and stops for approval before broad edits.

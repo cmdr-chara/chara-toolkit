@@ -1,6 +1,6 @@
 # End-to-End Workflow Scenarios
 
-**Information checked:** 2026-07-17
+**Information checked:** 2026-08-16
 
 Each scenario tests the complete operating contract of one skill. A passing run produces the stated artifacts, cites repository or runtime evidence, respects the stop conditions, and does not silently absorb another skill's owned decision.
 
@@ -309,3 +309,26 @@ Each scenario tests the complete operating contract of one skill. A passing run 
 **Verification:** baseline and candidate use the same workload and material environment; p99 and secondary metrics are reported with units and variance; permissions, ordering, pagination, and errors remain valid.
 
 **Stop/escalate:** stop when no safe representative baseline exists, measurements are non-comparable, approval is ambiguous, the remedy becomes a migration, or production or cost authority is required.
+
+## 15. `codebase-improvement-planner` — Prioritize the next codebase upgrade
+
+**Situation:** A mature repository has accumulated technical debt, inconsistent tests, several old dependencies, duplicated domain logic, and manual release steps. The team knows it should improve the codebase but has not chosen a specific change.
+
+**Inputs:** repository root and working-tree state; product/operational constraints; protected contracts; current build/test/CI/deploy evidence; optional maintenance goals; implementation authorization state.
+
+**Expected workflow:**
+
+1. Freeze audit scope, exclusions, protected behavior, and whether the task is discovery-only or may continue after approval.
+2. Establish a breadth-first baseline across architecture, contracts, tests, CI, tooling, dependency/runtime health, developer workflow, reliability, observability, and operations.
+3. Admit only candidates with concrete repository evidence, expected benefit, confidence, unknowns, verification target, and a likely owning workflow.
+4. Classify each admitted candidate as Major, Medium, or Minor from contract reach, coordination, reversibility, and verification burden rather than line count.
+5. Rank candidates separately from magnitude using value, evidence strength, cost of delay, effort, risk, reversibility, and verifiability.
+6. Recommend one next upgrade and one runner-up when repository evidence cannot resolve a business-priority tie; explain why a smaller candidate may outrank a Major change.
+7. Produce the grouped backlog and a bounded execution slice, then stop at AWAITING_APPROVAL before broad edits.
+8. After explicit approval, either hand the selected migration/debugging/performance/refactor/platform task to its specialist or execute only the approved maintenance slice and verify it.
+
+**Expected artifacts:** scope/evidence limits; Major, Medium, and Minor backlog; candidate evidence/confidence/verification fields; recommended next upgrade; runner-up when needed; bounded proposal; specialist handoff or approved maintenance verification.
+
+**Verification:** every recommendation resolves to repository evidence; magnitude and priority remain separate; speculative/style-only items are rejected; broad discovery changes no files; any approved execution stays inside the proposed slice and reports evidence gained or improved.
+
+**Stop/escalate:** stop when evidence is too weak to rank candidates, a selected candidate becomes a specialist-owned workflow, repository state materially changes, approval is absent, or implementation would exceed the proposed magnitude/scope.

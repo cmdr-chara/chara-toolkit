@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "information_checked": "2026-07-31",
+  "information_checked": "2026-08-16",
   "minimums": {
     "positive_per_skill": 4,
     "negative_per_skill": 3
@@ -731,6 +731,58 @@
           "expected": "do_not_activate",
           "route_to": "production-web-builder",
           "reason": "Performance is one part of a broader platform production audit."
+        }
+      ]
+    },
+    {
+      "skill": "codebase-improvement-planner",
+      "positive": [
+        {
+          "id": "codebase-improvement-planner-p1",
+          "prompt": "Inspect this unfamiliar repository and list the best improvements we could make, grouped into Major, Medium, and Minor, then recommend what we should do next.",
+          "expected": "activate",
+          "reason": "Open-ended repository improvement discovery and prioritization."
+        },
+        {
+          "id": "codebase-improvement-planner-p2",
+          "prompt": "We do not have a specific refactor in mind. Audit the codebase for maintainability, reliability, testing, architecture, tooling, and operational improvements and rank the opportunities.",
+          "expected": "activate",
+          "reason": "No predefined change exists; the requested decision is what to improve."
+        },
+        {
+          "id": "codebase-improvement-planner-p3",
+          "prompt": "Find the highest-value technical upgrade in this repo. Separate change magnitude from priority and explain why the recommended next move beats the larger alternatives.",
+          "expected": "activate",
+          "reason": "Requests evidence-backed candidate classification and next-upgrade selection."
+        },
+        {
+          "id": "codebase-improvement-planner-p4",
+          "prompt": "Make an improvement backlog for this codebase with evidence, expected benefit, risk, effort, confidence, verification, and the owning workflow for each candidate.",
+          "expected": "activate",
+          "reason": "Directly requests the planner's improvement backlog contract."
+        }
+      ],
+      "negative": [
+        {
+          "id": "codebase-improvement-planner-n1",
+          "prompt": "Upgrade Next.js from the current major to the next supported major and plan compatibility and rollback.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "The target transition is already known; discovery is no longer the primary decision."
+        },
+        {
+          "id": "codebase-improvement-planner-n2",
+          "prompt": "Checkout sometimes charges the wrong total after retries. Reproduce it and find the root cause.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "A concrete correctness failure needs causal investigation."
+        },
+        {
+          "id": "codebase-improvement-planner-n3",
+          "prompt": "Review this defined auth diff and propose a behavior-preserving refactor of these three files.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "The review/refactor scope is already defined."
         }
       ]
     }

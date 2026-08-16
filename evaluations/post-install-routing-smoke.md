@@ -18,9 +18,9 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | R10 | Compare Flutter, Expo/React Native, and native for this product using hard gates, weighted criteria, proof spikes, and operational constraints. | `mobile-architecture-director` |
 | R11 | Implement this approved feature in the existing Flutter app with routing, offline persistence, platform integration, tests, and release checks. | `flutter-production-builder` |
 | R12 | Implement this approved feature in the existing Expo app with Router, development builds, offline behavior, device tests, EAS Build, and Update policy. | `expo-react-native-builder` |
-
 | R13 | Review this feature branch for actionable defects, assess whether its duplicated parser should be refactored, and stop with a concrete proposal before editing. | `review-and-refactor-code` |
 | R14 | Profile this API's p99 under a representative workload, identify falsifiable bottlenecks, and stop with a bounded optimization proposal before editing. | `optimize-codebase-performance` |
+| R15 | Inspect this repository without a predefined change, group the best improvement opportunities into Major, Medium, and Minor, and recommend the highest-value next upgrade. | `codebase-improvement-planner` |
 
 ## High-risk overlaps
 
@@ -30,15 +30,15 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | O2 | A framework upgrade now crashes startup for an unknown reason; determine why, then finish the migration safely. | `debugging-investigator` then `codebase-evolution-controller` |
 | O3 | Redesign this dashboard from product goals, then implement the approved direction in its existing web app. | `product-design-director` then `production-web-builder` |
 | O4 | Choose our mobile stack, then build the feature after the architecture decision is approved. | `mobile-architecture-director` then exactly one of `flutter-production-builder` or `expo-react-native-builder` |
-
 | O5 | Map an unfamiliar service, then review a defined diff inside it. | `repository-intelligence` then `review-and-refactor-code` |
 | O6 | A refactor caused a deadlock; find the cause, then propose a safe structural correction. | `debugging-investigator` then `review-and-refactor-code` |
 | O7 | The API returns wrong totals and is slow; fix the evidence order. | `debugging-investigator` then `optimize-codebase-performance` |
 | O8 | Measure and optimize p99, then decide whether the integrated release can ship. | `optimize-codebase-performance` then `verification-and-release` |
+| O9 | We do not know what to improve yet; inspect the repository, choose the best upgrade, then route that concrete task to the specialist that owns it. | `codebase-improvement-planner` then the selected specialist skill |
 
 ## Acceptance
 
-- Pass all 14 primary routes.
-- Pass at least six of eight overlap sequences with no incorrect co-primary activation.
+- Pass all 15 primary routes.
+- Pass at least seven of nine overlap sequences with no incorrect co-primary activation.
 - Treat a missing skill, stale display label, or wrong primary route as a failure even if the eventual answer is plausible.
 - If a case fails, record client version, installed skill path, selected skills, and rationale; fix metadata or trigger boundaries, then rerun only the failed case and its nearest overlap case.

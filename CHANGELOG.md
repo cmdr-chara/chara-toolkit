@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add `codebase-improvement-planner` for open-ended repository improvement discovery, Major/Medium/Minor magnitude classification, and evidence-backed next-upgrade selection.
+- Add a ranking rubric that keeps change magnitude separate from priority, plus routing, workflow, catalog, and responsibility-matrix coverage.
+
 ## 0.4.1 - 2026-08-16
 
 - Route the four general Mission Control roles through GPT-5.6 Luna with `max` reasoning for the current Codex Subagents V2 runtime.

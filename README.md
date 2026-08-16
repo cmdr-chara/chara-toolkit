@@ -1,14 +1,14 @@
 # Codex Toolkit
 
-> Fifteen focused Codex skills for understanding, changing, and verifying real software projects.
+> Sixteen focused Codex skills for understanding, changing, and verifying real software projects.
 
 [![CI](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Codex_skills-15-7c3aed.svg)](skills)
+[![Skills](https://img.shields.io/badge/Codex_skills-16-7c3aed.svg)](skills)
 [![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
 <p align="center">
-  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Fifteen Codex skills and six optional agents." />
+  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Sixteen Codex skills and six optional agents." />
 </p>
 
 Codex can write code without this toolkit. The skills here are for the parts around the code: tracing an unfamiliar system, controlling scope, checking assumptions, preserving behavior, and deciding what evidence is enough to ship.
@@ -44,6 +44,7 @@ For a bug investigation instead, replace it with `debugging-investigator`. The t
 | You want to... | Use |
 | --- | --- |
 | Understand an unfamiliar repository or see what a change could affect | [repository-intelligence](skills/repository-intelligence) |
+| Discover and rank what the codebase should improve next | [codebase-improvement-planner](skills/codebase-improvement-planner) |
 | Review a change or plan a safe refactor | [review-and-refactor-code](skills/review-and-refactor-code) |
 | Find the cause of a bug or regression | [debugging-investigator](skills/debugging-investigator) |
 | Measure a slow path and plan an optimization | [optimize-codebase-performance](skills/optimize-codebase-performance) |
@@ -51,7 +52,7 @@ For a bug investigation instead, replace it with `debugging-investigator`. The t
 | Update guides, examples, API docs, configuration, or runbooks | [documentation-synchronizer](skills/documentation-synchronizer) |
 | Decide what must be tested or whether a release is ready | [verification-and-release](skills/verification-and-release) |
 
-Review/refactor and performance requests start with inspection and a proposal. They do not edit files until you approve the proposed batch.
+Open-ended codebase improvement, review/refactor, and performance requests start with inspection and a proposal. They do not expand into broad edits until you approve the proposed batch.
 
 ### Build products and interfaces
 
@@ -78,6 +79,7 @@ Use the smallest skill that owns the decision in front of you. A skill can hand 
 A task does not need every skill. Common paths are:
 
 - Unknown repository -> repository-intelligence -> the relevant implementation skill.
+- Open-ended “improve this codebase” request -> codebase-improvement-planner -> the specialist that owns the selected upgrade.
 - Bug with an unknown cause -> debugging-investigator -> a focused fix -> verification-and-release.
 - Requested cleanup -> review-and-refactor-code -> your approval -> incremental refactor.
 - Slow critical path -> optimize-codebase-performance -> your approval -> measured optimization.
@@ -150,7 +152,7 @@ See [the evaluation guide](evaluations/README.md) for routing and workflow tests
 | docs | Design decisions, boundaries, and research sources |
 | evaluations | Routing, overlap, workflow, and smoke-test cases |
 | scripts | Installers and validation tools |
-| skills | Fifteen installable skills |
+| skills | Sixteen installable skills |
 
 ## Research and credit
 
@@ -158,7 +160,7 @@ Codex model routing was refreshed on 2026-08-16; broader web research was refres
 
 Product design and screenshot reconstruction include adaptations from Leonxlnx's MIT-licensed Taste Skill project. [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) contains the license and source mapping.
 
-The code-review, refactoring, and performance skills were independently authored after inspecting an unlicensed public skill collection. No source prose or code was copied. The research record is in [docs/research-ledger.md](docs/research-ledger.md).
+The code-review, refactoring, performance, and codebase-improvement skills were independently authored after inspecting an unlicensed public skill collection. No source prose or code was copied. The research record is in [docs/research-ledger.md](docs/research-ledger.md).
 
 ## Contributing
 
