@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.7.0 - 2026-08-17
+
+- Add a zero-maintenance `setup` command that installs all toolkit skills and Mission Control into Codex and registers automatic updates.
+- Make automatic updates release-pinned: the updater checks the latest published GitHub Release, never unreleased `main`, and automatically picks up newly added toolkit skills.
+- Add user-level scheduler support for Windows Task Scheduler, macOS LaunchAgents, Linux systemd timers, and a crontab fallback, with status/remove commands and conflict backups.
+- Rewrite the README skill picker in shorter task language so every route is understandable without knowing toolkit jargon.
+- Extend CI to exercise a complete isolated toolkit install and validate the auto-update plan without registering a scheduler on the runner.
+
 ## 0.6.0 - 2026-08-16
 
 - Add `content-provenance-hygiene` for evidence-first inspection and authorized deterministic sanitation of provenance/metadata in user-owned text, images, PDFs, and document containers.
@@ -31,7 +39,7 @@
 ## 0.4.0 - 2026-08-11
 
 - Add public CI for structural validation, helper smoke tests, package inspection, and an isolated Mission Control install.
-- Scope the package name to `@cmdr-chara/codex-toolkit` to avoid colliding with an unrelated npm package.
+- Scope the package name to `@cmdr-chara/codex-toolkit` to avoid colliding with an unrelated unscoped npm package.
 - Require PowerShell 7 for the repository-owned installer and make its default home-directory lookup profile-independent.
 - Tighten the README around the fastest useful install, trust signals, and the distinction between individual skills and Mission Control.
 - Correct the evaluation guide to reflect all fifteen primary skill routes.
