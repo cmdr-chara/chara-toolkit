@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -50,17 +51,114 @@ PATTERNS: dict[str, re.Pattern[str]] = {
 }
 
 
+def iter_repository_files(root: Path) -> Iterable[Path]:
+    """Yield owned files without descending into dependency/generated trees."""
+    for current, dirnames, filenames in os.walk(root, topdown=True, followlinks=False):
+        directory = Path(current)
+        dirnames[:] = sorted(
+            name
+            for name in dirnames
+            if name not in SKIP_DIRS and not (directory / name).is_symlink()
+        )
+        for filename in sorted(filenames):
+            path = directory / filename
+            if path.is_symlink() or not path.is_file():
+                continue
+            yield path
+
+
 def iter_source_files(root: Path) -> Iterable[Path]:
-    for path in root.rglob("*"):
-        if not path.is_file() or path.suffix.lower() not in SOURCE_SUFFIXES:
+    for path in iter_repository_files(root):
+        if path.suffix.lower() in SOURCE_SUFFIXES:
+            yield path
+
+
+def iter_tsconfig_files(root: Path) -> Iterable[Path]:
+    for path in iter_repository_files(root):
+        if path.suffix.lower() == ".json" and path.name.lower().startswith("tsconfig"):
+            yield path
+
+
+def strip_jsonc_comments(text: str) -> str:
+    output: list[str] = []
+    index = 0
+    in_string = False
+    escaped = False
+    while index < len(text):
+        char = text[index]
+        if in_string:
+            output.append(char)
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            index += 1
             continue
-        try:
-            relative = path.relative_to(root)
-        except ValueError:
+
+        if char == '"':
+            in_string = True
+            output.append(char)
+            index += 1
             continue
-        if any(part in SKIP_DIRS for part in relative.parts[:-1]):
+
+        if char == "/" and index + 1 < len(text):
+            next_char = text[index + 1]
+            if next_char == "/":
+                index += 2
+                while index < len(text) and text[index] not in "\r\n":
+                    index += 1
+                continue
+            if next_char == "*":
+                index += 2
+                while index + 1 < len(text) and text[index : index + 2] != "*/":
+                    if text[index] in "\r\n":
+                        output.append(text[index])
+                    index += 1
+                index = min(len(text), index + 2)
+                continue
+
+        output.append(char)
+        index += 1
+    return "".join(output)
+
+
+def strip_jsonc_trailing_commas(text: str) -> str:
+    output: list[str] = []
+    index = 0
+    in_string = False
+    escaped = False
+    while index < len(text):
+        char = text[index]
+        if in_string:
+            output.append(char)
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            index += 1
             continue
-        yield path
+
+        if char == '"':
+            in_string = True
+            output.append(char)
+            index += 1
+            continue
+
+        if char == ",":
+            lookahead = index + 1
+            while lookahead < len(text) and text[lookahead].isspace():
+                lookahead += 1
+            if lookahead < len(text) and text[lookahead] in "}]":
+                index += 1
+                continue
+
+        output.append(char)
+        index += 1
+    return "".join(output)
 
 
 def read_json(path: Path) -> object | None:
@@ -70,19 +168,29 @@ def read_json(path: Path) -> object | None:
         return None
 
 
+def read_jsonc(path: Path) -> object | None:
+    try:
+        text = path.read_text(encoding="utf-8")
+        normalized = strip_jsonc_trailing_commas(strip_jsonc_comments(text))
+        return json.loads(normalized)
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+
+
 def tsconfig_summary(root: Path) -> list[dict[str, object]]:
     results: list[dict[str, object]] = []
-    for path in sorted(root.glob("tsconfig*.json")):
-        data = read_json(path)
+    for path in sorted(iter_tsconfig_files(root), key=lambda item: item.relative_to(root).as_posix()):
+        relative = path.relative_to(root).as_posix()
+        data = read_jsonc(path)
         if not isinstance(data, dict):
-            results.append({"path": path.name, "parseable_json": False})
+            results.append({"path": relative, "parseable_jsonc": False})
             continue
         compiler = data.get("compilerOptions")
         compiler = compiler if isinstance(compiler, dict) else {}
         results.append(
             {
-                "path": path.name,
-                "parseable_json": True,
+                "path": relative,
+                "parseable_jsonc": True,
                 "extends": data.get("extends"),
                 "strict": compiler.get("strict"),
                 "noImplicitAny": compiler.get("noImplicitAny"),
@@ -147,7 +255,7 @@ def scan_sources(root: Path) -> tuple[Counter[str], dict[str, list[dict[str, obj
     counts: Counter[str] = Counter()
     examples: dict[str, list[dict[str, object]]] = defaultdict(list)
     files_scanned = 0
-    for path in sorted(iter_source_files(root)):
+    for path in iter_source_files(root):
         try:
             text = path.read_text(encoding="utf-8")
         except (OSError, UnicodeError):
@@ -175,8 +283,8 @@ def build_report(root: Path) -> dict[str, object]:
     counts, examples, files_scanned = scan_sources(root)
     anti_slop_paths = [
         path.relative_to(root).as_posix()
-        for path in root.rglob("index.ts")
-        if "anti-slop" in path.as_posix().lower() and path.is_file()
+        for path in iter_repository_files(root)
+        if path.name == "index.ts" and "anti-slop" in path.as_posix().lower()
     ]
     return {
         "root": str(root),

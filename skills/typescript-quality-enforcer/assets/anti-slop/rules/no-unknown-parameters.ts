@@ -39,6 +39,13 @@ function parameterName(parameter: Parameter, sourceText: string): string {
     : sourceText.replace(/\s*:\s*unknown\s*$/u, "");
 }
 
+function resolvesToUnknown(type: ESTree.TSType): boolean {
+  if (type.type === "TSUnknownKeyword") return true;
+  if (type.type === "TSParenthesizedType") return resolvesToUnknown(type.typeAnnotation);
+  if (type.type === "TSUnionType") return type.types.some(resolvesToUnknown);
+  return false;
+}
+
 /** Disallow unknown inputs except explicitly named error-cause enrichment. */
 export const noUnknownParametersRule = defineRule({
   meta: {
@@ -56,7 +63,8 @@ export const noUnknownParametersRule = defineRule({
     const checkParameters = (node: ParameterOwner) => {
       for (const parameter of node.params) {
         const annotation = parameterAnnotation(parameter);
-        if (annotation?.typeAnnotation.type !== "TSUnknownKeyword") continue;
+        if (annotation === null || annotation === undefined) continue;
+        if (!resolvesToUnknown(annotation.typeAnnotation)) continue;
         const name = parameterName(parameter, context.sourceCode.getText(parameter));
         if (name === "cause") continue;
         context.report({

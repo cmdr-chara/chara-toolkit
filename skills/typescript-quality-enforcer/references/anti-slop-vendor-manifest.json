@@ -1,0 +1,33 @@
+{
+  "files": {
+    "LICENSE": "69239ead1ed4a05db45c0da08d1b8f64c0a76ee4",
+    "index.ts": "2b4ae2223e33e1c44bcdaf5c0424eab135f415d8",
+    "rules/no-chained-type-assertions.ts": "0d118527804cfd00fe377af13293f3d2071492bf",
+    "rules/no-conditional-empty-object-spread.ts": "ae7248d36e54851b67ad1f5d78813bf09ac3dd6a",
+    "rules/no-known-value-widening.ts": "2a6806c699460a4f19e715bc2b36ad7fc69e7f12",
+    "rules/no-module-mocking.ts": "d6fb5b45c0344add2ea8c1fe296d472eee0e2549",
+    "rules/no-object-parameters.ts": "29b990f3395a21c2270f4a35eede36e23a80b745",
+    "rules/no-reflect-apply.ts": "2cc30451bda68d90d84eb9744034a778ae783b20",
+    "rules/no-reflect-get.ts": "cf630ecc005aa9cef09cdd4a701feea968674b47",
+    "rules/no-runtime-typeof.ts": "6a25c2475d9a49c2145408b20892a7db2b7129c4",
+    "rules/no-shape-in-symbol-names.ts": "afc00dd41245ef8ca5b5481acaff3253700187bd",
+    "rules/no-unknown-parameters.ts": "baed0e667c19c8d75452b945a5f382c1570a23f8",
+    "rules/no-unknown-returns.ts": "4b16d6ef3d78a727a3685303e77045267e2c60eb",
+    "rules/no-unknown-type-aliases.ts": "6bf100d2de0f420a29c1839130ebf9b243e26f72",
+    "rules/no-unsafe-dictionary-type.ts": "8c45eed27628fa2c70b64017ebd3a7da998df151",
+    "rules/no-widen-then-assert.ts": "c5e07f7fc55a8ebc1c19db58625552822beb0c1e",
+    "rules/require-safety-comment-for-type-assertion.ts": "d1aadd38c1ad0cfff3d40bd48d75277e4c3f81c6",
+    "shared/dictionary-types.ts": "865170047f330705aa74e9cabfe44ad004297e86",
+    "shared/lexical-type-parameters.ts": "7cdb18c911c9dd31066ead3beda0a9dfc6554018",
+    "shared/reflect-method.ts": "39bc218c3bbf1eada15c00b825202e2835771ea7"
+  },
+  "hash_kind": "git-blob-sha1",
+  "local_patches": [
+    "rules/no-unknown-parameters.ts",
+    "rules/no-unknown-type-aliases.ts",
+    "rules/require-safety-comment-for-type-assertion.ts"
+  ],
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/dmmulroy/anti-slop",
+  "upstream_revision": "446268e5d15baa968eaec669ff65358d36ae6259"
+}

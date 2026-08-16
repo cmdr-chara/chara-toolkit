@@ -50,12 +50,27 @@ SOFTWARE.
 ## dmmulroy/anti-slop
 
 **Upstream:** https://github.com/dmmulroy/anti-slop  
-**Vendored revision:** `446268e5d15baa968eaec669ff65358d36ae6259`  
+**Vendored base revision:** `446268e5d15baa968eaec669ff65358d36ae6259`  
 **Information checked:** 2026-08-16
 
-The deterministic Oxlint runtime under `skills/typescript-quality-enforcer/assets/anti-slop/` is vendored from the upstream `skills/install-anti-slop/assets/anti-slop/` runtime at the revision above. The vendored surface contains `index.ts`, fifteen rule modules, and three shared helper modules. Upstream package metadata, tests, lockfiles, CI, and repository development configuration are not redistributed.
+The deterministic Oxlint runtime under `skills/typescript-quality-enforcer/assets/anti-slop/`
+is based on the upstream `skills/install-anti-slop/assets/anti-slop/` runtime at the
+revision above. The vendored surface contains `index.ts`, fifteen rule modules, and
+three shared helper modules. Upstream package metadata, tests, lockfiles, CI, and
+repository development configuration are not redistributed.
 
-The surrounding `typescript-quality-enforcer` workflow, staged-adoption guidance, read-only inventory helper, non-overwriting installer behavior, toolkit routing/evaluations, and verification policy are integration work authored for this repository. The vendored runtime is kept source-equivalent to the pinned upstream asset; future refreshes must update the pinned revision and provenance together.
+The toolkit carries three local correctness patches on top of that base revision:
+`no-unknown-parameters` handles unknown-dominated union inputs,
+`require-safety-comment-for-type-assertion` rejects empty `SAFETY:` markers, and
+`no-unknown-type-aliases` inspects lexical block/namespace aliases. All other runtime
+files retain their upstream Git blobs. The complete post-patch runtime is pinned by
+`skills/typescript-quality-enforcer/references/anti-slop-vendor-manifest.json` and
+verified in CI by `scripts/verify_anti_slop_vendor.py`.
+
+The surrounding `typescript-quality-enforcer` workflow, staged-adoption guidance,
+read-only inventory helper, non-overwriting installer behavior, toolkit
+routing/evaluations, and verification policy are integration work authored for this
+repository.
 
 No endorsement by Dillon Mulroy is stated or implied.
 
