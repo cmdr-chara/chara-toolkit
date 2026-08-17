@@ -125,9 +125,10 @@ jobs:
           temp_home="$(mktemp -d)"
           node bin/toolkit.mjs auto-update install --dry-run --codex-home "$temp_home"
 
-      - name: Validate release-pinned update runner
+      - name: Validate immutable-release update runner
         shell: bash
         run: |
+          set -euo pipefail
           runner_dir="$(mktemp -d)"
           cp scripts/auto-update-runner.mjs "$runner_dir/update-runner.mjs"
           cat > "$runner_dir/auto-update.json" <<'JSON'
@@ -141,9 +142,25 @@ jobs:
           cat > "$runner_dir/state.json" <<'JSON'
           {
             "schema_version": 1,
-            "release": "v0.7.0"
+            "release": "v0.8.0"
           }
           JSON
-          node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 | tee "$runner_dir/plan.txt"
-          grep -F 'github:cmdr-chara/codex-toolkit#v0.8.0' "$runner_dir/plan.txt"
+          test_commit="0123456789abcdef0123456789abcdef01234567"
+          node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 --commit "$test_commit" | tee "$runner_dir/plan.txt"
+          grep -F "github:cmdr-chara/codex-toolkit#$test_commit" "$runner_dir/plan.txt"
           grep -F '"setup"' "$runner_dir/plan.txt"
+          grep -F "\"commit\": \"$test_commit\"" "$runner_dir/plan.txt"
+
+          if node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 --commit deadbeef; then
+            echo "updater unexpectedly accepted a non-immutable commit reference" >&2
+            exit 1
+          fi
+
+          cat > "$runner_dir/state.json" <<JSON
+          {
+            "schema_version": 1,
+            "release": "v0.8.0",
+            "commit": "$test_commit"
+          }
+          JSON
+          node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 --commit "$test_commit" | grep -F 'already current'
