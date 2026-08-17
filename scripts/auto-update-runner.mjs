@@ -98,6 +98,17 @@ if (typeof commit !== "string" || !COMMIT_PATTERN.test(commit)) {
   throw new Error(`GitHub returned an unexpected release commit: ${String(commit)}`);
 }
 
+if (
+  state.release === tag &&
+  typeof state.commit === "string" &&
+  COMMIT_PATTERN.test(state.commit) &&
+  state.commit !== commit
+) {
+  throw new Error(
+    `Release tag ${tag} moved from ${state.commit} to ${commit}; refusing automatic update`,
+  );
+}
+
 if (state.release === tag && state.commit === commit) {
   console.log(`Codex Toolkit is already current at ${tag} (${commit.slice(0, 12)}).`);
   process.exit(0);
