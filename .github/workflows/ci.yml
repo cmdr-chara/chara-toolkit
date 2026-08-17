@@ -146,6 +146,7 @@ jobs:
           }
           JSON
           test_commit="0123456789abcdef0123456789abcdef01234567"
+          moved_commit="89abcdef0123456789abcdef0123456789abcdef"
           node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 --commit "$test_commit" | tee "$runner_dir/plan.txt"
           grep -F "github:cmdr-chara/codex-toolkit#$test_commit" "$runner_dir/plan.txt"
           grep -F '"setup"' "$runner_dir/plan.txt"
@@ -164,3 +165,8 @@ jobs:
           }
           JSON
           node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 --commit "$test_commit" | grep -F 'already current'
+
+          if node "$runner_dir/update-runner.mjs" --dry-run --tag v0.8.0 --commit "$moved_commit"; then
+            echo "updater unexpectedly accepted a moved release tag" >&2
+            exit 1
+          fi
