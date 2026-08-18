@@ -28,9 +28,15 @@ INTERESTING_PACKAGES = {
 def walk(root: Path, max_files: int) -> tuple[list[Path], bool]:
     files: list[Path] = []
     for current, dirs, names in os.walk(root, topdown=True, followlinks=False):
-        dirs[:] = sorted(d for d in dirs if d not in IGNORE)
+        directory = Path(current)
+        dirs[:] = sorted(
+            d for d in dirs if d not in IGNORE and not (directory / d).is_symlink()
+        )
         for name in sorted(names):
-            files.append(Path(current) / name)
+            path = directory / name
+            if path.is_symlink() or not path.is_file():
+                continue
+            files.append(path)
             if len(files) >= max_files:
                 return files, True
     return files, False

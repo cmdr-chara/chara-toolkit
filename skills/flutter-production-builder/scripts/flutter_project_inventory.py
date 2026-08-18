@@ -22,9 +22,15 @@ SELECTED = {
 def walk(root: Path, max_files: int) -> tuple[list[Path], bool]:
     files: list[Path] = []
     for current, dirs, names in os.walk(root, topdown=True, followlinks=False):
-        dirs[:] = sorted(d for d in dirs if d not in IGNORE)
+        directory = Path(current)
+        dirs[:] = sorted(
+            d for d in dirs if d not in IGNORE and not (directory / d).is_symlink()
+        )
         for name in sorted(names):
-            files.append(Path(current) / name)
+            path = directory / name
+            if path.is_symlink() or not path.is_file():
+                continue
+            files.append(path)
             if len(files) >= max_files:
                 return files, True
     return files, False
@@ -100,7 +106,11 @@ def inventory(root: Path, max_files: int) -> dict[str, Any]:
     for path in files:
         if path.name == "pubspec.yaml":
             pubspecs.append({"path": rel(path), **parse_pubspec(path)})
-    platforms = [name for name in ("android", "ios", "macos", "windows", "linux", "web") if (root / name).is_dir()]
+    platforms = [
+        name
+        for name in ("android", "ios", "macos", "windows", "linux", "web")
+        if (root / name).is_dir() and not (root / name).is_symlink()
+    ]
     configs = sorted(rel(p) for p in files if p.name in {"analysis_options.yaml", "build.yaml", "l10n.yaml", "melos.yaml", "Podfile", "gradle.properties", "settings.gradle", "settings.gradle.kts"})
     generated = sorted(rel(p) for p in files if any(token in p.name for token in (".g.dart", ".freezed.dart", ".mocks.dart")))
     tests = sorted({rel(p.parent) for p in files if p.suffix == ".dart" and any(part in {"test", "integration_test"} for part in p.parts)})

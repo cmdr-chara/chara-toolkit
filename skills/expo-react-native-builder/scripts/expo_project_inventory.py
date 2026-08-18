@@ -21,9 +21,15 @@ SELECTED = {
 def walk(root: Path, max_files: int) -> tuple[list[Path], bool]:
     files: list[Path] = []
     for current, dirs, names in os.walk(root, topdown=True, followlinks=False):
-        dirs[:] = sorted(d for d in dirs if d not in IGNORE)
+        directory = Path(current)
+        dirs[:] = sorted(
+            d for d in dirs if d not in IGNORE and not (directory / d).is_symlink()
+        )
         for name in sorted(names):
-            files.append(Path(current) / name)
+            path = directory / name
+            if path.is_symlink() or not path.is_file():
+                continue
+            files.append(path)
             if len(files) >= max_files:
                 return files, True
     return files, False
@@ -84,13 +90,13 @@ def inventory(root: Path, max_files: int) -> dict[str, Any]:
     app_configs: list[dict[str, Any]] = []
     for name in ("app.json", "app.config.json"):
         path = root / name
-        if path.is_file():
+        if path.is_file() and not path.is_symlink():
             data, error = read_json(path)
             app_configs.append({"path": name, "error": error} if data is None else {"path": name, "selected": redact_config(data)})
     dynamic_configs = sorted(rel(p) for p in files if p.name in {"app.config.js", "app.config.ts"})
     eas = None
     eas_path = root / "eas.json"
-    if eas_path.is_file():
+    if eas_path.is_file() and not eas_path.is_symlink():
         data, error = read_json(eas_path)
         if data is None:
             eas = {"path": "eas.json", "error": error}
@@ -101,7 +107,7 @@ def inventory(root: Path, max_files: int) -> dict[str, Any]:
         "package_manifests": packages,
         "lockfiles": sorted(rel(p) for p in files if p.name in {"package-lock.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"}),
         "app_json_configs": app_configs, "dynamic_app_configs": dynamic_configs, "eas": eas,
-        "native_directories": [name for name in ("ios", "android") if (root / name).is_dir()],
+        "native_directories": [name for name in ("ios", "android") if (root / name).is_dir() and not (root / name).is_symlink()],
         "route_signals": sorted({rel(p.parent) for p in files if "app" in p.parts and p.suffix in {".tsx", ".ts", ".jsx", ".js"} and (p.name.startswith("_") or p.name.startswith("+") or p.name in {"index.tsx", "index.jsx"})})[:200],
         "test_configs": sorted(rel(p) for p in files if p.name in {"jest.config.js", "jest.config.ts", ".maestro", "detox.config.js", "detox.config.ts"} or p.name.startswith("playwright.config")),
         "environment_file_names_only": sorted(rel(p) for p in files if p.name.startswith(".env")),
