@@ -60,8 +60,10 @@ def validate_evaluations(result):
     supplemental = _load_json_objects([supplemental_path], "cases", result)
     for case in supplemental:
         sequence = case.get("expected_sequence")
-        if not isinstance(sequence, list) or not all(
-            isinstance(item, str) and item for item in sequence
+        if (
+            not isinstance(sequence, list)
+            or not sequence
+            or not all(isinstance(item, str) and item for item in sequence)
         ):
             result.error(
                 "overlap-cases-content-provenance.json: expected_sequence must be "
