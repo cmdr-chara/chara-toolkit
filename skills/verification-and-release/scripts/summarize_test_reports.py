@@ -30,6 +30,19 @@ def number(value: str | None, default: float = 0.0) -> float:
         return default
 
 
+def junit_aggregate_suites(root: ET.Element) -> list[ET.Element]:
+    """Select the highest aggregate nodes available without counting nested suites twice."""
+    tag = root.tag.rsplit("}", 1)[-1]
+    if tag in {"testsuite", "testsuites"} and root.get("tests") is not None:
+        return [root]
+    suites: list[ET.Element] = []
+    for child in root:
+        child_tag = child.tag.rsplit("}", 1)[-1]
+        if child_tag in {"testsuite", "testsuites"}:
+            suites.extend(junit_aggregate_suites(child))
+    return suites
+
+
 def junit_summary(files: list[Path]) -> dict[str, Any]:
     totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0, "time_seconds": 0.0}
     parsed: list[dict[str, Any]] = []
@@ -40,10 +53,7 @@ def junit_summary(files: list[Path]) -> dict[str, Any]:
         except (ET.ParseError, OSError) as exc:
             problems.append(f"{path}: {exc}")
             continue
-        suites = [root] if root.tag.endswith("testsuite") else [x for x in root.iter() if x.tag.endswith("testsuite")]
-        # Avoid double counting nested suites: use root aggregate when it provides tests.
-        if root.tag.endswith("testsuites") and root.get("tests") is not None:
-            suites = [root]
+        suites = junit_aggregate_suites(root)
         item = {"path": str(path), "tests": 0, "failures": 0, "errors": 0, "skipped": 0, "time_seconds": 0.0}
         for suite in suites:
             item["tests"] += int(number(suite.get("tests")))
@@ -92,6 +102,11 @@ def lcov_summary(files: list[Path]) -> dict[str, Any]:
     return {"files": parsed, "totals": totals, "percentages": percentages, "parse_problems": problems}
 
 
+def coverage_cell(hit: int, found: int, percentage: float | None) -> str:
+    rendered = f"{percentage}%" if percentage is not None else "n/a"
+    return f"{hit}/{found} ({rendered})"
+
+
 def markdown(data: dict[str, Any]) -> str:
     jt = data["junit"]["totals"]
     lt = data["lcov"]["totals"]
@@ -105,7 +120,7 @@ def markdown(data: dict[str, Any]) -> str:
         "", "## LCOV", "",
         "| Files | Lines | Functions | Branches |",
         "| ---: | ---: | ---: | ---: |",
-        f"| {len(data['lcov']['files'])} | {lt['lines_hit']}/{lt['lines_found']} ({lp['lines']}%) | {lt['functions_hit']}/{lt['functions_found']} ({lp['functions']}%) | {lt['branches_hit']}/{lt['branches_found']} ({lp['branches']}%) |",
+        f"| {len(data['lcov']['files'])} | {coverage_cell(lt['lines_hit'], lt['lines_found'], lp['lines'])} | {coverage_cell(lt['functions_hit'], lt['functions_found'], lp['functions'])} | {coverage_cell(lt['branches_hit'], lt['branches_found'], lp['branches'])} |",
         "", "> Coverage totals locate gaps; they do not establish release readiness.",
     ]
     problems = data["junit"]["parse_problems"] + data["lcov"]["parse_problems"]
