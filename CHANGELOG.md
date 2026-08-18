@@ -1,3 +1,7 @@
+## 0.8.4 - 2026-08-18
+
+- fix: keep project inventories inside repository roots (#9) (`195b0e23f381`).
+
 ## 0.8.3 - 2026-08-18
 
 - ci: stop generated release commits from recursing (`c4f0d32e2d5d`).
