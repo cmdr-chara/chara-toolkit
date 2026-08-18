@@ -58,10 +58,18 @@ def classify(path: str) -> list[dict[str, str]]:
     return results
 
 
+def normalize_changed_path(raw: str) -> str:
+    """Normalize an explicit path without stripping meaningful leading dots."""
+    value = raw.strip().replace("\\", "/")
+    while value.startswith("./"):
+        value = value[2:]
+    return value
+
+
 def build(root: Path, files: list[str]) -> dict[str, Any]:
     normalized: list[str] = []
     for raw in files:
-        p = raw.strip().replace("\\", "/").lstrip("./")
+        p = normalize_changed_path(raw)
         if p and p not in normalized:
             normalized.append(p)
     items = [{"path": p, "suggested_surfaces": classify(p)} for p in sorted(normalized)]
