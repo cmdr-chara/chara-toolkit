@@ -45,7 +45,6 @@ def git_output(root: Path, *args: str) -> str | None:
 
 def walk_files(root: Path, max_files: int) -> tuple[list[Path], bool]:
     files: list[Path] = []
-    truncated = False
     for current, dirs, names in os.walk(root, topdown=True, followlinks=False):
         dirs[:] = sorted(d for d in dirs if d not in IGNORED_DIRS)
         for name in sorted(names):
@@ -56,10 +55,9 @@ def walk_files(root: Path, max_files: int) -> tuple[list[Path], bool]:
             except OSError:
                 continue
             files.append(path)
-            if len(files) >= max_files:
-                truncated = True
-                return files, truncated
-    return files, truncated
+            if len(files) > max_files:
+                return files[:max_files], True
+    return files, False
 
 
 def rel(root: Path, path: Path) -> str:
