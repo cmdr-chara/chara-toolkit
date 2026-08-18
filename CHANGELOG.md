@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.8.1 - 2026-08-18
+
+- Harden automatic updates by resolving the latest published release tag to its immutable 40-character commit SHA before executing it through `npx`.
+- Support lightweight and annotated Git tags while rejecting malformed SHAs, unsupported tag targets, resolution cycles, and excessive tag indirection.
+- Record both release tag and resolved commit in updater state so an installation is considered current only when both identities match.
+- Fail closed if an already-installed release tag later resolves to a different commit, preventing silently moved release tags from being trusted.
+- Extend CI coverage for immutable update execution, malformed commit rejection, current-state detection, and moved-tag refusal.
+
 ## 0.8.0 - 2026-08-17
 
 - Add `bug-finder` for proactive discovery of previously unknown correctness defects using explicit invariants, high-risk surface prioritization, and proof/falsification before confirmation.
