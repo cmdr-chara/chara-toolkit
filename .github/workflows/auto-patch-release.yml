@@ -1,0 +1,110 @@
+name: Auto Patch Release
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: codex-toolkit-auto-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out validated main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Refuse stale CI results
+        id: candidate
+        env:
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --tags --force
+          current="$(git rev-parse origin/main)"
+          if [ "$current" != "$VALIDATED_SHA" ]; then
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            echo "A newer main commit exists; its CI run will own the next release."
+            exit 0
+          fi
+          echo "release=true" >> "$GITHUB_OUTPUT"
+
+      - name: Compute next patch version
+        if: steps.candidate.outputs.release == 'true'
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          current="$(node -p "require('./package.json').version")"
+          if ! [[ "$current" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "Automatic releases require a stable semver package version; found $current" >&2
+            exit 1
+          fi
+          next="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.$((BASH_REMATCH[3] + 1))"
+          echo "version=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare release metadata
+        if: steps.candidate.outputs.release == 'true'
+        env:
+          NEXT_VERSION: ${{ steps.version.outputs.version }}
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          pkg.version = process.env.NEXT_VERSION;
+          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+          python - <<'PY'
+          import os
+          import subprocess
+          from datetime import date
+          from pathlib import Path
+
+          version = os.environ['NEXT_VERSION']
+          sha = os.environ['VALIDATED_SHA']
+          subject = subprocess.check_output(
+              ['git', 'show', '-s', '--format=%s', sha], text=True
+          ).strip()
+          path = Path('CHANGELOG.md')
+          previous = path.read_text(encoding='utf-8')
+          section = (
+              f"## {version} - {date.today().isoformat()}\n\n"
+              f"- {subject} (`{sha[:12]}`).\n\n"
+          )
+          path.write_text(section + previous, encoding='utf-8')
+          PY
+
+      - name: Commit release candidate
+        if: steps.candidate.outputs.release == 'true'
+        env:
+          NEXT_VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json CHANGELOG.md
+          git commit -m "chore(release): prepare v${NEXT_VERSION} [skip ci]"
+          git push origin HEAD:main
+
+      - name: Run canonical release workflow
+        if: steps.candidate.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release.yml --ref main
