@@ -1,3 +1,7 @@
+## 0.8.3 - 2026-08-18
+
+- ci: stop generated release commits from recursing (`c4f0d32e2d5d`).
+
 ## 0.8.2 - 2026-08-18
 
 - ci: automate verified toolkit patch releases (`450a43abdf18`).
