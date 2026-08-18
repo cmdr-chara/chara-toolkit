@@ -204,7 +204,10 @@ def tsconfig_summary(root: Path) -> list[dict[str, object]]:
 
 
 def package_summary(root: Path) -> dict[str, object]:
-    package = read_json(root / "package.json")
+    package_path = root / "package.json"
+    if package_path.is_symlink() or not package_path.is_file():
+        return {"present": False}
+    package = read_json(package_path)
     if not isinstance(package, dict):
         return {"present": False}
     dependencies: dict[str, object] = {}
@@ -248,7 +251,11 @@ def config_files(root: Path) -> list[str]:
         "vite.config.ts",
         "vite.config.js",
     ]
-    return [name for name in candidates if (root / name).is_file()]
+    return [
+        name
+        for name in candidates
+        if (root / name).is_file() and not (root / name).is_symlink()
+    ]
 
 
 def scan_sources(root: Path) -> tuple[Counter[str], dict[str, list[dict[str, object]]], int]:
