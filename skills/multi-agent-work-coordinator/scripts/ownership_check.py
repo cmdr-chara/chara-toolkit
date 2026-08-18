@@ -11,13 +11,16 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 GLOB_CHARS = re.compile(r"[*?[{]")
+WINDOWS_ABSOLUTE_PATH = re.compile(r"^[A-Za-z]:/")
 
 
 def normalize(raw: str) -> str:
     value = raw.strip().replace("\\", "/")
+    if value.startswith("/") or WINDOWS_ABSOLUTE_PATH.match(value):
+        raise ValueError(f"absolute scope is not repository-relative: {raw!r}")
     while value.startswith("./"):
         value = value[2:]
-    value = re.sub(r"/+", "/", value).strip("/")
+    value = re.sub(r"/+", "/", value).rstrip("/")
     if not value or value == "." or value.startswith("../") or "/../" in f"/{value}/":
         raise ValueError(f"unsafe or empty repository-relative scope: {raw!r}")
     return value
