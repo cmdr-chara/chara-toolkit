@@ -18,6 +18,11 @@ NAMES = {
     "pubspec.yaml", "pubspec.lock", "Gemfile", "Gemfile.lock", "composer.json", "composer.lock",
     ".nvmrc", ".node-version", ".python-version", ".ruby-version", "rust-toolchain", "rust-toolchain.toml", "mise.toml", ".tool-versions",
 }
+LOCKFILE_NAMES = {
+    "package-lock.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb",
+    "poetry.lock", "Pipfile.lock", "Cargo.lock", "go.sum", "pubspec.lock",
+    "Gemfile.lock", "composer.lock",
+}
 
 
 def read_limited(path: Path, limit: int = 2_000_000) -> str | None:
@@ -101,7 +106,7 @@ def inventory(root: Path, max_files: int) -> dict[str, Any]:
                 results.append(item)
         if truncated:
             break
-    locks = [r["path"] for r in results if r["name"].endswith("lock") or r["name"].endswith("lockb") or r["name"] in {"go.sum", "yarn.lock"}]
+    locks = [r["path"] for r in results if r["name"] in LOCKFILE_NAMES]
     return {
         "root": str(root), "files_scanned": min(seen, max_files), "truncated": truncated,
         "manifests": results, "lockfiles": locks,
