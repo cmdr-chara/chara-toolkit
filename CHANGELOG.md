@@ -1,3 +1,7 @@
+## 0.8.6 - 2026-08-28
+
+- feat: add toolchain preflight skill (`854adc14fcd7`).
+
 ## 0.8.5 - 2026-08-18
 
 - fix: reject empty overlap sequences (#13) (`046551e0074d`).
