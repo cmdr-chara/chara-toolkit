@@ -6,14 +6,14 @@ This suite tests routing, overlap resolution, complete workflows, resource integ
 
 ## Files
 
-- `routing-cases.json` plus `routing-cases-content-provenance.json`: 76 positive and 57 negative trigger cases—four positive and three negative per production skill.
+- `routing-cases.json` plus `routing-cases-content-provenance.json`: 80 positive and 60 negative trigger cases—four positive and three negative per production skill.
 - `overlap-cases.json` plus `overlap-cases-content-provenance.json`: adversarial prompts that require a primary skill or an explicit sequence/handoff rather than accidental multi-skill activation.
 - `workflow-scenarios.md` plus `workflow-scenarios-content-provenance.md`: one realistic end-to-end scenario per production skill with inputs, workflow, artifacts, verification, and stop conditions.
 - `adversarial-review.md`: self-review findings, corrections, and remaining refresh obligations.
 - `package-claim-review.md`: manual protocol for time-sensitive compatibility, maintenance, license, security, cost, and deprecation claims.
-- `post-install-routing-smoke.md`: a compact live-client check for all nineteen production skill routes and the highest-risk overlaps.
+- `post-install-routing-smoke.md`: a compact live-client check for all twenty production skill routes and the highest-risk overlaps.
 
-The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, and bug-finder routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
+The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, bug-finder, and toolchain-preflight routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
 
 ## Structural run
 
@@ -54,6 +54,7 @@ Execute each scenario against a representative fixture or real repository. Revie
 - provenance hygiene that inspects before mutation, preserves authorization/scope, checks runtime capabilities, and never equates sanitation with human authorship;
 - unlazy completion ledgers that keep blocked work visible, preserve specialist approval boundaries, rerun stale high-value checks, and re-measure final quantitative claims;
 - bug-finder hunts that derive real invariants, distinguish confirmed/plausible/retired candidates, prove observable contract violations, and disclose material unexamined surfaces;
+- toolchain preflights that resolve one supported invocation, avoid unchanged retries, isolate temporary work, and hand application failures back to the owning specialist;
 - feature-level verification by builders and integrated release judgment only by `verification-and-release`;
 - no destructive Git/data action or invented command.
 
@@ -71,3 +72,4 @@ Execute each scenario against a representative fixture or real repository. Revie
 - No provenance sanitation claim that overstates the available inspection surface or implies proof of human authorship.
 - No unlazy completion claim with open/blocked required gates, stale final-state evidence, or unmeasured exhaustive/count claims.
 - No bug-finder confirmation based only on suspicious code, severity intuition, or missing tests without an observable contract violation and deciding evidence.
+- No toolchain preflight activated merely because a task uses local tools when the documented command already works.

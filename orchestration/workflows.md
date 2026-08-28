@@ -12,6 +12,18 @@ Use these as **conditional orchestration patterns**, not mandatory chains. A ste
 - A workflow never overrides a specialist's `AWAITING_APPROVAL`, safety restriction, migration boundary, or user constraint.
 - When a handoff changes the task class, explicitly pass the evidence and scope that justified the transition.
 
+## Toolchain preflight
+
+Use when the real task is blocked by an unknown or broken local shell, runtime, package-manager shim, native-command argument boundary, browser capability, or text encoding.
+
+```text
+toolchain-preflight → owning specialist
+                    → debugging-investigator? (stable invocation now exposes an application failure)
+                    → codebase-evolution-controller? (a real version transition is required)
+```
+
+Stop using preflight as soon as one supported invocation reaches the actual task. Do not add it to workflows whose documented repository command already succeeds.
+
 ## Bug hunt — unknown defects
 
 Use when the user asks to find important bugs that are not already known.

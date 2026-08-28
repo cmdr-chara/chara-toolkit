@@ -157,6 +157,58 @@
           "reason": "Broad improvement prioritization is not the same decision as correctness-defect discovery."
         }
       ]
+    },
+    {
+      "skill": "toolchain-preflight",
+      "positive": [
+        {
+          "id": "toolchain-preflight-p1",
+          "prompt": "Before retrying this Windows build, resolve why npm is selecting a policy-blocked PowerShell shim and give me one supported package-manager invocation that actually reaches the repository script.",
+          "expected": "activate",
+          "reason": "The real task is blocked at the package-manager shim and shell boundary, which is owned by toolchain preflight."
+        },
+        {
+          "id": "toolchain-preflight-p2",
+          "prompt": "This virtual environment launcher points to a missing interpreter and its binary extensions do not import under the bundled Python. Classify the mismatch and establish a safe local execution path before running the CLI again.",
+          "expected": "activate",
+          "reason": "A stale launcher and runtime/binary-extension mismatch require bounded executable resolution before application work."
+        },
+        {
+          "id": "toolchain-preflight-p3",
+          "prompt": "Our browser smoke test cannot start because Playwright has no managed Chromium. Check the supported system or in-app browser capability and avoid downloading another browser unless it is truly required.",
+          "expected": "activate",
+          "reason": "The requested decision is browser-capability preflight, not product debugging or browser-test implementation."
+        },
+        {
+          "id": "toolchain-preflight-p4",
+          "prompt": "The local report collector fails while writing Unicode transcript text under the Windows code page. Resolve the encoding path in a fresh scratch directory and verify the collector completes before we score anything.",
+          "expected": "activate",
+          "reason": "A local text-encoding failure blocks the actual report workflow and fits the explicit UTF-8 preflight boundary."
+        }
+      ],
+      "negative": [
+        {
+          "id": "toolchain-preflight-n1",
+          "prompt": "The documented pnpm test command runs successfully, but checkout still returns stale totals after a retry. Reproduce it, find the cause, and design a regression test.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "The execution path already works and the remaining problem is a concrete application defect."
+        },
+        {
+          "id": "toolchain-preflight-n2",
+          "prompt": "Upgrade this repository from Node 20 to Node 24, assess package compatibility, stage the rollout, and define rollback.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "A deliberate runtime version transition is migration work, not local invocation preflight."
+        },
+        {
+          "id": "toolchain-preflight-n3",
+          "prompt": "The build, tests, and browser checks all pass. Decide whether this integrated release candidate has enough evidence to ship.",
+          "expected": "do_not_activate",
+          "route_to": "verification-and-release",
+          "reason": "The local execution path is stable; integrated ship judgment belongs to verification and release."
+        }
+      ]
     }
   ]
 }

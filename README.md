@@ -1,14 +1,14 @@
 # Codex Toolkit
 
-> Automatic workflow routing for 20 Codex skills and 6 agents — bug hunting, implementation, completion gates, and release verification.
+> Automatic workflow routing for 21 Codex skills and 6 agents — toolchain preflight, bug hunting, implementation, completion gates, and release verification.
 
 [![CI](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Codex_skills-20-7c3aed.svg)](skills)
+[![Skills](https://img.shields.io/badge/Codex_skills-21-7c3aed.svg)](skills)
 [![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
 <p align="center">
-  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Twenty Codex skills and six optional agents." />
+  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Twenty-one Codex skills and six optional agents." />
 </p>
 
 **Say what you want done, not which skill to run.**
@@ -44,7 +44,7 @@ npx --yes github:cmdr-chara/codex-toolkit setup
 
 That installs:
 
-- all **20 Codex skills**;
+- all **21 Codex skills**;
 - **6 Mission Control agents**;
 - automatic workflow routing in a managed section of your global Codex `AGENTS.md`;
 - the detailed workflow catalog under `~/.codex/codex-toolkit/workflows.md`;
@@ -77,6 +77,7 @@ You usually do not need to name a skill after the full setup.
 
 ```text
 Find important bugs we have not noticed yet.
+Resolve this blocked shell, runtime, or browser path before retrying the task.
 Fix this intermittent reconnect regression properly.
 Improve this repository and take the best improvement through completion.
 Make this slow path faster, but prove the improvement with comparable measurements.
@@ -155,6 +156,7 @@ The router orchestrates. **The specialist remains authoritative for its domain d
 | Map an unfamiliar codebase or determine change blast radius | [repository-intelligence](skills/repository-intelligence) |
 | Find important bugs you do not know about yet | [bug-finder](skills/bug-finder) |
 | Find the root cause of a known bug or regression | [debugging-investigator](skills/debugging-investigator) |
+| Resolve a broken or unknown local shell, runtime, package-manager, browser, quoting, or encoding path | [toolchain-preflight](skills/toolchain-preflight) |
 | Decide what the codebase should improve next | [codebase-improvement-planner](skills/codebase-improvement-planner) |
 | Review code or refactor it safely | [review-and-refactor-code](skills/review-and-refactor-code) |
 | Make a slow path faster using measurements | [optimize-codebase-performance](skills/optimize-codebase-performance) |
@@ -223,7 +225,7 @@ npx --yes github:cmdr-chara/codex-toolkit
 ```text
 ~/.codex/
 ├── AGENTS.md                         # user content + small managed routing block
-├── skills/                           # 20 installable skills
+├── skills/                           # 21 installable skills
 ├── agents/                           # 6 Mission Control agent configs
 └── codex-toolkit/
     ├── workflows.md                  # conditional multi-skill workflows
@@ -244,7 +246,7 @@ python scripts/run_smoke_tests.py . --as-of 2026-08-17
 
 CI additionally verifies:
 
-- all 20 skills and 19 production routes;
+- all 21 skills and 20 production routes;
 - vendored anti-slop integrity and TypeScript regressions;
 - package contents;
 - isolated full-toolkit installation;

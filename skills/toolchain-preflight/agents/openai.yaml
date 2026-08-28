@@ -1,0 +1,4 @@
+interface:
+  display_name: "Toolchain Preflight"
+  short_description: "Resolve local toolchain constraints safely"
+  default_prompt: "Use $toolchain-preflight to resolve the local execution path before retrying this task."

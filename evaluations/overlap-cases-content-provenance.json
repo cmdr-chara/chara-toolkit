@@ -31,6 +31,16 @@
       ],
       "primary_decision": "Bug Finder owns unknown-defect discovery and proof; Debugging Investigator begins only after a concrete confirmed symptom needs causal explanation.",
       "anti_route": "Do not start causal debugging before there is a specific failure candidate, and do not call suspicious code a confirmed bug without an observable contract violation."
+    },
+    {
+      "id": "overlap-toolchain-preflight-01",
+      "prompt": "The repository test command cannot start because PowerShell selects a blocked package-manager shim. Establish one supported invocation first; after it runs, investigate the reproducible stale-total failure the tests expose.",
+      "expected_sequence": [
+        "toolchain-preflight",
+        "debugging-investigator"
+      ],
+      "primary_decision": "Toolchain Preflight owns reaching the real test path; Debugging Investigator begins only after that stable invocation exposes a concrete application failure.",
+      "anti_route": "Do not treat shell policy as the application's root cause, and do not keep preflight active once the supported test command runs."
     }
   ]
 }

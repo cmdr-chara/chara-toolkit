@@ -75,13 +75,14 @@ jobs:
           EOF
 
           node bin/toolkit.mjs setup --no-auto-update --codex-home "$temp_home"
-          test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 20
+          test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 21
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
           test -f "$temp_home/codex-toolkit/workflows.md"
           grep -F 'Keep this user-authored rule exactly present.' "$temp_home/AGENTS.md"
           test "$(grep -c '<!-- codex-toolkit:start -->' "$temp_home/AGENTS.md")" -eq 1
           test "$(grep -c '<!-- codex-toolkit:end -->' "$temp_home/AGENTS.md")" -eq 1
           grep -F 'bug-finder' "$temp_home/AGENTS.md"
+          grep -F 'toolchain-preflight' "$temp_home/AGENTS.md"
           grep -F 'Bug hunt — unknown defects' "$temp_home/codex-toolkit/workflows.md"
 
           agents_before="$(sha256sum "$temp_home/AGENTS.md" | cut -d' ' -f1)"

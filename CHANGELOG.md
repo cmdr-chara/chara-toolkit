@@ -18,6 +18,9 @@
 
 ## Unreleased
 
+- Add `toolchain-preflight` for bounded resolution of unknown or broken local shells, runtimes, package-manager shims, native-command quoting, browser capability, and text encoding before task retries.
+- Add routing, overlap, workflow, responsibility, live-smoke, catalog, and managed-orchestration coverage for twenty production routes and twenty-one installable skills.
+
 ## 0.8.1 - 2026-08-18
 
 - Harden automatic updates by resolving the latest published release tag to its immutable 40-character commit SHA before executing it through `npx`.

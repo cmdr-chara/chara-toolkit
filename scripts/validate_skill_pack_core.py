@@ -13,7 +13,7 @@ try:
 except ImportError:  # Direct script execution puts scripts/ on sys.path.
     import _validate_skill_pack_impl as impl
 
-for _skill in ("unlazy", "bug-finder"):
+for _skill in ("unlazy", "bug-finder", "toolchain-preflight"):
     if _skill not in impl.EXPECTED_SKILLS:
         impl.EXPECTED_SKILLS = [*impl.EXPECTED_SKILLS, _skill]
 impl.TOOLKIT_SKILLS = ["delegate-with-mission-cards", *impl.EXPECTED_SKILLS]
@@ -69,7 +69,12 @@ def validate_evaluations(result):
                 "overlap-cases-content-provenance.json: expected_sequence must be "
                 f"a non-empty string list in {case.get('id')!r}"
             )
-    for skill in ("content-provenance-hygiene", "unlazy", "bug-finder"):
+    for skill in (
+        "content-provenance-hygiene",
+        "unlazy",
+        "bug-finder",
+        "toolchain-preflight",
+    ):
         if not any(
             isinstance(case.get("expected_sequence"), list)
             and skill in case["expected_sequence"]
@@ -136,6 +141,7 @@ def validate_responsibility_and_provenance(result):
     managed_text = impl.read_text(managed, result)
     for phrase in (
         "repository-intelligence",
+        "toolchain-preflight",
         "bug-finder",
         "debugging-investigator",
         "unlazy",
@@ -149,11 +155,13 @@ def validate_responsibility_and_provenance(result):
     for phrase in (
         "Bug hunt — unknown defects",
         "Known bug — diagnose and fix",
+        "Toolchain preflight",
         "Build or change a feature",
         "Improve an existing codebase",
         "Performance hunt",
         "Multi-agent execution",
         "bug-finder",
+        "toolchain-preflight",
         "debugging-investigator",
         "unlazy",
         "verification-and-release",

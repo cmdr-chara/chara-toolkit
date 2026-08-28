@@ -73,3 +73,27 @@
 **Verification:** every confirmed finding has a real contract, reachable trigger or demonstrated path, observable failure, and deciding evidence; plausible theories are not reported as bugs; retired candidates remain visible when useful; unexamined high-risk surfaces are disclosed; the hunt does not mutate production state or user data merely to produce findings.
 
 **Stop/escalate:** stop with `BUGS_FOUND` when confirmed defects have reproducible/bounded proof and clear next owners; stop with `NO_CONFIRMED_BUGS` only for the agreed examined scope, never as a claim that the repository is bug-free; stop with `BOUNDED` when decisive platform/runtime evidence is unavailable. Use `debugging-investigator` only after a concrete symptom exists and `verification-and-release` only after integrated remediation exists.
+
+## 20. `toolchain-preflight` — Resolve a blocked Windows build and browser path
+
+**Situation:** A repository documents an npm build and a browser smoke test, but PowerShell selects a policy-blocked `npm.ps1` shim, a quote-heavy fallback command is split across native argument boundaries, and Playwright has no managed Chromium binary. The user wants the actual task resumed without changing system execution policy or downloading a large browser unnecessarily.
+
+**Inputs:** repository root and instructions; working-tree status; OS and PowerShell edition; package manifest/lockfile; documented build and browser commands; executable-discovery evidence; first exact errors; available system or in-app browser capabilities; mutation and download authorization boundary.
+
+**Expected workflow:**
+
+1. Freeze the real task command, expected success signal, repository/user state, required runtime and browser capability, and current unknowns.
+2. Resolve the actual PowerShell, Node, and package-manager executables; probe each required executable once rather than repeatedly invoking a blocked alias.
+3. Classify the first failures separately as blocked shim, native argument boundary, and missing managed browser capability; do not call them application defects.
+4. Select the repository-supported native package-manager executable and use an argument array, structured tool call, or temporary script for quote-heavy arguments.
+5. Check for a supported system or in-app browser before proposing a managed browser download.
+6. Run one narrow build probe and one browser-capability probe through the selected paths; change the hypothesis before any retry.
+7. Run the actual documented build and browser smoke path through the now-stable invocation.
+8. Inspect the working tree and run-scoped scratch directory; remove temporary launchers or disclose exactly what remains.
+9. Hand a reproducible application failure to `debugging-investigator`, a required runtime transition to `codebase-evolution-controller`, or successful task execution back to the owning builder.
+
+**Expected artifacts:** environment contract; executable and capability probe record; classified failure ledger; resolved invocation; actual build/browser outcomes; repository/scratch state-impact record; explicit handoff and residual unknowns.
+
+**Verification:** no system policy is changed; no global tool or browser is installed without authorization; required executables are probed once; retries use a changed hypothesis; the actual task path—not only a version/list command—is exercised; user work and unrelated repository state remain preserved.
+
+**Stop/escalate:** stop when one supported invocation reaches the real task, when the failure becomes application behavior, when a version migration is required, when no supported browser/runtime remains, or when the next action needs new installation or system-change authority. Do not retain toolchain preflight as a mandatory wrapper after the environment path works.
