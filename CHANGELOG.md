@@ -1,3 +1,7 @@
+## 0.8.8 - 2026-09-12
+
+- docs: define evaluation evidence agent contracts (`e700ed2c7878`).
+
 ## 0.8.7 - 2026-09-12
 
 - docs: scope orchestration guidance (`3a6682ee5633`).
