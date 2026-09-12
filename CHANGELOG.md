@@ -1,3 +1,7 @@
+## 0.8.7 - 2026-09-12
+
+- docs: scope orchestration guidance (`3a6682ee5633`).
+
 ## 0.8.6 - 2026-08-28
 
 - feat: add toolchain preflight skill (`854adc14fcd7`).
