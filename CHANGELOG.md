@@ -1,3 +1,7 @@
+## 0.9.2 - 2026-09-24
+
+- docs: simplify README for new users (`9be2460c7b52`).
+
 ## 0.9.1 - 2026-09-24
 
 - docs: add canonical README hero (`b32581bb2a45`).
