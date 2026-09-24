@@ -1,6 +1,6 @@
 # Codex Toolkit
 
-> Automatic workflow routing for 22 Codex skills and 6 agents — toolchain preflight, bug hunting, implementation, completion gates, and release verification.
+> 22 focused Codex skills and 6 optional agents for real software projects.
 
 [![CI](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
@@ -11,32 +11,41 @@
   <img src=".github/assets/codex-toolkit-readme-hero.png" width="900" alt="Codex Toolkit — Inspect. Change. Prove." />
 </p>
 
-**Say what you want done, not which skill to run.**
+## What is Codex Toolkit?
 
-Codex Toolkit gives Codex specialist workflows for the parts of software work that are easy to get wrong: understanding an unfamiliar repository, finding unknown bugs, proving root causes, controlling migrations and refactors, finishing large tasks completely, coordinating parallel agents, and deciding whether an integrated change is actually ready to ship.
+Codex Toolkit gives Codex a set of focused workflows for common software-engineering jobs.
 
-The full installer adds a small global routing policy so Codex can select one primary specialist and compose supporting skills only when their trigger becomes relevant.
+You do **not** need to learn the skill names or choose one manually. Install the toolkit, then describe what you want in normal language.
 
 For example:
 
 ```text
-Find and fix important bugs in this repository.
+Find important bugs in this repository.
 ```
-
-can become:
 
 ```text
-repository-intelligence?
-→ bug-finder
-→ debugging-investigator?
-→ owning implementation specialist?
-→ unlazy?
-→ verification-and-release?
+Make this API faster and prove the improvement.
 ```
 
-`?` means conditional. A workflow does not activate every skill mechanically.
+```text
+Upgrade this framework without breaking compatibility.
+```
 
-## Install once
+```text
+Review this authentication change for security problems.
+```
+
+```text
+Finish this feature completely and verify it before saying it is done.
+```
+
+Codex Toolkit picks the smallest relevant workflow and loads extra guidance only when it is needed.
+
+## Quick start
+
+### 1. Install
+
+You need **Node.js 18+** and Codex.
 
 ```sh
 npx --yes github:cmdr-chara/codex-toolkit setup
@@ -44,247 +53,201 @@ npx --yes github:cmdr-chara/codex-toolkit setup
 
 That installs:
 
-- all **22 Codex skills**;
-- **6 Mission Control agents**;
-- automatic workflow routing in a managed section of your global Codex `AGENTS.md`;
-- the detailed workflow catalog under `~/.codex/codex-toolkit/workflows.md`;
-- a user-level auto-updater pinned to the **latest published GitHub Release**.
+- **22 Codex skills**
+- **6 optional Mission Control agents**
+- automatic workflow routing
+- automatic updates from published GitHub releases
 
-Future releases can add or update skills and routing without another manual install. The updater never follows unreleased `main` commits.
+### 2. Use Codex normally
 
-The installer never replaces your whole `AGENTS.md`. It owns only:
+Just ask for the outcome you want.
 
 ```text
-<!-- codex-toolkit:start -->
-...
-<!-- codex-toolkit:end -->
+Fix this intermittent reconnect bug properly.
 ```
 
-Everything outside that block is preserved. Malformed or duplicate markers fail closed instead of being guessed around.
+```text
+Inspect this codebase and tell me what is worth improving next.
+```
 
-Check or disable automatic updates:
+```text
+Build this approved web feature and do not stop half-finished.
+```
+
+```text
+Is this release actually safe to ship?
+```
+
+You can still name a skill explicitly when you want to, but you usually do not need to.
+
+## What can it help with?
+
+### Understand and investigate
+
+| You want to... | Toolkit skill |
+| --- | --- |
+| Understand an unfamiliar repository | [repository-intelligence](skills/repository-intelligence) |
+| Find bugs nobody has reported yet | [bug-finder](skills/bug-finder) |
+| Find the root cause of a known bug | [debugging-investigator](skills/debugging-investigator) |
+| Fix a broken shell, runtime, package-manager, browser, or encoding path | [toolchain-preflight](skills/toolchain-preflight) |
+| Review security-sensitive code | [security-review](skills/security-review) |
+
+### Improve existing code
+
+| You want to... | Toolkit skill |
+| --- | --- |
+| Decide what is worth improving next | [codebase-improvement-planner](skills/codebase-improvement-planner) |
+| Review or refactor code safely | [review-and-refactor-code](skills/review-and-refactor-code) |
+| Make a slow path faster using measurements | [optimize-codebase-performance](skills/optimize-codebase-performance) |
+| Improve TypeScript type safety and lint discipline | [typescript-quality-enforcer](skills/typescript-quality-enforcer) |
+| Upgrade dependencies, frameworks, APIs, schemas, or runtimes | [codebase-evolution-controller](skills/codebase-evolution-controller) |
+| Keep documentation in sync with implementation | [documentation-synchronizer](skills/documentation-synchronizer) |
+
+### Build products and interfaces
+
+| You want to... | Toolkit skill |
+| --- | --- |
+| Define product UX and visual direction | [product-design-director](skills/product-design-director) |
+| Rebuild an interface from screenshots | [screenshot-to-interface](skills/screenshot-to-interface) |
+| Build or audit a production web app | [production-web-builder](skills/production-web-builder) |
+| Choose a mobile architecture | [mobile-architecture-director](skills/mobile-architecture-director) |
+| Build or audit a Flutter app | [flutter-production-builder](skills/flutter-production-builder) |
+| Build or audit an Expo / React Native app | [expo-react-native-builder](skills/expo-react-native-builder) |
+
+### Finish and coordinate work
+
+| You want to... | Toolkit skill |
+| --- | --- |
+| Finish a substantial task without premature "done" claims | [unlazy](skills/unlazy) |
+| Decide whether an integrated change is ready to ship | [verification-and-release](skills/verification-and-release) |
+| Split work safely across multiple agents | [multi-agent-work-coordinator](skills/multi-agent-work-coordinator) |
+| Delegate bounded work to the included agents | [delegate-with-mission-cards](skills/delegate-with-mission-cards) |
+| Inspect or clean provenance and metadata in files you own | [content-provenance-hygiene](skills/content-provenance-hygiene) |
+
+## How it works
+
+A **skill** is a focused set of instructions for one kind of job.
+
+Codex Toolkit keeps the process simple:
+
+1. It reads what you asked for.
+2. It selects the skill that owns that job.
+3. It loads extra references only when they are relevant.
+4. It keeps project-specific instructions in control.
+5. It hands work to another specialist only when the task actually changes.
+
+This means a simple bug fix stays simple, while a larger migration or release can use more structure when needed.
+
+Your repository's own `AGENTS.md` always takes priority over the toolkit's general guidance.
+
+## Automatic updates
+
+The full setup installs an updater that follows **published GitHub releases**, not unreleased commits on `main`.
+
+Future releases can add skills, improve workflows, and update routing without requiring another manual install.
+
+Check update status:
 
 ```sh
 npx --yes github:cmdr-chara/codex-toolkit auto-update status
+```
+
+Disable automatic updates:
+
+```sh
 npx --yes github:cmdr-chara/codex-toolkit auto-update remove
 ```
 
+The installer does not replace your global Codex `AGENTS.md`. It manages only its own marked section and leaves the rest of your file untouched.
+
 See [Automatic updates](docs/auto-update.md) for Windows, macOS, Linux, custom `CODEX_HOME`, and scheduler details.
 
-## Use it normally
+## Want only one skill?
 
-You usually do not need to name a skill after the full setup.
+Every skill can also be installed independently.
 
-```text
-Find important bugs we have not noticed yet.
-Resolve this blocked shell, runtime, or browser path before retrying the task.
-Fix this intermittent reconnect regression properly.
-Improve this repository and take the best improvement through completion.
-Make this slow path faster, but prove the improvement with comparable measurements.
-Upgrade this framework without breaking compatibility.
-Build this approved feature and do not stop half-finished.
-Tell me whether this release candidate is actually safe to ship.
-```
-
-The routing layer chooses the smallest workflow that owns the decision. Repository-local `AGENTS.md` instructions remain authoritative for project-specific rules.
-
-## Common workflows
-
-### Unknown bugs
-
-```text
-repository-intelligence?
-→ bug-finder
-→ debugging-investigator?       # when causal proof is still missing
-→ implementation specialist?
-→ unlazy?                       # substantial accepted remediation
-→ verification-and-release?     # integrated release candidate
-```
-
-`bug-finder` discovers previously unknown correctness defects and proves or retires candidates. `debugging-investigator` starts from a concrete failure and establishes the causal chain.
-
-### Known bug
-
-```text
-repository-intelligence?
-→ debugging-investigator
-→ focused fix
-→ unlazy?
-→ verification-and-release?
-```
-
-### Improve a codebase
-
-```text
-repository-intelligence
-→ codebase-improvement-planner
-→ selected specialist
-→ unlazy?
-→ verification-and-release?
-```
-
-### Build a feature
-
-```text
-repository-intelligence?
-→ owning web / mobile / evolution specialist
-→ unlazy?
-→ documentation-synchronizer?
-→ verification-and-release?
-```
-
-### Parallel work
-
-```text
-repository-intelligence
-→ multi-agent-work-coordinator
-→ delegate-with-mission-cards
-→ isolated reader/writer missions
-→ integration
-→ unlazy?
-→ verification-and-release?
-```
-
-The router orchestrates. **The specialist remains authoritative for its domain decisions, approvals, and stop conditions.** `unlazy` cannot bypass a safety or approval gate, and `verification-and-release` remains the final owner of ship/no-ship judgment.
-
-## Skill catalog
-
-### Understand, investigate, and improve
-
-| What you need | Skill |
-| --- | --- |
-| Map an unfamiliar codebase or determine change blast radius | [repository-intelligence](skills/repository-intelligence) |
-| Find important bugs you do not know about yet | [bug-finder](skills/bug-finder) |
-| Find the root cause of a known bug or regression | [debugging-investigator](skills/debugging-investigator) |
-| Resolve a broken or unknown local shell, runtime, package-manager, browser, quoting, or encoding path | [toolchain-preflight](skills/toolchain-preflight) |
-| Decide what the codebase should improve next | [codebase-improvement-planner](skills/codebase-improvement-planner) |
-| Review code or refactor it safely | [review-and-refactor-code](skills/review-and-refactor-code) |
-| Review security-sensitive code for realistic exploit paths | [security-review](skills/security-review) |
-| Make a slow path faster using measurements | [optimize-codebase-performance](skills/optimize-codebase-performance) |
-| Tighten TypeScript types and lint rules without hiding errors | [typescript-quality-enforcer](skills/typescript-quality-enforcer) |
-| Inspect or remove hidden provenance/metadata from files you own | [content-provenance-hygiene](skills/content-provenance-hygiene) |
-
-### Build and evolve
-
-| What you need | Skill |
-| --- | --- |
-| Upgrade a dependency, framework, API, schema, or runtime safely | [codebase-evolution-controller](skills/codebase-evolution-controller) |
-| Keep documentation synchronized with code changes | [documentation-synchronizer](skills/documentation-synchronizer) |
-| Define product UX and visual direction | [product-design-director](skills/product-design-director) |
-| Rebuild a UI from screenshots or visual references | [screenshot-to-interface](skills/screenshot-to-interface) |
-| Build or audit a production web feature/app | [production-web-builder](skills/production-web-builder) |
-| Choose the right mobile stack | [mobile-architecture-director](skills/mobile-architecture-director) |
-| Build or audit a Flutter feature/app | [flutter-production-builder](skills/flutter-production-builder) |
-| Build or audit an Expo/React Native feature/app | [expo-react-native-builder](skills/expo-react-native-builder) |
-
-### Finish, verify, and coordinate
-
-| What you need | Skill |
-| --- | --- |
-| Finish a substantial already-scoped task without premature “done” claims | [unlazy](skills/unlazy) |
-| Decide whether an integrated change is safe to ship | [verification-and-release](skills/verification-and-release) |
-| Split work across agents without write conflicts | [multi-agent-work-coordinator](skills/multi-agent-work-coordinator) |
-| Send approved missions to the toolkit's custom agents | [delegate-with-mission-cards](skills/delegate-with-mission-cards) |
-
-Every skill remains independently installable. To list the collection:
+List the available skills:
 
 ```sh
 npx skills add https://github.com/cmdr-chara/codex-toolkit --list
 ```
 
-Install one skill globally for Codex:
+Install one skill:
 
 ```sh
 npx skills add https://github.com/cmdr-chara/codex-toolkit --skill repository-intelligence -g -a codex
 ```
 
-Selective `npx skills add` installs do not install the toolkit's global routing or automatic-update setup.
+A single-skill install does not add the toolkit's automatic routing, Mission Control agents, or updater.
 
 ## Mission Control
 
-Mission Control provides six optional agents for work that is already understood well enough to split safely.
+The full setup also includes six optional agents for work that can be split safely.
 
-| Agent | Best for | Route |
-| --- | --- | --- |
-| pathfinder-reader | Fast file, symbol, and fact lookup | Luna Max |
-| patcher-writer | Small isolated edits | Luna Max |
-| investigator-reader | Debugging, tracing, and focused reviews | Luna Max |
-| builder-writer | Features, tests, fixes, docs, and configuration | Luna Max |
-| sentinel-reader | Security, privacy, migrations, and other high-risk analysis | Sol High |
-| architect-writer | Difficult architecture and failure-sensitive changes | Sol Max |
+You do not need to configure or call them manually. The toolkit can use them when separate pieces of work have clear boundaries and can be checked independently.
 
-The coordinator owns decomposition, exclusive write scopes, dependency order, and integration. Mission Control chooses an appropriate agent for each approved mission. The parent Codex task still owns the integrated result.
+<details>
+<summary><strong>Mission Control agents</strong></summary>
 
-The recommended `setup` command installs Mission Control automatically. To install or refresh only Mission Control:
-
-```sh
-npx --yes github:cmdr-chara/codex-toolkit
-```
-
-## What setup adds
-
-```text
-~/.codex/
-├── AGENTS.md                         # user content + small managed routing block
-├── skills/                           # 22 installable skills
-├── agents/                           # 6 Mission Control agent configs
-└── codex-toolkit/
-    ├── workflows.md                  # conditional multi-skill workflows
-    ├── state.json                    # installed release state
-    └── auto-update.*                 # short-lived updater support
-```
-
-Repository-local instructions still take precedence for repository-specific constraints.
-
-## Validation
-
-The repository ships structural validation, routing/overlap evaluation cases, helper smoke tests, release metadata verification, installer tests, and auto-update tests.
-
-```sh
-python scripts/validate_skill_pack.py . --as-of 2026-09-24
-python scripts/run_smoke_tests.py . --as-of 2026-09-24
-```
-
-CI additionally verifies:
-
-- all 22 skills and 21 production routes;
-- vendored anti-slop integrity and TypeScript regressions;
-- package contents;
-- isolated full-toolkit installation;
-- preservation and idempotence of user-authored `AGENTS.md` content;
-- fail-closed behavior for malformed managed markers;
-- release-pinned auto-update planning;
-- canonical social-preview/release metadata.
-
-See [the evaluation guide](evaluations/README.md) for routing and workflow tests.
-
-## Repository layout
-
-| Folder | Contents |
+| Agent | Best for |
 | --- | --- |
-| `agents` | Six Mission Control agents |
-| `docs` | Design decisions, boundaries, updater docs, and research sources |
-| `evaluations` | Routing, overlap, workflow, and smoke-test cases |
-| `orchestration` | Managed routing instructions and multi-skill workflow catalog |
-| `scripts` | Installers, update runner, validation, and smoke tests |
-| `skills` | Twenty-two installable skills |
+| `pathfinder-reader` | Fast file, symbol, and fact lookup |
+| `patcher-writer` | Small isolated edits |
+| `investigator-reader` | Debugging, tracing, and focused reviews |
+| `builder-writer` | Features, tests, fixes, docs, and configuration |
+| `sentinel-reader` | High-risk security, privacy, migration, and architecture review |
+| `architect-writer` | Difficult architecture and failure-sensitive implementation |
 
-## Research and credit
+The parent Codex task remains responsible for integrating and checking the final result.
 
-Product design and screenshot reconstruction include adaptations from Leonxlnx's MIT-licensed Taste Skill project. [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) contains the source mapping and preserved notices.
+</details>
 
-`unlazy` adapts Leonxlnx's MIT-licensed completion-gate and Depth Tree method for Codex Toolkit's safety, approval, and specialist-handoff model. Its provenance and modification boundaries are recorded in [skills/unlazy/references/upstream-provenance.md](skills/unlazy/references/upstream-provenance.md).
+## Safety and verification
 
-The TypeScript quality enforcer vendors the deterministic Oxlint runtime from Dillon Mulroy's MIT-licensed `anti-slop` project at a pinned upstream revision. Attribution and the upstream license are preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+The toolkit is designed to keep changes evidence-driven and bounded.
 
-Content provenance hygiene was designed after inspecting Guillaume Meyer's MIT-licensed `watermarks-remover` service and skill. Codex Toolkit does not vendor that runtime; the optional protocol reference is pinned in [skills/content-provenance-hygiene/references/service-protocol.md](skills/content-provenance-hygiene/references/service-protocol.md).
+Its workflows emphasize:
 
-Security review and several conditional specialist references selectively adapt MIT-licensed engineering concepts from SkillMedev/skills. Attribution, source mapping, and modification boundaries are preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- preserving existing user work
+- avoiding destructive actions without authorization
+- measuring performance before claiming improvements
+- separating confirmed bugs from theories
+- keeping migrations reversible where possible
+- verifying important changes before release
+- keeping security findings tied to realistic attack paths
 
-## Contributing
+The repository also includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks.
 
-Bug reports, routing examples, and focused skill improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+## For contributors and advanced users
+
+Most users can stop here.
+
+If you want to understand or modify the toolkit itself:
+
+- [Workflow routing](orchestration/workflows.md)
+- [Responsibility matrix](docs/responsibility-matrix.md)
+- [Skill-system design](docs/skill-system-design.md)
+- [Evaluation suite](evaluations/README.md)
+- [Automatic updates](docs/auto-update.md)
+- [Contributing](CONTRIBUTING.md)
+
+Repository layout:
+
+| Folder | What is inside |
+| --- | --- |
+| `skills` | The 22 installable skills |
+| `agents` | Mission Control agent definitions |
+| `orchestration` | Multi-skill routing and workflow guidance |
+| `evaluations` | Routing and behavior checks |
+| `scripts` | Validation, installer, and maintenance tools |
+| `docs` | Design decisions and supporting documentation |
+
+## Credits
+
+Codex Toolkit includes or adapts ideas from several MIT-licensed projects, including Leonxlnx's Taste Skill and Unlazy work, Dillon Mulroy's `anti-slop`, Guillaume Meyer's `watermarks-remover`, and selected SkillMedev engineering skills.
+
+Full source mapping, modifications, and preserved license notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## License
 
-[MIT](LICENSE) Copyright 2026 cmdr-chara
+[MIT](LICENSE) © 2026 cmdr-chara
