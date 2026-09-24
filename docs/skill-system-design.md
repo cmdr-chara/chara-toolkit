@@ -65,3 +65,11 @@ Four overlapping source prompts were reduced to two owned decisions:
 - optimize-codebase-performance owns measured bottleneck analysis and bounded optimization.
 
 Both split read-only diagnosis from implementation with an explicit approval state. This reduces routing overlap and prevents words such as refactor or optimize from silently authorizing edits.
+
+## Context-budget refresh — 2026-09-24
+
+The production skills now use a thinner root/conditional-reference split. Discovery metadata states the positive activation boundary without carrying every negative neighbor. Root `SKILL.md` files keep durable ownership, safety, workflow, handoff, and completion rules; specialist checklists and uncommon branches live in `references/` and are loaded only when their trigger becomes relevant.
+
+The validator keeps the Agent Skills 1024-character description ceiling and 500-line body ceiling as hard safety limits, while adding earlier review warnings at 320 description characters, 180 root lines, and 1400 body words. These warning thresholds are toolkit heuristics, not OpenAI platform limits.
+
+The refresh also folds narrow MIT-licensed specialist techniques into existing owners rather than multiplying top-level routes. The only new production route is `security-review`, because security-focused code review has a distinct decision owner and was already an explicit handoff from review/refactor.

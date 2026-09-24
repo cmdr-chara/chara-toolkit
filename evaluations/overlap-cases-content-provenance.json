@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "information_checked": "2026-08-17",
+  "information_checked": "2026-09-24",
   "cases": [
     {
       "id": "overlap-content-provenance-01",
@@ -41,6 +41,16 @@
       ],
       "primary_decision": "Toolchain Preflight owns reaching the real test path; Debugging Investigator begins only after that stable invocation exposes a concrete application failure.",
       "anti_route": "Do not treat shell policy as the application's root cause, and do not keep preflight active once the supported test command runs."
+    },
+    {
+      "id": "overlap-security-review-01",
+      "prompt": "Review this PR. Most of it is a refactor, but the changed authorization helper now decides whether users can access other tenants' invoices. Focus on whether the new trust boundary is exploitable, then hand any non-security structural cleanup back to normal review.",
+      "expected_sequence": [
+        "security-review",
+        "review-and-refactor-code"
+      ],
+      "primary_decision": "Security exploitability of the changed authorization boundary is primary; ordinary structural findings are secondary.",
+      "anti_route": "Do not let general refactor review dilute or replace the security-first authorization analysis."
     }
   ]
 }

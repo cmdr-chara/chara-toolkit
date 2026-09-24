@@ -1,14 +1,14 @@
 # Codex Toolkit
 
-> Automatic workflow routing for 21 Codex skills and 6 agents — toolchain preflight, bug hunting, implementation, completion gates, and release verification.
+> Automatic workflow routing for 22 Codex skills and 6 agents — toolchain preflight, bug hunting, implementation, completion gates, and release verification.
 
 [![CI](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Codex_skills-21-7c3aed.svg)](skills)
+[![Skills](https://img.shields.io/badge/Codex_skills-22-7c3aed.svg)](skills)
 [![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
 <p align="center">
-  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Twenty-one Codex skills and six optional agents." />
+  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Twenty-two Codex skills and six optional agents." />
 </p>
 
 **Say what you want done, not which skill to run.**
@@ -44,7 +44,7 @@ npx --yes github:cmdr-chara/codex-toolkit setup
 
 That installs:
 
-- all **21 Codex skills**;
+- all **22 Codex skills**;
 - **6 Mission Control agents**;
 - automatic workflow routing in a managed section of your global Codex `AGENTS.md`;
 - the detailed workflow catalog under `~/.codex/codex-toolkit/workflows.md`;
@@ -159,6 +159,7 @@ The router orchestrates. **The specialist remains authoritative for its domain d
 | Resolve a broken or unknown local shell, runtime, package-manager, browser, quoting, or encoding path | [toolchain-preflight](skills/toolchain-preflight) |
 | Decide what the codebase should improve next | [codebase-improvement-planner](skills/codebase-improvement-planner) |
 | Review code or refactor it safely | [review-and-refactor-code](skills/review-and-refactor-code) |
+| Review security-sensitive code for realistic exploit paths | [security-review](skills/security-review) |
 | Make a slow path faster using measurements | [optimize-codebase-performance](skills/optimize-codebase-performance) |
 | Tighten TypeScript types and lint rules without hiding errors | [typescript-quality-enforcer](skills/typescript-quality-enforcer) |
 | Inspect or remove hidden provenance/metadata from files you own | [content-provenance-hygiene](skills/content-provenance-hygiene) |
@@ -225,7 +226,7 @@ npx --yes github:cmdr-chara/codex-toolkit
 ```text
 ~/.codex/
 ├── AGENTS.md                         # user content + small managed routing block
-├── skills/                           # 21 installable skills
+├── skills/                           # 22 installable skills
 ├── agents/                           # 6 Mission Control agent configs
 └── codex-toolkit/
     ├── workflows.md                  # conditional multi-skill workflows
@@ -240,13 +241,13 @@ Repository-local instructions still take precedence for repository-specific cons
 The repository ships structural validation, routing/overlap evaluation cases, helper smoke tests, release metadata verification, installer tests, and auto-update tests.
 
 ```sh
-python scripts/validate_skill_pack.py . --as-of 2026-08-17
-python scripts/run_smoke_tests.py . --as-of 2026-08-17
+python scripts/validate_skill_pack.py . --as-of 2026-09-24
+python scripts/run_smoke_tests.py . --as-of 2026-09-24
 ```
 
 CI additionally verifies:
 
-- all 21 skills and 20 production routes;
+- all 22 skills and 21 production routes;
 - vendored anti-slop integrity and TypeScript regressions;
 - package contents;
 - isolated full-toolkit installation;
@@ -266,7 +267,7 @@ See [the evaluation guide](evaluations/README.md) for routing and workflow tests
 | `evaluations` | Routing, overlap, workflow, and smoke-test cases |
 | `orchestration` | Managed routing instructions and multi-skill workflow catalog |
 | `scripts` | Installers, update runner, validation, and smoke tests |
-| `skills` | Twenty installable skills |
+| `skills` | Twenty-two installable skills |
 
 ## Research and credit
 
@@ -277,6 +278,8 @@ Product design and screenshot reconstruction include adaptations from Leonxlnx's
 The TypeScript quality enforcer vendors the deterministic Oxlint runtime from Dillon Mulroy's MIT-licensed `anti-slop` project at a pinned upstream revision. Attribution and the upstream license are preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 Content provenance hygiene was designed after inspecting Guillaume Meyer's MIT-licensed `watermarks-remover` service and skill. Codex Toolkit does not vendor that runtime; the optional protocol reference is pinned in [skills/content-provenance-hygiene/references/service-protocol.md](skills/content-provenance-hygiene/references/service-protocol.md).
+
+Security review and several conditional specialist references selectively adapt MIT-licensed engineering concepts from SkillMedev/skills. Attribution, source mapping, and modification boundaries are preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Contributing
 

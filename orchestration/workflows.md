@@ -106,6 +106,20 @@ repository-intelligence? → review-and-refactor-code
 
 A defined PR/branch/diff should route here rather than to `bug-finder`.
 
+## Security review
+
+Use when exploitability, authorization, untrusted-input handling, secrets, or another trust boundary is the primary review decision.
+
+```text
+repository-intelligence? → security-review
+                         → debugging-investigator? (security-related symptom needs causal proof)
+                         → owning implementation specialist? (authorized fix)
+                         → unlazy? (substantial remediation)
+                         → verification-and-release?
+```
+
+A normal PR/code-quality review stays with `review-and-refactor-code`. Dependency/version transitions remain owned by `codebase-evolution-controller`.
+
 ## TypeScript quality hardening
 
 ```text

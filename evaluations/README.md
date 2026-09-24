@@ -1,26 +1,26 @@
 # Evaluation Suite
 
-**Information checked:** 2026-08-17
+**Information checked:** 2026-09-24
 
 This suite tests routing, overlap resolution, complete workflows, resource integrity, volatile package claims, and provenance. It is designed for deterministic structural validation plus model-based execution review.
 
 ## Files
 
-- `routing-cases.json` plus `routing-cases-content-provenance.json`: 80 positive and 60 negative trigger cases—four positive and three negative per production skill.
+- `routing-cases.json` plus `routing-cases-content-provenance.json`: 84 positive and 63 negative trigger cases—four positive and three negative per production skill.
 - `overlap-cases.json` plus `overlap-cases-content-provenance.json`: adversarial prompts that require a primary skill or an explicit sequence/handoff rather than accidental multi-skill activation.
 - `workflow-scenarios.md` plus `workflow-scenarios-content-provenance.md`: one realistic end-to-end scenario per production skill with inputs, workflow, artifacts, verification, and stop conditions.
 - `adversarial-review.md`: self-review findings, corrections, and remaining refresh obligations.
 - `package-claim-review.md`: manual protocol for time-sensitive compatibility, maintenance, license, security, cost, and deprecation claims.
-- `post-install-routing-smoke.md`: a compact live-client check for all twenty production skill routes and the highest-risk overlaps.
+- `post-install-routing-smoke.md`: a compact live-client check for all twenty-one production skill routes and the highest-risk overlaps.
 
-The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, bug-finder, and toolchain-preflight routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
+The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, bug-finder, toolchain-preflight, and security-review routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
 
 ## Structural run
 
 From the pack root:
 
 ```sh
-python scripts/validate_skill_pack.py . --as-of 2026-08-17
+python scripts/validate_skill_pack.py . --as-of 2026-09-24
 ```
 
 The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, dated references, source URLs, unsafe command strings, Python syntax, vendored anti-slop integrity/provenance, licensing, and obvious long-paragraph duplication.
@@ -34,6 +34,7 @@ For every case in the routing case files:
 3. A positive case passes when the expected skill is selected as primary.
 4. A negative case passes when the named skill is not primary and the stated route—or an equivalent no-skill decision—is selected.
 5. Treat over-activation as a failure even if the final answer is plausible.
+6. When metadata changes, test at least three paraphrased positive prompts, two adjacent negative prompts, and realistic workflow scenarios; do not reuse the description wording as the test prompt.
 
 For the overlap case files, exact incidental helper use is not required, but the owned decision and sequence must match. A skill may be a prerequisite or handoff without becoming co-primary.
 
@@ -55,6 +56,7 @@ Execute each scenario against a representative fixture or real repository. Revie
 - unlazy completion ledgers that keep blocked work visible, preserve specialist approval boundaries, rerun stale high-value checks, and re-measure final quantitative claims;
 - bug-finder hunts that derive real invariants, distinguish confirmed/plausible/retired candidates, prove observable contract violations, and disclose material unexamined surfaces;
 - toolchain preflights that resolve one supported invocation, avoid unchanged retries, isolate temporary work, and hand application failures back to the owning specialist;
+- security reviews that tie findings to reachable trust-boundary failures, keep uncertain exploitability labeled, and avoid replacing general code review;
 - feature-level verification by builders and integrated release judgment only by `verification-and-release`;
 - no destructive Git/data action or invented command.
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "information_checked": "2026-08-17",
+  "information_checked": "2026-09-24",
   "skills": [
     {
       "skill": "content-provenance-hygiene",
@@ -207,6 +207,58 @@
           "expected": "do_not_activate",
           "route_to": "verification-and-release",
           "reason": "The local execution path is stable; integrated ship judgment belongs to verification and release."
+        }
+      ]
+    },
+    {
+      "skill": "security-review",
+      "positive": [
+        {
+          "id": "security-review-p1",
+          "prompt": "Review these account endpoints for authorization flaws. Check whether a logged-in user can read or modify another tenant's resources by changing IDs.",
+          "expected": "activate",
+          "reason": "Security exploitability and object-level authorization are the primary review decision."
+        },
+        {
+          "id": "security-review-p2",
+          "prompt": "Audit this webhook handler for signature bypass, unsafe parsing, replay, and privilege-changing side effects. Give me only realistic security findings with evidence.",
+          "expected": "activate",
+          "reason": "The request is a focused trust-boundary security review."
+        },
+        {
+          "id": "security-review-p3",
+          "prompt": "Check this file-upload and image-fetch flow for path traversal, SSRF, dangerous content handling, and secret leakage before we ship it.",
+          "expected": "activate",
+          "reason": "File/network handling of untrusted input is explicitly security-sensitive."
+        },
+        {
+          "id": "security-review-p4",
+          "prompt": "Review this authentication and role-change diff for exploitable security regressions, including business-logic ways to bypass approval or escalate privileges.",
+          "expected": "activate",
+          "reason": "The task is security-first diff review across auth and business invariants."
+        }
+      ],
+      "negative": [
+        {
+          "id": "security-review-n1",
+          "prompt": "Review this parser refactor for correctness, maintainability, and behavior parity. Security is not a special concern.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "A normal bounded code review belongs to the general review/refactor specialist."
+        },
+        {
+          "id": "security-review-n2",
+          "prompt": "Upgrade this vulnerable dependency to the fixed major version, map compatibility, stage rollout, and define rollback.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "The primary decision is a dependency/version transition, even though security motivates it."
+        },
+        {
+          "id": "security-review-n3",
+          "prompt": "Our auth service intermittently rejects valid refresh tokens after failover. Reproduce that exact symptom and find the causal chain.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "A concrete known failure with uncertain cause belongs to causal debugging."
         }
       ]
     }

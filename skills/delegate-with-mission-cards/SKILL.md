@@ -1,6 +1,6 @@
 ---
 name: delegate-with-mission-cards
-description: Delegate independent, bounded repository work to specialized reader and writer subagents using mission cards, exclusive write ownership, staged fan-out, and parent-side verification. Use for parallel exploration, reviews, research, isolated implementation, tests, migrations, or security-sensitive work. Do not use when work is small, tightly coupled, ambiguous, or cannot be independently verified.
+description: Delegate independent, bounded repository work to specialized subagents with explicit write ownership and parent verification. Use when parallel work can be scoped and verified independently.
 ---
 
 # Mission Control

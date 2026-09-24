@@ -97,3 +97,30 @@
 **Verification:** no system policy is changed; no global tool or browser is installed without authorization; required executables are probed once; retries use a changed hypothesis; the actual task path—not only a version/list command—is exercised; user work and unrelated repository state remain preserved.
 
 **Stop/escalate:** stop when one supported invocation reaches the real task, when the failure becomes application behavior, when a version migration is required, when no supported browser/runtime remains, or when the next action needs new installation or system-change authority. Do not retain toolchain preflight as a mandatory wrapper after the environment path works.
+
+## 21. `security-review` — Tenant-scoped invoice API authorization
+
+**Situation:** A service adds invoice read/update endpoints that accept resource IDs from authenticated users and also fetch signed attachment URLs from a user-supplied storage reference.
+
+**Expected workflow:**
+1. Freeze the candidate/diff and map authenticated entry points, tenant/resource ownership, outbound URL construction, and sensitive outputs.
+2. Trace object-level authorization for every invoice operation rather than treating login as permission.
+3. Follow user-controlled identifiers/URLs into database, redirect, network, and file/storage sinks.
+4. Raise only reachable findings with a concrete attack path; keep uncertain deployment assumptions labeled.
+5. Propose the smallest control fix and regression evidence, then hand implementation to the owning builder when edits are authorized.
+
+**Expected artifacts:**
+- trust-boundary map;
+- focused security findings with affected boundary, precondition, impact, severity rationale, and fix direction;
+- explicit non-findings/unknowns where exploitability was not established;
+- regression-test plan.
+
+**Verification:**
+- each finding is tied to a reachable authorization/input path rather than scanner output alone;
+- object/tenant ownership is checked at the operation boundary;
+- SSRF/path/file claims account for the actual deployment and redirect behavior;
+- no production exploit execution is required for proof.
+
+**Stop/escalate:**
+Stop when reportable findings have sufficient evidence and the fix owner is clear. Escalate a concrete unexplained runtime symptom to `debugging-investigator`, or a dependency/version transition to `codebase-evolution-controller`.
+

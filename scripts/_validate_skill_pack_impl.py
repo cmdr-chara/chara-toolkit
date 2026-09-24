@@ -290,8 +290,10 @@ def validate_skills(result: Result) -> dict[str, str]:
             result.error(f"{rel(path, result.root)}: description exceeds 1024 characters")
         else:
             descriptions[skill] = description
-            if "Use when" not in description or "Do not use" not in description:
-                result.error(f"{rel(path, result.root)}: description must include explicit 'Use when' and 'Do not use' routing clauses")
+            if not re.search(r"\bUse (?:when|for)\b", description):
+                result.error(f"{rel(path, result.root)}: description must state a concrete positive activation condition")
+            if len(description) > 320:
+                result.warn(f"{rel(path, result.root)}: description is {len(description)} characters; shorten discovery metadata when possible")
 
         lines = text.splitlines()
         words = re.findall(r"\b\w+[\w'-]*\b", body)
@@ -299,8 +301,12 @@ def validate_skills(result: Result) -> dict[str, str]:
         word_counts[skill] = len(words)
         if len(lines) >= 500:
             result.error(f"{rel(path, result.root)}: {len(lines)} lines; keep SKILL.md below 500 lines")
+        elif len(lines) > 180:
+            result.warn(f"{rel(path, result.root)}: {len(lines)} lines; review for progressive-disclosure extraction")
         if len(words) > 4000:
             result.error(f"{rel(path, result.root)}: {len(words)} words; likely exceeds the recommended 5,000-token body")
+        elif len(words) > 1400:
+            result.warn(f"{rel(path, result.root)}: {len(words)} words; consider moving conditional detail into references/")
         if not body.strip().startswith("# "):
             result.error(f"{rel(path, result.root)}: body must start with an H1 title")
 

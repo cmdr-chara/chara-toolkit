@@ -46,7 +46,7 @@ The original 0.2.0 build could not clone the repository in its runtime. The 0.3.
 
 ## Web platform and production interface research
 
-Detailed package decisions are in `skills/production-web-builder/references/web-ecosystem-2026-07-31.md`.
+Detailed package decisions are in `skills/production-web-builder/references/web-ecosystem-2026-09-24.md`.
 
 | Area | Primary sources checked | Finding retained |
 | --- | --- | --- |
@@ -110,7 +110,7 @@ Detailed comparison is in `skills/mobile-architecture-director/references/platfo
 
 Named package rows were checked against their official docs/repositories and, where a concrete release was recorded, npm or pub.dev metadata. The dated matrices deliberately state when to choose and avoid each package. They do not convert package popularity into a recommendation.
 
-- Web matrix: `skills/production-web-builder/references/web-ecosystem-2026-07-31.md`
+- Web matrix: `skills/production-web-builder/references/web-ecosystem-2026-09-24.md`
 - Flutter matrix: `skills/flutter-production-builder/references/flutter-ecosystem-2026-07-17.md`
 - Expo/RN matrix: `skills/expo-react-native-builder/references/expo-react-native-ecosystem-2026-07-17.md`
 - Platform matrix: `skills/mobile-architecture-director/references/platform-decision-matrix-2026-07-17.md`
@@ -121,3 +121,21 @@ Named package rows were checked against their official docs/repositories and, wh
 - Any framework stable/SDK release, store policy/target API change, critical advisory, package deprecation, ownership transfer, or license change.
 - A target repository resolving versions outside the dated matrices.
 - A builder encountering a native module, deployment adapter, database/sync engine, authentication provider, or observability vendor not already evaluated.
+
+## 2026-09-24 skill-context refresh
+
+| Source | Material inspected | Finding retained in the pack | Checked |
+| --- | --- | --- | --- |
+| https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra | Current OpenAI guidance on skill discovery metadata, context cost, progressive disclosure, and over-prescriptive legacy prompts | Keep discovery descriptions short, avoid defensive ceremony that newer models no longer need, and route conditional detail through references. | 2026-09-24 |
+| https://developers.openai.com/plugins/build/skills | Current OpenAI skill structure and progressive-disclosure guidance | Keep `SKILL.md` concise; put detailed references/scripts/assets beside it and load them only when relevant. | 2026-09-24 |
+| https://github.com/SkillMedev/skills | Portable engineering skill collection and repository structure | Selectively adapt narrowly useful specialist methods rather than importing a second overlapping routing system. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/LICENSE | MIT license | Preserve attribution and complete license text for adapted concepts. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/secure-code-review/SKILL.md | Focused exploit-class review and finding filtering | Re-expressed as `security-review` with Codex Toolkit trust-boundary, evidence, handoff, and regression contracts. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/flaky-test-detangler/SKILL.md | Hidden-dependency model for flaky tests | Folded into debugging as a conditional reference; retries/sleeps are not accepted as root-cause fixes. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/characterization-test-writer/SKILL.md | Pin observed legacy behavior before refactoring | Folded into review/refactor as a conditional legacy-code safety-net reference. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/dependency-risk-audit/SKILL.md | Reachability-aware dependency/security/license review | Folded into evolution for dependency additions/upgrades. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/migration-safety-checker/SKILL.md | Production database lock/backfill/expand-contract safety | Folded into evolution as database-migration guidance. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/github-actions/SKILL.md | CI graph, cache, privilege, fork, and deployment controls | Folded into release verification as GitHub Actions guidance without universal timing budgets. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/typescript-strict/SKILL.md | Staged TypeScript strictness migration | Folded into TypeScript quality enforcement. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/web-performance/SKILL.md | Field-first Core Web Vitals workflow | Folded into the production web builder; numeric thresholds remain current-source checks rather than permanent root instructions. | 2026-09-24 |
+| https://github.com/SkillMedev/skills/blob/main/skills/skill-tester/SKILL.md | Positive, negative, neighbor-collision, and realistic behavior scenarios | Integrated into the toolkit evaluation methodology. | 2026-09-24 |

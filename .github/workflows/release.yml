@@ -97,7 +97,7 @@ jobs:
           node-version: "24"
 
       - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-08-16
+        run: python scripts/validate_skill_pack.py . --as-of 2026-09-24
 
       - name: Verify anti-slop vendor integrity
         run: python scripts/verify_anti_slop_vendor.py .
@@ -109,7 +109,7 @@ jobs:
         run: python scripts/verify_release_metadata.py .
 
       - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-08-16
+        run: python scripts/run_smoke_tests.py . --as-of 2026-09-24
 
       - name: Inspect package contents
         run: npm pack --dry-run

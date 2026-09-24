@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Review"
+  short_description: "Find exploitable security flaws with evidence"
+  default_prompt: "Use $security-review to review this security-sensitive code for realistic exploit paths and focused fixes."

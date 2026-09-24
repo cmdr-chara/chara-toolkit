@@ -1,3 +1,12 @@
+## 0.9.0 - 2026-09-24
+
+- Add `security-review` as a focused security code-review specialist with trust-boundary tracing, filtered exploit findings, and regression-oriented fixes.
+- Compress all production `SKILL.md` roots and routing descriptions around progressive disclosure, preserving conditional specialist detail in references instead of default context.
+- Fold flaky-test diagnosis, characterization testing, dependency risk, production database migration safety, GitHub Actions hardening, TypeScript strictness migration, and Core Web Vitals guidance into their existing owning skills.
+- Modernize skill validation with concise-description and root-size review signals while preserving Agent Skills hard ceilings and routing/evidence checks.
+- Extend routing, overlap, workflow, responsibility, installer, and release metadata coverage to 22 installable skills and 21 production routes.
+- Preserve MIT attribution and source mapping for the SkillMedev/skills concepts adapted in this release.
+
 ## 0.8.8 - 2026-09-12
 
 - docs: define evaluation evidence agent contracts (`e700ed2c7878`).
@@ -30,8 +39,7 @@
 
 ## Unreleased
 
-- Add `toolchain-preflight` for bounded resolution of unknown or broken local shells, runtimes, package-manager shims, native-command quoting, browser capability, and text encoding before task retries.
-- Add routing, overlap, workflow, responsibility, live-smoke, catalog, and managed-orchestration coverage for twenty production routes and twenty-one installable skills.
+- No unreleased changes.
 
 ## 0.8.1 - 2026-08-18
 

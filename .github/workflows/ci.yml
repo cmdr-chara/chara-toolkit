@@ -35,7 +35,7 @@ jobs:
         run: python .github/render_social_preview.py
 
       - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-08-17
+        run: python scripts/validate_skill_pack.py . --as-of 2026-09-24
 
       - name: Verify anti-slop vendor integrity
         run: python scripts/verify_anti_slop_vendor.py .
@@ -47,7 +47,7 @@ jobs:
         run: python scripts/verify_release_metadata.py .
 
       - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-08-17
+        run: python scripts/run_smoke_tests.py . --as-of 2026-09-24
 
       - name: Validate installer and updater scripts
         run: |
@@ -75,7 +75,7 @@ jobs:
           EOF
 
           node bin/toolkit.mjs setup --no-auto-update --codex-home "$temp_home"
-          test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 21
+          test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
           test -f "$temp_home/codex-toolkit/workflows.md"
           grep -F 'Keep this user-authored rule exactly present.' "$temp_home/AGENTS.md"
@@ -83,7 +83,9 @@ jobs:
           test "$(grep -c '<!-- codex-toolkit:end -->' "$temp_home/AGENTS.md")" -eq 1
           grep -F 'bug-finder' "$temp_home/AGENTS.md"
           grep -F 'toolchain-preflight' "$temp_home/AGENTS.md"
+          grep -F 'security-review' "$temp_home/AGENTS.md"
           grep -F 'Bug hunt — unknown defects' "$temp_home/codex-toolkit/workflows.md"
+          grep -F 'Security review' "$temp_home/codex-toolkit/workflows.md"
 
           agents_before="$(sha256sum "$temp_home/AGENTS.md" | cut -d' ' -f1)"
           workflows_before="$(sha256sum "$temp_home/codex-toolkit/workflows.md" | cut -d' ' -f1)"

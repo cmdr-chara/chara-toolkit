@@ -150,3 +150,48 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## SkillMedev/skills
+
+**Upstream:** https://github.com/SkillMedev/skills  
+**Inspected revision:** `a28c4ce9366b5a8540577bed8f70b6a60f8fde27`  
+**License source:** https://github.com/SkillMedev/skills/blob/main/LICENSE  
+**Information checked:** 2026-09-24
+
+Codex Toolkit selectively adapts engineering concepts from these upstream skills:
+
+- `skills/secure-code-review/SKILL.md` -> `skills/security-review/`
+- `skills/flaky-test-detangler/SKILL.md` -> `skills/debugging-investigator/references/flaky-tests.md`
+- `skills/characterization-test-writer/SKILL.md` -> `skills/review-and-refactor-code/references/characterization-testing.md`
+- `skills/dependency-risk-audit/SKILL.md` -> `skills/codebase-evolution-controller/references/dependency-risk.md`
+- `skills/migration-safety-checker/SKILL.md` -> `skills/codebase-evolution-controller/references/database-migration-safety.md`
+- `skills/github-actions/SKILL.md` -> `skills/verification-and-release/references/github-actions.md`
+- `skills/typescript-strict/SKILL.md` -> `skills/typescript-quality-enforcer/references/strictness-migration.md`
+- `skills/web-performance/SKILL.md` -> `skills/production-web-builder/references/core-web-vitals.md`
+- `skills/skill-tester/SKILL.md` -> the toolkit evaluation methodology.
+
+The adapted material uses original wording and is reorganized around Codex Toolkit ownership boundaries, progressive disclosure, repository-state preservation, evidence quality, approval stops, and existing routing/evaluation contracts. No upstream scripts or binary assets are redistributed.
+
+No endorsement by Skill Me or Alexander Ouellet is stated or implied.
+
+### MIT License
+
+Copyright (c) 2026 Alexander Ouellet
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

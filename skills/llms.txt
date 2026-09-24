@@ -19,3 +19,4 @@ content-provenance-hygiene: Evidence-first inspection and authorized sanitation 
 unlazy: Evidence-backed completion discipline for substantial tasks using explicit gates, safe checks, natural-joint decomposition, final-candidate rechecks, and audited completion claims without overriding specialist safety or approval boundaries.
 bug-finder: Evidence-backed hunting for previously unknown correctness defects using explicit invariants, high-risk surface prioritization, bounded proof/falsification, and clean handoff to causal debugging or the owning specialist.
 toolchain-preflight: Narrow local execution-path resolution for unknown or broken shells, runtimes, package-manager shims, native quoting, browser capability, and text encoding before retrying builds, tests, scripts, or browser checks.
+security-review: Focused security code review across trust boundaries, authorization, untrusted input, secrets, file/network handling, and business-logic abuse.

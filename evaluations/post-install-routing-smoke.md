@@ -26,6 +26,7 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | R18 | This substantial task is already scoped. Use explicit completion gates, prove every requested deliverable, rerun stale checks on the final candidate, and re-measure every count before reporting success. | `unlazy` |
 | R19 | Hunt this repository for important correctness bugs we do not know about yet. Derive invariants, inspect high-risk lifecycle/concurrency/persistence boundaries, and prove or retire concrete candidates rather than listing code smells. | `bug-finder` |
 | R20 | This Windows task is blocked by a policy-blocked npm shim, nested native-command quoting failures, and an unknown browser executable. Resolve one supported local invocation before retrying the build and browser check. | `toolchain-preflight` |
+| R21 | Review these tenant-scoped invoice endpoints and signed attachment fetches for authorization bypass, SSRF, unsafe input handling, and realistic security regressions. | `security-review` |
 
 ## High-risk overlaps
 
@@ -45,10 +46,11 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | O12 | The approved refactor has five required slices and keeps getting reported done early; preserve the refactor approval boundary, then use completion gates to prove every slice and integration invariant. | `review-and-refactor-code` then `unlazy` |
 | O13 | We do not have a known provider bug. Hunt for one, prove the strongest candidate, and only then determine the causal chain for that confirmed failure. | `bug-finder` then `debugging-investigator` |
 | O14 | The repository test command cannot start because the shell shim is blocked; first establish a supported invocation, then investigate the reproducible stale-total failure that appears once the tests run. | `toolchain-preflight` then `debugging-investigator` |
+| O15 | Review a refactor that changes tenant authorization. Security exploitability is primary; ordinary structural cleanup comes after the trust-boundary review. | `security-review` then `review-and-refactor-code` |
 
 ## Acceptance
 
-- Pass all 20 primary routes.
-- Pass at least twelve of fourteen overlap sequences with no incorrect co-primary activation.
+- Pass all 21 primary routes.
+- Pass at least thirteen of fifteen overlap sequences with no incorrect co-primary activation.
 - Treat a missing skill, stale display label, or wrong primary route as a failure even if the eventual answer is plausible.
 - If a case fails, record client version, installed skill path, selected skills, and rationale; fix metadata or trigger boundaries, then rerun only the failed case and its nearest overlap case.

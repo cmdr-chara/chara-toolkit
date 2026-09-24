@@ -13,7 +13,7 @@ try:
 except ImportError:  # Direct script execution puts scripts/ on sys.path.
     import _validate_skill_pack_impl as impl
 
-for _skill in ("unlazy", "bug-finder", "toolchain-preflight"):
+for _skill in ("unlazy", "bug-finder", "toolchain-preflight", "security-review"):
     if _skill not in impl.EXPECTED_SKILLS:
         impl.EXPECTED_SKILLS = [*impl.EXPECTED_SKILLS, _skill]
 impl.TOOLKIT_SKILLS = ["delegate-with-mission-cards", *impl.EXPECTED_SKILLS]
@@ -74,6 +74,7 @@ def validate_evaluations(result):
         "unlazy",
         "bug-finder",
         "toolchain-preflight",
+        "security-review",
     ):
         if not any(
             isinstance(case.get("expected_sequence"), list)
@@ -122,12 +123,26 @@ def validate_responsibility_and_provenance(result):
                 f"{phrase!r}"
             )
 
+    security_reference = result.root / "skills/security-review/references/provenance.md"
+    security_text = impl.read_text(security_reference, result)
+    for phrase in (
+        "SkillMedev/skills",
+        "a28c4ce9366b5a8540577bed8f70b6a60f8fde27",
+        "Copyright (c) 2026 Alexander Ouellet",
+        "No endorsement by Skill Me or Alexander Ouellet is stated or implied",
+    ):
+        if phrase not in security_text:
+            result.error(f"skills/security-review: provenance missing {phrase!r}")
+
     notice = impl.read_text(result.root / "THIRD_PARTY_NOTICES.md", result)
     for phrase in (
         "## Leonxlnx/unlazy",
         "ed9e8d2b5919698cf2c54bda270d507e10b69617",
         "## guillaumemeyer/watermarks-remover",
         "Copyright (c) 2026 watermarks-remover contributors",
+        "## SkillMedev/skills",
+        "a28c4ce9366b5a8540577bed8f70b6a60f8fde27",
+        "Copyright (c) 2026 Alexander Ouellet",
     ):
         if phrase not in notice:
             result.error(f"THIRD_PARTY_NOTICES.md: missing {phrase!r}")
@@ -143,6 +158,7 @@ def validate_responsibility_and_provenance(result):
         "repository-intelligence",
         "toolchain-preflight",
         "bug-finder",
+        "security-review",
         "debugging-investigator",
         "unlazy",
         "verification-and-release",
@@ -161,6 +177,7 @@ def validate_responsibility_and_provenance(result):
         "Performance hunt",
         "Multi-agent execution",
         "bug-finder",
+        "security-review",
         "toolchain-preflight",
         "debugging-investigator",
         "unlazy",
