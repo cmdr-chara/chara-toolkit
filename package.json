@@ -1,6 +1,6 @@
 {
   "name": "@cmdr-chara/codex-toolkit",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "22 Codex skills and 6 agents with concise routing, security review, completion gates, and release-pinned updates",
   "repository": {
     "type": "git",

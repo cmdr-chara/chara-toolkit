@@ -1,3 +1,7 @@
+## 0.9.1 - 2026-09-24
+
+- docs: add canonical README hero (`b32581bb2a45`).
+
 ## 0.9.0 - 2026-09-24
 
 - Add `security-review` as a focused security code-review specialist with trust-boundary tracing, filtered exploit findings, and regression-oriented fixes.
