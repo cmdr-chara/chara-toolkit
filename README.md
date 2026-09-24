@@ -8,7 +8,7 @@
 [![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
 <p align="center">
-  <img src=".github/assets/codex-toolkit-social-preview.png" width="900" alt="Codex Toolkit: Inspect. Change. Prove. Twenty-two Codex skills and six optional agents." />
+  <img src=".github/assets/codex-toolkit-readme-hero.png" width="900" alt="Codex Toolkit — Inspect. Change. Prove." />
 </p>
 
 **Say what you want done, not which skill to run.**

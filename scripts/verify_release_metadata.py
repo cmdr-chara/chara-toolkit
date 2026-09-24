@@ -31,6 +31,7 @@ def main() -> int:
     catalog_path = root / "skills" / "llms.txt"
     manifest_path = root / ".github" / "assets" / "social-preview-manifest.json"
     preview_path = root / ".github" / "assets" / "codex-toolkit-social-preview.png"
+    readme_hero_path = root / ".github" / "assets" / "codex-toolkit-readme-hero.png"
     renderer_path = root / ".github" / "render_social_preview.py"
     changelog_path = root / "CHANGELOG.md"
 
@@ -76,6 +77,18 @@ def main() -> int:
         )
 
     try:
+        readme_hero = readme_hero_path.read_bytes()
+    except OSError as exc:
+        return fail(f"cannot read README hero PNG: {exc}")
+    if len(readme_hero) < 24 or readme_hero[:8] != b"\x89PNG\r\n\x1a\n":
+        return fail("README hero is not a valid PNG header")
+    hero_width, hero_height = struct.unpack(">II", readme_hero[16:24])
+    if (hero_width, hero_height) != (1200, 675):
+        return fail(
+            f"README hero dimensions are {(hero_width, hero_height)}, expected (1200, 675)"
+        )
+
+    try:
         renderer = renderer_path.read_text(encoding="utf-8")
         changelog = changelog_path.read_text(encoding="utf-8")
     except (OSError, UnicodeError) as exc:
@@ -87,10 +100,15 @@ def main() -> int:
         return fail("renderer must derive release metadata from package.json and skills/llms.txt")
     if "image_git_blob_sha1" not in renderer or "git_blob_sha1(OUTPUT)" not in renderer:
         return fail("renderer must record the committed preview using Git blob identity")
+    if "README_HERO" not in renderer or "render_readme_hero()" not in renderer:
+        return fail("renderer must generate the canonical README hero")
     if f"## {version} - " not in changelog:
         return fail(f"CHANGELOG.md has no release section for {version}")
 
-    print(f"release metadata: PASS (v{version}, {skill_count} skills, {width}x{height}, blob {actual_blob})")
+    print(
+        f"release metadata: PASS (v{version}, {skill_count} skills, "
+        f"social {width}x{height}, README {hero_width}x{hero_height}, blob {actual_blob})"
+    )
     return 0
 
 
