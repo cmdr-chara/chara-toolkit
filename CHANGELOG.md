@@ -1,3 +1,7 @@
+## 0.9.3 - 2026-09-25
+
+- feat: make Mission Control model-agnostic (`321088eaac83`).
+
 ## 0.9.2 - 2026-09-24
 
 - docs: simplify README for new users (`9be2460c7b52`).
