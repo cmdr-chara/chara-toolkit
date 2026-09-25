@@ -77,6 +77,7 @@ jobs:
           node bin/toolkit.mjs setup --no-auto-update --codex-home "$temp_home"
           test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
+          ! grep -R -E '^(model|model_reasoning_effort|model_provider|service_tier)[[:space:]]*=' "$temp_home/agents"
           test -f "$temp_home/codex-toolkit/workflows.md"
           grep -F 'Keep this user-authored rule exactly present.' "$temp_home/AGENTS.md"
           test "$(grep -c '<!-- codex-toolkit:start -->' "$temp_home/AGENTS.md")" -eq 1

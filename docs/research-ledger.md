@@ -1,6 +1,6 @@
 # Ecosystem Research Ledger
 
-**Information checked:** 2026-07-17; Next.js security refresh 2026-07-31; Codex model routing refresh 2026-08-16
+**Information checked:** 2026-07-17; Next.js security refresh 2026-07-31; Mission Control portability refresh 2026-09-25
 **Research mode:** current public web, repository tree/raw-file inspection, official documentation, official package registries/repositories, and release/advisory pages.  
 **Refresh policy:** stable workflow principles remain in `SKILL.md`; changing version/package/platform facts remain in dated references and must be rechecked before use.
 
@@ -18,7 +18,7 @@
 | Source | Material inspected | Finding retained in the pack | Checked |
 | --- | --- | --- | --- |
 | https://github.com/cmdr-chara/codex-toolkit | Root tree, README, existing `skills/`, `agents/`, installers, package metadata | The toolkit is compact and already ships Mission Control. Integration must be additive. | 2026-07-17 |
-| https://raw.githubusercontent.com/cmdr-chara/codex-toolkit/main/README.md | Installation model, catalog, safety statement, existing skill description | `delegate-with-mission-cards` owns role/model dispatch and parent-side verification. | 2026-07-17 |
+| https://raw.githubusercontent.com/cmdr-chara/codex-toolkit/main/README.md | Installation model, catalog, safety statement, existing skill description | `delegate-with-mission-cards` owns portable role dispatch and parent-side verification; model selection is runtime-owned. | 2026-07-17 |
 | https://raw.githubusercontent.com/cmdr-chara/codex-toolkit/main/skills/delegate-with-mission-cards/SKILL.md | Delegation gate, mission cards, exclusive writer ownership, waves, handoff review | `multi-agent-work-coordinator` must add a generic work DAG/ownership/integration layer, not duplicate the six-role adapter. | 2026-07-17 |
 | https://raw.githubusercontent.com/cmdr-chara/codex-toolkit/main/LICENSE | MIT terms, copyright | Pack root license preserves `Copyright (c) 2026 cmdr-chara`. | 2026-07-17 |
 | https://github.com/Emanuele-web04/skills/tree/main/skills | Four public Markdown prompts covering code review, refactoring, and two overlapping performance workflows; no license file was exposed | Only general workflow ideas informed an independent two-skill design. No source prose or code was copied; the two performance concepts were merged to avoid ambiguous routing. | 2026-07-31 |
@@ -139,3 +139,15 @@ Named package rows were checked against their official docs/repositories and, wh
 | https://github.com/SkillMedev/skills/blob/main/skills/typescript-strict/SKILL.md | Staged TypeScript strictness migration | Folded into TypeScript quality enforcement. | 2026-09-24 |
 | https://github.com/SkillMedev/skills/blob/main/skills/web-performance/SKILL.md | Field-first Core Web Vitals workflow | Folded into the production web builder; numeric thresholds remain current-source checks rather than permanent root instructions. | 2026-09-24 |
 | https://github.com/SkillMedev/skills/blob/main/skills/skill-tester/SKILL.md | Positive, negative, neighbor-collision, and realistic behavior scenarios | Integrated into the toolkit evaluation methodology. | 2026-09-24 |
+
+## 2026-09-25 Mission Control portability refresh
+
+| Source | Finding retained | Checked |
+| --- | --- | --- |
+| https://developers.openai.com/api/docs/guides/responses-multi-agent | Multi-agent subagents share the request model in the documented Responses multi-agent flow; role design should not depend on per-role model pinning. | 2026-09-25 |
+| https://github.com/openai/codex/blob/main/codex-rs/app-server-protocol/src/protocol/v2/config.rs | Codex configuration represents `model` and `model_reasoning_effort` as optional fields. Mission Control role files can therefore omit them and let the active runtime configuration govern inference. | 2026-09-25 |
+
+Mission Control now defines role identity through sandbox authority, scope, execution behavior, consequence level, and handoff evidence. The six shipped TOMLs intentionally omit model, provider, service-tier, and reasoning-effort pins. This keeps the bundle portable across compatible Codex models and lets user or organization policy choose the runtime model.
+
+The dispatch contract also degrades explicitly: when named custom roles are unavailable, the parent or an available generic subagent may execute the same bounded mission card, but the toolkit must not claim that an unavailable role or sandbox profile was applied.
+

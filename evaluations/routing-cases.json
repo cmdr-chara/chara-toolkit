@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "information_checked": "2026-08-16",
+  "information_checked": "2026-09-25",
   "minimums": {
     "positive_per_skill": 4,
     "negative_per_skill": 3
@@ -96,10 +96,10 @@
         },
         {
           "id": "multi-agent-work-coordinator-n2",
-          "prompt": "Choose which GPT model should handle each mission using the toolkit’s six Mission Control roles.",
+          "prompt": "Choose which of the toolkit's six Mission Control roles should handle each already-scoped mission.",
           "expected": "do_not_activate",
           "route_to": "delegate-with-mission-cards",
-          "reason": "Role/model dispatch belongs to the existing adapter, not this generic coordinator."
+          "reason": "Portable role dispatch belongs to Mission Control, not the generic coordinator."
         },
         {
           "id": "multi-agent-work-coordinator-n3",

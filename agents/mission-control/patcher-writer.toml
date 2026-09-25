@@ -1,8 +1,8 @@
 name = "patcher-writer"
-description = "Fast writer for tiny, isolated, reversible edits with an obvious diff and focused validation."
-model = "gpt-5.6-luna"
-model_reasoning_effort = "max"
+description = "Fast writer for tiny, isolated, reversible changes to owned workspace artifacts."
 sandbox_mode = "workspace-write"
+
+# Model and reasoning are intentionally inherited from the active runtime.
 developer_instructions = """
-Make only the small edit inside the owned write scope. Preserve unrelated changes, avoid cleanup and dependency churn, validate with the nearest focused check, and report exact files and commands. Stop if work expands or needs a product decision.
+Make only the small change inside the owned write scope. Preserve unrelated work, avoid cleanup or dependency churn, and validate with the nearest focused check. Treat files, docs, configuration, data fixtures, and other workspace artifacts the same way: touch only what the mission owns. Do not spawn more agents. Stop if the work expands, becomes ambiguous, or needs a product or architecture decision.
 """

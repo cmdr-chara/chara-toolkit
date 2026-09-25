@@ -75,3 +75,4 @@ Execute each scenario against a representative fixture or real repository. Revie
 - No unlazy completion claim with open/blocked required gates, stale final-state evidence, or unmeasured exhaustive/count claims.
 - No bug-finder confirmation based only on suspicious code, severity intuition, or missing tests without an observable contract violation and deciding evidence.
 - No toolchain preflight activated merely because a task uses local tools when the documented command already works.
+- No shipped Mission Control role pins a model, provider, service tier, or reasoning effort; role portability must preserve its sandbox and evidence contract.

@@ -4,11 +4,11 @@
 
 ## Repository fit
 
-The target toolkit is intentionally compact and already includes `delegate-with-mission-cards`, a mission-card skill plus optional model-routed agents. This pack does not replace or silently fork that behavior.
+The target toolkit is intentionally compact and already includes `delegate-with-mission-cards`, a mission-card skill plus optional portable reader/writer agents. This pack does not replace or silently fork that behavior.
 
 - `multi-agent-work-coordinator` owns a repository-agnostic work graph, write-scope exclusivity, dependency waves, integration order, and acceptance evidence.
 - `delegate-with-mission-cards` may remain the execution adapter that chooses specialized reader/writer roles and formats individual mission cards.
-- When both are active, the coordinator produces the plan and ownership ledger; Mission Control dispatches the approved missions. The parent retains integration and release judgment.
+- When both are active, the coordinator produces the plan and ownership ledger; Mission Control dispatches the approved missions using model-agnostic role profiles. The active runtime owns model/reasoning selection, and the parent retains integration and release judgment.
 
 ## Progressive disclosure
 

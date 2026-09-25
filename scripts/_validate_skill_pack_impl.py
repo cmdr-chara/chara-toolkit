@@ -40,12 +40,12 @@ EXPECTED_SKILLS = [
 TOOLKIT_SKILLS = ["delegate-with-mission-cards", *EXPECTED_SKILLS]
 
 MISSION_CONTROL_ROUTES = {
-    "pathfinder-reader": ("gpt-5.6-luna", "max", "read-only"),
-    "patcher-writer": ("gpt-5.6-luna", "max", "workspace-write"),
-    "investigator-reader": ("gpt-5.6-luna", "max", "read-only"),
-    "builder-writer": ("gpt-5.6-luna", "max", "workspace-write"),
-    "sentinel-reader": ("gpt-5.6-sol", "high", "read-only"),
-    "architect-writer": ("gpt-5.6-sol", "max", "workspace-write"),
+    "pathfinder-reader": "read-only",
+    "patcher-writer": "workspace-write",
+    "investigator-reader": "read-only",
+    "builder-writer": "workspace-write",
+    "sentinel-reader": "read-only",
+    "architect-writer": "workspace-write",
 }
 
 REQUIRED_ROOT = [
@@ -233,7 +233,7 @@ def validate_mission_control(result: Result) -> None:
     if unexpected:
         result.error(f"unexpected Mission Control agents: {', '.join(unexpected)}")
 
-    for name, expected in MISSION_CONTROL_ROUTES.items():
+    for name, expected_sandbox in MISSION_CONTROL_ROUTES.items():
         path = actual.get(name)
         if path is None:
             continue
@@ -242,17 +242,23 @@ def validate_mission_control(result: Result) -> None:
         except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
             result.error(f"{rel(path, result.root)}: invalid TOML: {exc}")
             continue
-        observed = (
-            data.get("model"),
-            data.get("model_reasoning_effort"),
-            data.get("sandbox_mode"),
-        )
         if data.get("name") != name:
             result.error(f"{rel(path, result.root)}: name must match filename stem {name!r}")
-        if observed != expected:
+        if not str(data.get("description", "")).strip():
+            result.error(f"{rel(path, result.root)}: Mission Control role needs a non-empty description")
+        if data.get("sandbox_mode") != expected_sandbox:
             result.error(
-                f"{rel(path, result.root)}: expected model/effort/sandbox {expected!r}, got {observed!r}"
+                f"{rel(path, result.root)}: expected sandbox {expected_sandbox!r}, "
+                f"got {data.get('sandbox_mode')!r}"
             )
+        if not str(data.get("developer_instructions", "")).strip():
+            result.error(f"{rel(path, result.root)}: Mission Control role needs developer_instructions")
+        for field_name in ("model", "model_reasoning_effort", "model_provider", "service_tier"):
+            if field_name in data:
+                result.error(
+                    f"{rel(path, result.root)}: universal Mission Control roles must inherit "
+                    f"runtime configuration; remove {field_name!r}"
+                )
 
     result.metrics["mission_control_agents"] = len(actual)
 

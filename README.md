@@ -184,6 +184,8 @@ A single-skill install does not add the toolkit's automatic routing, Mission Con
 
 The full setup also includes six optional agents for work that can be split safely.
 
+Mission Control is **model-agnostic**: the roles do not pin a specific GPT model or reasoning level. They inherit your active Codex/runtime configuration, so the same role definitions can work across compatible current and future models.
+
 You do not need to configure or call them manually. The toolkit can use them when separate pieces of work have clear boundaries and can be checked independently.
 
 <details>
@@ -191,14 +193,14 @@ You do not need to configure or call them manually. The toolkit can use them whe
 
 | Agent | Best for |
 | --- | --- |
-| `pathfinder-reader` | Fast file, symbol, and fact lookup |
-| `patcher-writer` | Small isolated edits |
-| `investigator-reader` | Debugging, tracing, and focused reviews |
-| `builder-writer` | Features, tests, fixes, docs, and configuration |
-| `sentinel-reader` | High-risk security, privacy, migration, and architecture review |
-| `architect-writer` | Difficult architecture and failure-sensitive implementation |
+| `pathfinder-reader` | Fast discovery and narrow fact lookup |
+| `patcher-writer` | Tiny isolated reversible changes |
+| `investigator-reader` | Debugging, research, tracing, and focused reviews |
+| `builder-writer` | Normal bounded implementation across code, tests, docs, config, and workspace artifacts |
+| `sentinel-reader` | High-consequence read-only review |
+| `architect-writer` | High-consequence cross-cutting implementation |
 
-The parent Codex task remains responsible for integrating and checking the final result.
+The parent Codex task remains responsible for decisions, integration, and checking the final result. If a Codex runtime does not expose named custom roles, the same mission-card boundaries can still be used with the parent or an available generic subagent; the toolkit does not pretend that an unavailable role profile was applied.
 
 </details>
 

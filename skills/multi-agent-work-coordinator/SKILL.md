@@ -11,7 +11,7 @@ Parallelize only work that is understood well enough to own, verify, and integra
 
 Use this skill when several bounded work items can proceed independently after repository boundaries are known.
 
-Do not trigger for repository discovery, tiny/tightly coupled work, ambiguous tasks, or role/model routing alone.
+Do not trigger for repository discovery, tiny/tightly coupled work, ambiguous tasks, or choosing a Mission Control role alone.
 
 ## Required inputs
 

@@ -37,7 +37,7 @@ Each scenario tests the complete operating contract of one skill. A passing run 
 2. Build a DAG with read scope, exclusive write scope, dependencies, acceptance evidence, and stop conditions per mission.
 3. Make schema source, generated client, lockfile, and shared release config single-owner surfaces.
 4. Detect path/glob overlap with `ownership_check.py`; revise until no writer conflict remains.
-5. Launch independent readers/writers in the smallest useful waves; use the existing Mission Control skill only as an optional role/model dispatch adapter.
+5. Launch independent readers/writers in the smallest useful waves; use Mission Control only as an optional portable role-dispatch adapter.
 6. Review every handoff, inspect diffs, reject scope violations, and integrate in dependency order.
 7. Re-run integrated checks rather than accepting isolated green reports.
 

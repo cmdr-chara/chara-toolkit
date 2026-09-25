@@ -1,48 +1,57 @@
 ---
 name: delegate-with-mission-cards
-description: Delegate independent, bounded repository work to specialized subagents with explicit write ownership and parent verification. Use when parallel work can be scoped and verified independently.
+description: Delegate independent, bounded work to specialized reader and writer subagents with explicit ownership and parent verification. Use when parallel work can be scoped and verified independently.
 ---
 
 # Mission Control
 
-Keep the parent on the critical path. Delegate execution, not accountability. The parent owns decomposition, sequencing, product judgment, integration, validation, and the final answer.
+Delegate execution, not accountability. The parent owns decomposition, sequencing, decisions, integration, verification, and the final answer.
+
+Mission Control is intentionally **model-agnostic**. Its roles do not pin a model or reasoning effort; they use the active Codex/runtime configuration.
 
 ## Delegation gate
 
-Delegate only when the outcome and acceptance criteria are concrete, inputs are stable, scope is precise, execution is independent, evidence can verify the result, and delegation saves more time or context than briefing and review consume.
+Delegate only when the outcome and acceptance criteria are concrete, inputs are stable, scope is bounded, work is independently executable, and the result can be verified.
 
-Keep work in the parent when it is small, tightly coupled, destructive, primarily a product decision, dependent on unavailable credentials, or too ambiguous for a stop condition.
-
-## Mission ledger
-
-Record candidates before spawning:
-
-```text
-ID | objective | role | dependencies | read scope | write scope | acceptance evidence
-```
-
-Mark each `Ready`, `Blocked`, or `Parent-owned`. Launch only Ready missions and run dependent work in waves.
+Keep work in the parent when it is small, tightly coupled, destructive, primarily a product decision, dependent on unavailable authority, or too ambiguous for a stop condition.
 
 ## Choose the lightest capable role
 
 | Role | Use for |
 | --- | --- |
-| `pathfinder-reader` | Fast reconnaissance, files and symbols, codebase maps, and narrow facts |
-| `investigator-reader` | Debugging, behavior tracing, root causes, reviews, and option comparison |
-| `sentinel-reader` | Security, auth, privacy, migrations, architecture, public APIs, and subtle high-consequence analysis |
-| `patcher-writer` | Tiny, isolated, reversible edits with an obvious diff and fast validation |
-| `builder-writer` | Standard implementation, tests, fixes, contained refactors, docs, and configuration |
-| `architect-writer` | High-risk migrations, architecture changes, security hardening, and failure-sensitive work |
+| `pathfinder-reader` | Fast discovery and narrow fact gathering |
+| `investigator-reader` | Debugging, research, tracing, reviews, and comparisons |
+| `sentinel-reader` | High-consequence read-only security, privacy, migration, architecture, policy, or contract review |
+| `patcher-writer` | Tiny isolated reversible changes |
+| `builder-writer` | Normal bounded implementation across code, tests, docs, config, and other workspace artifacts |
+| `architect-writer` | High-consequence cross-cutting implementation, migrations, and security hardening |
 
-Escalate for ambiguity, blast radius, irreversibility, hidden coupling, or difficult validation. Never escalate merely because work contains many repetitive items.
+Escalate by **risk and complexity**, not by task length or prestige.
 
-## Model tiers
+## Runtime portability
 
-Use Luna Max for the four general roles: `pathfinder-reader`, `patcher-writer`, `investigator-reader`, and `builder-writer`. Escalate high-risk read-only review to `sentinel-reader` on Sol High. Reserve Sol Max for `architect-writer`, where irreversible migrations, architectural risk, security hardening, or failure-sensitive integration justify the highest tier. Do not escalate merely because a mission is long, repetitive, or important.
+- The shipped role TOMLs deliberately omit `model` and `model_reasoning_effort`.
+- The active Codex/runtime configuration chooses the model and reasoning behavior.
+- User or organization model policy remains authoritative.
+- If a runtime exposes named custom roles, select the matching role.
+- If named roles are unavailable, do not pretend a profile was applied. Keep the same mission card and safety boundary in the parent or an available generic subagent, and report the degraded dispatch.
+- Role identity is about permissions, scope, and execution behavior—not a specific model family.
+
+## Mission ledger
+
+Before dispatch, record:
+
+```text
+ID | objective | role | dependencies | read scope | write scope | acceptance evidence
+```
+
+Scopes may be files, directories, documents, datasets, generated artifacts, or other workspace resources. Mark each mission `Ready`, `Blocked`, or `Parent-owned`. Launch only `Ready` missions.
 
 ## Parallelism
 
-Use the smallest useful fan-out, normally two to four Ready missions. Favor parallel readers. Give every writer a mutually exclusive write set. Treat lockfiles, schemas, migrations, generated artifacts, shared configuration, and release files as single-owner surfaces. Wait for a wave before launching dependent work. Do not permit recursive delegation unless explicitly designed and authorized.
+Use the smallest useful fan-out. Favor parallel readers. Give every writer exclusive ownership of mutable resources. Treat shared schemas, lockfiles, migrations, generated artifacts, release files, and other shared outputs as single-owner surfaces.
+
+Wait for dependencies before launching later waves. Do not permit recursive delegation unless the parent explicitly designed and authorized it.
 
 ## Reader mission card
 
@@ -60,7 +69,7 @@ Return format:
 Stop or escalate when:
 ```
 
-Require separate answer, exact evidence, labeled inference, confidence with reason, and unknowns or blockers. Readers must not edit or silently broaden scope.
+Readers must remain read-only, distinguish facts from inference, and return unknowns or blockers.
 
 ## Writer mission card
 
@@ -80,18 +89,20 @@ Return format:
 Stop or escalate when:
 ```
 
-Require writers to preserve unrelated changes, make the smallest coherent change, avoid formatting churn and opportunistic cleanup, and stop before leaving ownership. Require an implementation summary, exact files, validation results, `PASS`/`PARTIAL`/`BLOCKED` status, and remaining risks.
+Writers preserve unrelated work, avoid opportunistic cleanup, and stop before leaving their ownership boundary.
 
 ## Review every handoff
 
-Treat output as evidence, not authority. Confirm the objective, check boundaries, inspect every diff, corroborate material claims, re-run proportionate validation against the integrated state, and resolve conflicts by evidence. Mark missions `ACCEPTED`, `REWORK`, `BLOCKED`, or `REJECTED`.
+Treat subagent output as evidence, not authority. Confirm the objective, inspect changed artifacts, corroborate material claims, and rerun proportionate checks against the integrated state.
 
-Never delegate final integration, release judgment, user communication, or decisions trading one requirement against another.
+Classify each handoff as `ACCEPTED`, `REWORK`, `BLOCKED`, or `REJECTED`.
 
-## Match evidence to risk
+Never delegate final integration, release judgment, user communication, or a decision that trades one requirement against another.
 
-- Low: targeted diff plus nearest focused deterministic check.
-- Medium: focused tests, relevant static checks, and affected consumer inspection.
-- High: adversarial review, negative paths, integrated validation, rollback or migration analysis, and explicit residual risks.
+## Evidence by consequence
 
-State skipped validation and its reason. Never present an unverified claim as confirmed.
+- Low: exact result plus nearest focused check.
+- Medium: focused validation and affected-consumer inspection.
+- High: adversarial review, negative paths, integration evidence, and rollback or containment analysis.
+
+State skipped verification and its reason. Never present an unverified claim as confirmed.
