@@ -1,3 +1,7 @@
+## 0.9.4 - 2026-09-25
+
+- feat: universalize coordination and Mission Control tooling (`278d15739005`).
+
 ## 0.9.3 - 2026-09-25
 
 - feat: make Mission Control model-agnostic (`321088eaac83`).
