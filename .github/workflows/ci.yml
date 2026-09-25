@@ -35,7 +35,7 @@ jobs:
         run: python .github/render_social_preview.py
 
       - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-09-24
+        run: python scripts/validate_skill_pack.py . --as-of 2026-09-25
 
       - name: Verify anti-slop vendor integrity
         run: python scripts/verify_anti_slop_vendor.py .
@@ -47,13 +47,15 @@ jobs:
         run: python scripts/verify_release_metadata.py .
 
       - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-09-24
+        run: python scripts/run_smoke_tests.py . --as-of 2026-09-25
 
       - name: Validate installer and updater scripts
         run: |
           node --check bin/install.mjs
           node --check bin/toolkit.mjs
           node --check scripts/auto-update-runner.mjs
+          grep -F "bin\\toolkit.mjs" scripts/install-mission-control.ps1
+          ! grep -E 'Copy-Item|Remove-Item|Get-ChildItem' scripts/install-mission-control.ps1
 
       - name: Inspect package contents
         shell: bash
@@ -87,6 +89,7 @@ jobs:
           grep -F 'security-review' "$temp_home/AGENTS.md"
           grep -F 'Bug hunt — unknown defects' "$temp_home/codex-toolkit/workflows.md"
           grep -F 'Security review' "$temp_home/codex-toolkit/workflows.md"
+          node bin/toolkit.mjs mission-control check --codex-home "$temp_home"
 
           agents_before="$(sha256sum "$temp_home/AGENTS.md" | cut -d' ' -f1)"
           workflows_before="$(sha256sum "$temp_home/codex-toolkit/workflows.md" | cut -d' ' -f1)"
@@ -121,6 +124,7 @@ jobs:
           node bin/toolkit.mjs --codex-home "$temp_home"
           test -f "$temp_home/skills/delegate-with-mission-cards/SKILL.md"
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
+          node bin/toolkit.mjs mission-control check --codex-home "$temp_home"
           test ! -e "$temp_home/AGENTS.md"
 
       - name: Validate automatic-update scheduler plan

@@ -1,4 +1,4 @@
 interface:
   display_name: "Multi-Agent Work Coordinator"
-  short_description: "Coordinate safe parallel repository work"
-  default_prompt: "Use $multi-agent-work-coordinator to create a safe work graph with exclusive ownership, execution waves, and verified handoffs."
+  short_description: "Coordinate safe parallel work across owned resources"
+  default_prompt: "Use $multi-agent-work-coordinator to create a safe work graph with exclusive mutable-resource ownership, dependency waves, and verified handoffs."

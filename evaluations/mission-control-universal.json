@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "information_checked": "2026-09-25",
+  "cases": [
+    {
+      "id": "mission-control-documents-discovery",
+      "category": "documents",
+      "prompt": "Review twelve policy documents in parallel and return the exact clauses that define retention, deletion, and appeal rights. Do not edit anything.",
+      "expected_role": "pathfinder-reader",
+      "mutates": false,
+      "owned_resources": [],
+      "acceptance_evidence": "Each returned clause identifies its source document and location; unknowns remain explicit."
+    },
+    {
+      "id": "mission-control-research-comparison",
+      "category": "research",
+      "prompt": "Split four independent vendor research tracks, compare each against the same decision criteria, and return evidence-backed findings for parent synthesis.",
+      "expected_role": "investigator-reader",
+      "mutates": false,
+      "owned_resources": [],
+      "acceptance_evidence": "Each research track uses the same criteria, cites its evidence, and separates facts from inference."
+    },
+    {
+      "id": "mission-control-high-consequence-review",
+      "category": "documents",
+      "prompt": "Adversarially review a proposed privacy and data-retention policy for high-consequence gaps without editing the source documents.",
+      "expected_role": "sentinel-reader",
+      "mutates": false,
+      "owned_resources": [],
+      "acceptance_evidence": "Findings identify concrete policy consequences, counter-evidence, uncertainty, and residual risk."
+    },
+    {
+      "id": "mission-control-tiny-doc-edits",
+      "category": "documents",
+      "prompt": "Apply three independent one-line corrections to separate owned Markdown files and verify each changed line.",
+      "expected_role": "patcher-writer",
+      "mutates": true,
+      "owned_resources": [
+        "docs/guide-a.md",
+        "docs/guide-b.md",
+        "docs/guide-c.md"
+      ],
+      "acceptance_evidence": "Only the three owned files change and each requested correction is visible."
+    },
+    {
+      "id": "mission-control-report-build",
+      "category": "mixed-artifacts",
+      "prompt": "Build three independent sections of a launch report from supplied notes and datasets, with one writer per section and parent integration afterward.",
+      "expected_role": "builder-writer",
+      "mutates": true,
+      "owned_resources": [
+        "report/market.md",
+        "report/operations.md",
+        "report/risk.md"
+      ],
+      "acceptance_evidence": "Each section satisfies its acceptance criteria and the parent can integrate without overlapping writes."
+    },
+    {
+      "id": "mission-control-high-consequence-migration",
+      "category": "mixed-artifacts",
+      "prompt": "Migrate a regulated data dictionary, validation rules, and operator runbook as one bounded high-consequence change with recovery evidence.",
+      "expected_role": "architect-writer",
+      "mutates": true,
+      "owned_resources": [
+        "schema/data-dictionary",
+        "validation/rules",
+        "runbook/operators"
+      ],
+      "acceptance_evidence": "Contracts, rollback or forward recovery, verification, and residual risks are explicit."
+    },
+    {
+      "id": "mission-control-data-analysis",
+      "category": "data",
+      "prompt": "Analyze four independent dataset partitions for anomalies, summarize evidence per partition, and leave the source data unchanged.",
+      "expected_role": "investigator-reader",
+      "mutates": false,
+      "owned_resources": [],
+      "acceptance_evidence": "Every anomaly claim is tied to a partition and reproducible evidence; source datasets are untouched."
+    },
+    {
+      "id": "mission-control-mixed-resource-coordination",
+      "category": "mixed-artifacts",
+      "prompt": "Coordinate independent updates to a configuration file, a documentation chapter, and a generated report while keeping shared release notes single-owner.",
+      "expected_role": "builder-writer",
+      "mutates": true,
+      "owned_resources": [
+        "config/runtime",
+        "docs/chapter",
+        "reports/generated",
+        "release/notes"
+      ],
+      "acceptance_evidence": "Mutable-resource ownership is exclusive and integration order accounts for the shared release notes."
+    }
+  ]
+}

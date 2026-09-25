@@ -54,3 +54,19 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 - Pass at least thirteen of fifteen overlap sequences with no incorrect co-primary activation.
 - Treat a missing skill, stale display label, or wrong primary route as a failure even if the eventual answer is plausible.
 - If a case fails, record client version, installed skill path, selected skills, and rationale; fix metadata or trigger boundaries, then rerun only the failed case and its nearest overlap case.
+
+## Mission Control portability smoke
+
+Run these separately from the primary skill-routing table. They test the optional Mission Control bundle, not a production-skill route.
+
+| ID | Prompt | Expected role |
+| --- | --- | --- |
+| M1 | Search these twelve supplied policy documents in parallel and return the exact clauses about retention and deletion. Do not edit them. | `pathfinder-reader` |
+| M2 | Compare four independent research tracks against the same criteria and return evidence-backed findings for parent synthesis. | `investigator-reader` |
+| M3 | Apply three independent one-line corrections to three separately owned Markdown files. | `patcher-writer` |
+| M4 | Build three independent sections of a report, one writer per section, then return them for parent integration. | `builder-writer` |
+| M5 | Adversarially review a privacy policy for high-consequence gaps without changing the source. | `sentinel-reader` |
+| M6 | Migrate a regulated data dictionary and operator runbook as one bounded high-consequence change with recovery evidence. | `architect-writer` |
+
+If named custom roles are unavailable, record the runtime fallback rather than counting a generic subagent as the named role.
+

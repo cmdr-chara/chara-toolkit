@@ -163,15 +163,15 @@ screenshot-to-interface → relevant builder? (production integration)
 
 ## Multi-agent execution
 
-`multi-agent-work-coordinator` is an orchestration helper, not a default prefix. Use it only after the work is understood well enough to define exclusive writes and integration order.
+`multi-agent-work-coordinator` is an orchestration helper, not a default prefix. Use it only after the work is understood well enough to define exclusive mutable-resource ownership and integration order.
 
 ```text
 mapped/approved work
         ↓
 multi-agent-work-coordinator
-        ├─ mission A (exclusive writes)
-        ├─ mission B (exclusive writes)
-        └─ mission C (read-only or exclusive writes)
+        ├─ mission A (exclusive mutable resources)
+        ├─ mission B (exclusive mutable resources)
+        └─ mission C (read-only or exclusive mutable resources)
         ↓
 integration gates
         ↓

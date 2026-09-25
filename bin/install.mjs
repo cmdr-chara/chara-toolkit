@@ -24,6 +24,18 @@ const windowsDailyTask = "Codex Toolkit Auto Update";
 const windowsLogonTask = "Codex Toolkit Auto Update Logon";
 const macLabel = "dev.cmdr-chara.codex-toolkit-update";
 const linuxUnit = "codex-toolkit-update";
+const managedStart = "<!-- codex-toolkit:start -->";
+const managedEnd = "<!-- codex-toolkit:end -->";
+const missionControlAgents = [
+  { file: "pathfinder-reader.toml", name: "pathfinder-reader", sandbox: "read-only" },
+  { file: "patcher-writer.toml", name: "patcher-writer", sandbox: "workspace-write" },
+  { file: "investigator-reader.toml", name: "investigator-reader", sandbox: "read-only" },
+  { file: "builder-writer.toml", name: "builder-writer", sandbox: "workspace-write" },
+  { file: "sentinel-reader.toml", name: "sentinel-reader", sandbox: "read-only" },
+  { file: "architect-writer.toml", name: "architect-writer", sandbox: "workspace-write" },
+];
+const missionControlPinnedField =
+  /^(model|model_reasoning_effort|model_provider|service_tier)\s*=/m;
 
 const argv = process.argv.slice(2);
 const commands = new Set(["setup", "mission-control", "auto-update", "help"]);
@@ -191,20 +203,12 @@ async function installMissionControl({ includeSkill = true } = {}) {
     }
   }
 
-  const agentNames = [
-    "pathfinder-reader.toml",
-    "patcher-writer.toml",
-    "investigator-reader.toml",
-    "builder-writer.toml",
-    "sentinel-reader.toml",
-    "architect-writer.toml",
-  ];
-  for (const name of agentNames) {
+  for (const role of missionControlAgents) {
     if (
       await syncFile(
-        join(packageRoot, "agents", "mission-control", name),
-        join(codexHome, "agents", name),
-        join("agents", name),
+        join(packageRoot, "agents", "mission-control", role.file),
+        join(codexHome, "agents", role.file),
+        join("agents", role.file),
       )
     ) {
       changed += 1;
@@ -213,6 +217,98 @@ async function installMissionControl({ includeSkill = true } = {}) {
   return changed;
 }
 
+async function checkMissionControl() {
+  const failures = [];
+  const notes = [];
+  const pass = (label) => console.log(`PASS: ${label}`);
+  const fail = (label) => {
+    failures.push(label);
+    console.log(`FAIL: ${label}`);
+  };
+  const note = (label) => {
+    notes.push(label);
+    console.log(`NOTE: ${label}`);
+  };
+
+  const skillSource = join(packageRoot, "skills", "delegate-with-mission-cards");
+  const skillTarget = join(codexHome, "skills", "delegate-with-mission-cards");
+  if (!(await exists(skillTarget))) {
+    fail("Mission Control skill is not installed");
+  } else if ((await treeDigest(skillSource)) !== (await treeDigest(skillTarget))) {
+    fail("Mission Control skill differs from this toolkit release");
+  } else {
+    pass("Mission Control skill is installed and current");
+  }
+
+  for (const role of missionControlAgents) {
+    const source = join(packageRoot, "agents", "mission-control", role.file);
+    const target = join(codexHome, "agents", role.file);
+    if (!(await exists(target))) {
+      fail(`${role.name} is missing`);
+      continue;
+    }
+    const [sourceBytes, targetBytes] = await Promise.all([readFile(source), readFile(target)]);
+    const text = targetBytes.toString("utf8");
+    if (!sourceBytes.equals(targetBytes)) {
+      fail(`${role.name} differs from this toolkit release`);
+    } else {
+      pass(`${role.name} is current`);
+    }
+    const expectedName = `name = "${role.name}"`;
+    const expectedSandbox = `sandbox_mode = "${role.sandbox}"`;
+    if (!text.split(/\r?\n/).some((line) => line.trim() === expectedName)) {
+      fail(`${role.name} has the wrong name field`);
+    }
+    if (!text.split(/\r?\n/).some((line) => line.trim() === expectedSandbox)) {
+      fail(`${role.name} has the wrong sandbox_mode`);
+    }
+    if (missionControlPinnedField.test(text)) {
+      fail(`${role.name} pins model/provider/reasoning settings`);
+    }
+  }
+
+  const agentsPath = join(codexHome, "AGENTS.md");
+  if (await exists(agentsPath)) {
+    const current = await readFile(agentsPath, "utf8");
+    const starts = current.split(managedStart).length - 1;
+    const ends = current.split(managedEnd).length - 1;
+    if (starts === 0 && ends === 0) {
+      note("Toolkit managed routing is not installed; Mission Control-only installation is still valid");
+    } else if (starts !== 1 || ends !== 1) {
+      fail(`AGENTS.md has malformed toolkit markers (${starts} start, ${ends} end)`);
+    } else {
+      const startIndex = current.indexOf(managedStart) + managedStart.length;
+      const endIndex = current.indexOf(managedEnd, startIndex);
+      if (endIndex < startIndex) {
+        fail("AGENTS.md toolkit markers are out of order");
+      } else {
+        const installed = current.slice(startIndex, endIndex).trim();
+        const expected = (await readFile(join(packageRoot, "orchestration", "managed-agents.md"), "utf8")).trim();
+        if (installed === expected) pass("Managed routing block is current");
+        else fail("Managed routing block differs from this toolkit release");
+      }
+    }
+  } else {
+    note("AGENTS.md is absent; Mission Control-only installation is still valid");
+  }
+
+  const workflowTarget = join(codexHome, "codex-toolkit", "workflows.md");
+  if (await exists(workflowTarget)) {
+    const [sourceBytes, targetBytes] = await Promise.all([
+      readFile(join(packageRoot, "orchestration", "workflows.md")),
+      readFile(workflowTarget),
+    ]);
+    if (sourceBytes.equals(targetBytes)) pass("Workflow catalog is current");
+    else fail("Workflow catalog differs from this toolkit release");
+  } else {
+    note("Workflow catalog is not installed; full setup installs it");
+  }
+
+  console.log(
+    `Mission Control check: ${failures.length ? "FAIL" : "PASS"} (${failures.length} failure(s), ${notes.length} note(s))`,
+  );
+  return failures.length === 0;
+}
 function run(commandName, args, { allowFailure = false, input } = {}) {
   const result = spawnSync(commandName, args, {
     encoding: "utf8",
@@ -592,6 +688,9 @@ Usage:
   npx --yes github:cmdr-chara/codex-toolkit setup
       Install all toolkit skills + Mission Control and enable automatic updates.
 
+  npx --yes github:cmdr-chara/codex-toolkit mission-control check
+      Verify the installed Mission Control roles, portability, and routing state.
+
   npx --yes github:cmdr-chara/codex-toolkit auto-update status
   npx --yes github:cmdr-chara/codex-toolkit auto-update install
   npx --yes github:cmdr-chara/codex-toolkit auto-update remove
@@ -616,16 +715,23 @@ if (command === "help" || flag("--help") || flag("-h")) {
   else if (action === "remove") await removeAutoUpdate();
   else if (action === "status") await showAutoUpdateStatus();
   else throw new Error(`unknown auto-update action: ${action}`);
-} else {
-  const changed = await installMissionControl({ includeSkill: true });
-  console.log(`Mission Control synchronized in ${codexHome}`);
-  if (changed) {
-    console.log(`Changed surfaces: ${changed}`);
-    if (!dryRun && (await exists(backupRoot))) {
-      console.log(`Previous files backed up to ${backupRoot}`);
+} else if (command === "mission-control") {
+  const action = argv[0] && !argv[0].startsWith("-") ? argv[0] : "install";
+  if (action === "check") {
+    if (!(await checkMissionControl())) process.exitCode = 1;
+  } else if (action === "install") {
+    const changed = await installMissionControl({ includeSkill: true });
+    console.log(`Mission Control synchronized in ${codexHome}`);
+    if (changed) {
+      console.log(`Changed surfaces: ${changed}`);
+      if (!dryRun && (await exists(backupRoot))) {
+        console.log(`Previous files backed up to ${backupRoot}`);
+      }
+    } else {
+      console.log("Mission Control was already current.");
     }
+    console.log("Start a fresh Codex task to load the skill and agents.");
   } else {
-    console.log("Mission Control was already current.");
+    throw new Error(`unknown mission-control action: ${action}`);
   }
-  console.log("Start a fresh Codex task to load the skill and agents.");
 }

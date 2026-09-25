@@ -12,6 +12,7 @@ This suite tests routing, overlap resolution, complete workflows, resource integ
 - `adversarial-review.md`: self-review findings, corrections, and remaining refresh obligations.
 - `package-claim-review.md`: manual protocol for time-sensitive compatibility, maintenance, license, security, cost, and deprecation claims.
 - `post-install-routing-smoke.md`: a compact live-client check for all twenty-one production skill routes and the highest-risk overlaps.
+- `mission-control-universal.json`: non-code and mixed-artifact Mission Control scenarios covering documents, research, data, and all six portable roles.
 
 The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, bug-finder, toolchain-preflight, and security-review routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
 
@@ -41,6 +42,12 @@ For the overlap case files, exact incidental helper use is not required, but the
 ## Post-install smoke run
 
 After copying the skills into a Codex installation, run the prompts in `post-install-routing-smoke.md` in fresh tasks. Record the selected primary skill before judging answer quality. This check is intentionally smaller than the full routing suite and exists to catch installation, metadata, or live-router drift.
+
+## Mission Control portability run
+
+For each case in `mission-control-universal.json`, run the prompt in a fresh task when the client supports subagents. Confirm the selected role, read/write authority, owned resources, and returned evidence match the case. These cases are deliberately not limited to repositories. Static validation proves coverage and role contracts, not live dispatch behavior.
+
+If the runtime does not expose named custom roles, record the fallback explicitly and verify that the same mission scope and ownership boundary were preserved without claiming the unavailable role was used.
 
 ## Workflow run
 
@@ -76,3 +83,4 @@ Execute each scenario against a representative fixture or real repository. Revie
 - No bug-finder confirmation based only on suspicious code, severity intuition, or missing tests without an observable contract violation and deciding evidence.
 - No toolchain preflight activated merely because a task uses local tools when the documented command already works.
 - No shipped Mission Control role pins a model, provider, service tier, or reasoning effort; role portability must preserve its sandbox and evidence contract.
+- Mission Control universal scenarios cover documents, research, data, and mixed artifacts, with all six roles represented and mutating cases carrying explicit owned resources.

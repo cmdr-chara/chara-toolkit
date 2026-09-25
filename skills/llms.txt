@@ -1,6 +1,6 @@
 delegate-with-mission-cards: Model-agnostic Mission Control for bounded multi-agent work with portable reader/writer roles, explicit ownership, safe parallel waves, runtime-inherited model settings, and parent-side verification.
 repository-intelligence: Evidence-backed architecture, ownership, dependency, hotspot, change-impact, and edit-conflict mapping.
-multi-agent-work-coordinator: Safe repository work graphs with exclusive write ownership, dependency waves, integration order, and handoff verification.
+multi-agent-work-coordinator: Safe work graphs for parallel tasks across code, documents, research, datasets, configuration, and other independently ownable resources.
 codebase-evolution-controller: Dependency, framework, schema, and API evolution with compatibility stages, rollout, rollback, and evidence.
 verification-and-release: Risk-based test strategy and evidence-backed release readiness decisions.
 debugging-investigator: Reproduction-first debugging with ranked hypotheses, causal tracing, minimal fixes, and regression design.

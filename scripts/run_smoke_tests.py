@@ -252,6 +252,18 @@ end_of_record
             ]
         },
     )
+    write_json(
+        ownership / "universal.json",
+        {
+            "single_owner_resources": ["brief/final", "data/merged.csv"],
+            "missions": [
+                {"id": "research-a", "kind": "writer", "write_scope": ["analysis/vendor-a.md"]},
+                {"id": "research-b", "kind": "writer", "write_scope": ["analysis/vendor-b.md"]},
+                {"id": "data", "kind": "writer", "write_scope": ["data/partition-a"]},
+                {"id": "final", "kind": "writer", "dependencies": ["research-a", "research-b", "data"], "write_scope": ["brief/final"]},
+            ],
+        },
+    )
 
     return {
         "fixtures": fixtures,
@@ -347,6 +359,7 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
         )
     )
     commands.append(run_command("ownership_valid", [py, str(scripts["ownership_check"]), str(paths["ownership"] / "valid.json"), "--json"], {0}))
+    commands.append(run_command("ownership_universal", [py, str(scripts["ownership_check"]), str(paths["ownership"] / "universal.json"), "--json"], {0}))
     commands.append(run_command("ownership_conflict", [py, str(scripts["ownership_check"]), str(paths["ownership"] / "conflict.json"), "--json"], {1}))
     commands.append(run_command("web_inventory", [py, str(scripts["web_inventory"]), str(paths["web"]), "--format", "json"], {0}))
     commands.append(run_command("flutter_inventory", [py, str(scripts["flutter_inventory"]), str(paths["flutter"]), "--format", "json"], {0}))
@@ -371,6 +384,7 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
     check(junit == {"tests": 3, "failures": 1, "errors": 0, "skipped": 1, "time_seconds": 1.25}, "JUnit aggregation preserves totals")
     check(lcov["lines_found"] == 10 and lcov["lines_hit"] == 8, "LCOV aggregation preserves line totals")
     check(parsed["ownership_valid"] == {"valid": True, "issue_count": 0, "issues": []}, "non-overlapping ownership plan passes")
+    check(parsed["ownership_universal"] == {"valid": True, "issue_count": 0, "issues": []}, "non-code logical resource ownership plan passes")
     check(parsed["ownership_conflict"]["valid"] is False and parsed["ownership_conflict"]["issue_count"] >= 1, "overlapping ownership plan fails with evidence")
     web_packages = parsed["web_inventory"]["package_manifests"][0]["selected_dependencies"]
     check(web_packages["next"]["range"] == "0.0.0-fixture", "web inventory reports manifest value without recommending it")

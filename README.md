@@ -186,7 +186,9 @@ The full setup also includes six optional agents for work that can be split safe
 
 Mission Control is **model-agnostic**: the roles do not pin a specific GPT model or reasoning level. They inherit your active Codex/runtime configuration, so the same role definitions can work across compatible current and future models.
 
-You do not need to configure or call them manually. The toolkit can use them when separate pieces of work have clear boundaries and can be checked independently.
+It is also **resource-agnostic**. The same mission/ownership model can coordinate code, documents, research, datasets, configuration, reports, and other bounded workspace artifacts.
+
+You do not need to configure or call the agents manually. The toolkit can use them when separate pieces of work have clear boundaries and can be checked independently.
 
 <details>
 <summary><strong>Mission Control agents</strong></summary>
@@ -201,6 +203,14 @@ You do not need to configure or call them manually. The toolkit can use them whe
 | `architect-writer` | High-consequence cross-cutting implementation |
 
 The parent Codex task remains responsible for decisions, integration, and checking the final result. If a Codex runtime does not expose named custom roles, the same mission-card boundaries can still be used with the parent or an available generic subagent; the toolkit does not pretend that an unavailable role profile was applied.
+
+Check your installed Mission Control bundle:
+
+```sh
+npx --yes github:cmdr-chara/codex-toolkit mission-control check
+```
+
+The check verifies all six roles, read/write sandbox boundaries, model-agnostic role files, the installed Mission Control skill, and any managed toolkit routing that is present.
 
 </details>
 

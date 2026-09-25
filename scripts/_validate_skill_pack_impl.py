@@ -66,6 +66,7 @@ REQUIRED_ROOT = [
     "evaluations/adversarial-review.md",
     "evaluations/package-claim-review.md",
     "evaluations/post-install-routing-smoke.md",
+    "evaluations/mission-control-universal.json",
 ]
 
 CORE_SECTIONS = {
@@ -259,6 +260,70 @@ def validate_mission_control(result: Result) -> None:
                     f"{rel(path, result.root)}: universal Mission Control roles must inherit "
                     f"runtime configuration; remove {field_name!r}"
                 )
+
+    universal_path = result.root / "evaluations" / "mission-control-universal.json"
+    if universal_path.is_file():
+        try:
+            universal = json.loads(read_text(universal_path, result))
+        except json.JSONDecodeError as exc:
+            result.error(f"{rel(universal_path, result.root)}: invalid JSON: {exc}")
+            universal = {}
+        cases = universal.get("cases", []) if isinstance(universal, dict) else []
+        if not isinstance(cases, list) or len(cases) < 8:
+            result.error("mission-control-universal.json: need at least eight universal scenarios")
+            cases = []
+        ids: list[str] = []
+        categories: set[str] = set()
+        roles: set[str] = set()
+        for case in cases:
+            if not isinstance(case, dict):
+                result.error("mission-control-universal.json: every case must be an object")
+                continue
+            ids.append(str(case.get("id", "")))
+            category = case.get("category")
+            role = case.get("expected_role")
+            if isinstance(category, str):
+                categories.add(category)
+            if isinstance(role, str):
+                roles.add(role)
+            for field_name in ("id", "category", "prompt", "expected_role", "acceptance_evidence"):
+                if not case.get(field_name):
+                    result.error(
+                        "mission-control-universal.json: "
+                        f"incomplete case {case.get('id')!r}; missing {field_name}"
+                    )
+            if role not in MISSION_CONTROL_ROUTES:
+                result.error(
+                    f"mission-control-universal.json: unknown role {role!r} in {case.get('id')!r}"
+                )
+            if not isinstance(case.get("mutates"), bool):
+                result.error(
+                    f"mission-control-universal.json: mutates must be boolean in {case.get('id')!r}"
+                )
+            owned = case.get("owned_resources", [])
+            if not isinstance(owned, list) or any(not isinstance(item, str) for item in owned):
+                result.error(
+                    f"mission-control-universal.json: owned_resources must be strings in {case.get('id')!r}"
+                )
+            if case.get("mutates") and not owned:
+                result.error(
+                    f"mission-control-universal.json: mutating case {case.get('id')!r} needs owned_resources"
+                )
+        if "" in ids or len(ids) != len(set(ids)):
+            result.error("mission-control-universal.json: case IDs must be non-empty and unique")
+        required_categories = {"documents", "research", "data", "mixed-artifacts"}
+        if not required_categories.issubset(categories):
+            result.error(
+                "mission-control-universal.json: missing universal categories "
+                f"{sorted(required_categories - categories)!r}"
+            )
+        missing_roles = sorted(set(MISSION_CONTROL_ROUTES) - roles)
+        if missing_roles:
+            result.error(
+                "mission-control-universal.json: missing role coverage "
+                f"{', '.join(missing_roles)}"
+            )
+        result.metrics["mission_control_universal_cases"] = len(cases)
 
     result.metrics["mission_control_agents"] = len(actual)
 
@@ -688,6 +753,19 @@ def validate_responsibility_and_provenance(result: Result) -> None:
         for phrase in required:
             if phrase not in text:
                 result.error(f"THIRD_PARTY_NOTICES.md: missing required notice/provenance text {phrase!r}")
+
+    ps_installer = result.root / "scripts" / "install-mission-control.ps1"
+    if ps_installer.is_file():
+        ps_text = read_text(ps_installer, result)
+        for phrase in ("bin\\toolkit.mjs", "mission-control", "Get-Command node"):
+            if phrase not in ps_text:
+                result.error(f"scripts/install-mission-control.ps1: missing canonical-wrapper contract {phrase!r}")
+        for forbidden in ("Copy-Item", "Remove-Item", "Get-ChildItem"):
+            if forbidden in ps_text:
+                result.error(
+                    "scripts/install-mission-control.ps1: legacy standalone install logic remains "
+                    f"({forbidden})"
+                )
 
     license_path = result.root / "LICENSE"
     if license_path.is_file():

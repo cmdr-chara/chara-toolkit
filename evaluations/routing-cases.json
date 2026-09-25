@@ -84,6 +84,18 @@
           "prompt": "Turn this bounded backlog into a work DAG, mark blocked tasks, assign read/write scopes, and state when the parent must integrate or stop.",
           "expected": "activate",
           "reason": "Requests the coordinator output directly."
+        },
+        {
+          "id": "multi-agent-work-coordinator-p5",
+          "prompt": "Split a launch report into independent research, data-analysis, and writing missions with exclusive ownership of each output artifact and a parent integration order.",
+          "expected": "activate",
+          "reason": "Requests a parallel work graph across non-code resources with explicit ownership and integration."
+        },
+        {
+          "id": "multi-agent-work-coordinator-p6",
+          "prompt": "Coordinate parallel review of several documents and datasets, keep the shared final brief single-owner, and define the evidence required before accepting each handoff.",
+          "expected": "activate",
+          "reason": "Requests universal mutable-resource ownership, waves, and handoff acceptance outside a repository-only workflow."
         }
       ],
       "negative": [
