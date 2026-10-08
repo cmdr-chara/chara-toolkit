@@ -25,7 +25,7 @@ Codex Toolkit accepts small, testable improvements. An issue or pull request sho
 ```sh
 python scripts/validate_skill_pack.py . --as-of YYYY-MM-DD
 python scripts/run_smoke_tests.py . --as-of YYYY-MM-DD
-node --test scripts/test_evaluate_behavioral_runs.mjs
+node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs
 npm pack --dry-run
 ```
 
@@ -34,3 +34,5 @@ Use the date on which you checked time-sensitive sources. The pull request shoul
 ## Pull requests
 
 Keep one behavioral change per pull request when practical. Describe what you ran, what passed, and what still requires a live Codex routing check.
+
+Release publication is [manual and approval-gated](docs/enterprise-deployment.md): bump the version/changelog in a reviewed PR and dispatch the release workflow for the tested main SHA. There is no automatic patch release.

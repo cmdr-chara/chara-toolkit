@@ -1,196 +1,102 @@
-name: Release
+name: Release (approved)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - package.json
-      - CHANGELOG.md
-      - .github/assets/social-preview-manifest.json
-      - .github/assets/codex-toolkit-social-preview.png
-      - .github/assets/codex-toolkit-readme-hero.png
-      - .github/render_social_preview.py
-      - scripts/verify_release_metadata.py
-      - .github/workflows/release.yml
   workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: "Reviewed, CI-passing main commit SHA (40 lowercase hex characters)"
+        required: true
+        type: string
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: codex-toolkit-manual-release
+  cancel-in-progress: false
 
 jobs:
-  preview:
+  release:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      changed: ${{ steps.refresh.outputs.changed }}
-      target_sha: ${{ steps.refresh.outputs.target_sha }}
-
+    timeout-minutes: 20
+    environment: release-approval
+    permissions:
+      contents: write
+      checks: read
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
+      - name: Check out approved main candidate
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "24"
-
-      - name: Set up social-preview renderer
-        run: python -m pip install --disable-pip-version-check --no-input Pillow
-
-      - name: Render and persist canonical artwork
-        id: refresh
+      - name: Verify exact main SHA and completed CI
+        env:
+          TARGET_SHA: ${{ inputs.candidate_sha }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          python .github/render_social_preview.py
-          if git diff --quiet -- \
-            .github/assets/codex-toolkit-social-preview.png \
-            .github/assets/codex-toolkit-readme-hero.png \
-            .github/assets/social-preview-manifest.json
-          then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            .github/assets/codex-toolkit-social-preview.png \
-            .github/assets/codex-toolkit-readme-hero.png \
-            .github/assets/social-preview-manifest.json
-          version="$(node -p "require('./package.json').version")"
-          git commit -m "chore: refresh v${version} artwork"
-          git push origin HEAD:main
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-  release:
-    needs: preview
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Check out release candidate
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-          ref: ${{ needs.preview.outputs.target_sha }}
-
-      - name: Assert candidate identity
-        env:
-          TARGET_SHA: ${{ needs.preview.outputs.target_sha }}
-        run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "Invalid candidate SHA" >&2; exit 1; }
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA" || { echo "Selected SHA does not match current main" >&2; exit 1; }
+          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/check-runs?per_page=100" |
+            jq -e --arg sha "$TARGET_SHA" 'any(.check_runs[]; .name == "validate" and .head_sha == $sha and .status == "completed" and .conclusion == "success")' >/dev/null ||
+            { echo "No passing CI validate check for exact candidate" >&2; exit 1; }
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.13"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "24"
 
-      - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-09-25
+      - name: Verify release candidate
+        run: |
+          set -euo pipefail
+          python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
+          python scripts/verify_anti_slop_vendor.py .
+          python scripts/verify_release_metadata.py .
+          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs
+          npm pack --dry-run >/dev/null
+          git diff --exit-code -- .github/assets package.json CHANGELOG.md scripts bin skills orchestration
 
-      - name: Verify anti-slop vendor integrity
-        run: python scripts/verify_anti_slop_vendor.py .
-
-      - name: Run TypeScript quality regressions
-        run: python scripts/test_typescript_quality_regressions.py .
-
-      - name: Verify release metadata
-        run: python scripts/verify_release_metadata.py .
-
-      - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-09-25
-
-      - name: Inspect package contents
-        run: npm pack --dry-run
-
-      - name: Prepare release notes
-        id: release
+      - name: Build immutable source package and release notes
+        env:
+          TARGET_SHA: ${{ inputs.candidate_sha }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
+          set -euo pipefail
           version="$(node -p "require('./package.json').version")"
           tag="v${version}"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$TARGET_SHA" || { echo "Main advanced; aborting release" >&2; exit 1; }
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists; never overwrite release identities" >&2
+            exit 1
+          fi
           python - "$version" "$RUNNER_TEMP/release-notes.md" <<'PY'
           import re
           import sys
           from pathlib import Path
-
           version, output = sys.argv[1], Path(sys.argv[2])
           text = Path("CHANGELOG.md").read_text(encoding="utf-8")
           pattern = rf"(?ms)^## {re.escape(version)} - [^\n]+\n\n(.*?)(?=^## |\Z)"
           match = re.search(pattern, text)
-          if match is None:
-              raise SystemExit(f"missing CHANGELOG section for {version}")
-          notes = match.group(1).strip()
-          if not notes:
-              raise SystemExit(f"empty CHANGELOG section for {version}")
-          output.write_text(notes + "\n", encoding="utf-8")
+          if match is None or not match.group(1).strip():
+              raise SystemExit(f"missing/non-empty CHANGELOG section required for {version}")
+          output.write_text(match.group(1).strip() + "\n", encoding="utf-8")
           PY
-
-      - name: Check existing tag and release
-        id: existing
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.release.outputs.tag }}
-        shell: bash
-        run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "tag=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "tag=false" >> "$GITHUB_OUTPUT"
-          fi
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "release=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "release=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create version tag
-        if: steps.existing.outputs.tag != 'true'
-        env:
-          TAG: ${{ steps.release.outputs.tag }}
-          TARGET_SHA: ${{ needs.preview.outputs.target_sha }}
-        run: |
-          git tag "$TAG" "$TARGET_SHA"
-          git push origin "refs/tags/$TAG"
-
-      - name: Create GitHub release
-        if: steps.existing.outputs.release != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.release.outputs.tag }}
-          VERSION: ${{ steps.release.outputs.version }}
-        run: >-
-          gh release create "$TAG"
-          --verify-tag
-          --title "Codex Toolkit $VERSION"
-          --notes-file "$RUNNER_TEMP/release-notes.md"
-
-      - name: Remove known merged release branches
-        shell: bash
-        run: |
-          for branch in \
-            feat/codebase-improvement-planner \
-            feat/typescript-quality-enforcer \
-            feat/content-provenance-hygiene \
-            noop-do-not-create
-          do
-            if git ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null 2>&1; then
-              git push origin --delete "$branch"
-            fi
-          done
+          archive="$(npm pack --silent)"
+          sha256sum "$archive" > SHA256SUMS
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$TARGET_SHA" || { echo "Main moved during release; aborting" >&2; exit 1; }
+          git tag -a "$tag" -m "Codex Toolkit $tag" "$TARGET_SHA"
+          git push origin "refs/tags/$tag"
+          gh release create "$tag" --verify-tag --title "Codex Toolkit $version" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" "$archive" "SHA256SUMS"
