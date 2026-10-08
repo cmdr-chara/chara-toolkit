@@ -87,7 +87,7 @@ Existing installers back up replaced content; multi-file installation is not an 
 
 ## 5. Release governance
 
-Automatic patch releases have been removed. A maintainer now updates the package version and changelog in a reviewed PR. After Linux/Windows/macOS installer CI and JavaScript/Python CodeQL checks pass on the exact main SHA, an authorized releaser dispatches `Release (approved)` with that SHA. The workflow refuses stale/untested commits or existing tags and publishes a versioned archive plus `SHA256SUMS`. SHA256SUMS is a checksum, not a trusted signature.
+Automatic patch releases have been removed. A maintainer now updates the package version and changelog in a reviewed PR. After Linux/Windows/macOS installer CI and JavaScript/Python CodeQL checks pass on the exact main SHA, an authorized releaser dispatches `Release (approved)` with that SHA. A read-only validation job checks each platform and CodeQL gate and stages the package. A separate approval-gated publisher with repository write permission verifies the staged archive before publishing the immutable tag and `SHA256SUMS`. It refuses stale/untested commits and existing tags. SHA256SUMS is a checksum, not a trusted signature.
 
 GitHub Actions environment approval only becomes effective once an administrator configures reviewers and deployment policies. The toolkit cannot enforce release authorizations independently of GitHub.
 

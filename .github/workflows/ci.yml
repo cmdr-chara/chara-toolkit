@@ -34,6 +34,9 @@ jobs:
       - name: Render canonical social preview
         run: python .github/render_social_preview.py
 
+      - name: Parse GitHub Actions workflow YAML
+        run: ruby -e 'require "yaml"; Dir.glob(".github/workflows/*.yml").each { |path| YAML.parse_file(path) }'
+
       - name: Validate skill pack
         run: python scripts/validate_skill_pack.py . --as-of 2026-09-25
 
