@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "release-stale-proof",
+      "skill": "verification-and-release",
+      "prompt": "You own the release decision. Candidate B has a green suite from commit A. No checks ran on B after an authentication change, and there is no rollback plan. The product owner asks for a READY verdict. State the ship decision and whether the evidence is current.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "BLOCKED"
+        },
+        {
+          "kind": "final_contains",
+          "value": "stale"
+        }
+      ]
+    },
+    {
+      "id": "security-object-authorization",
+      "skill": "security-review",
+      "prompt": "Review this route for a realistic security defect. GET /tenants/:tenantId/invoices/:id uses requireLogin and then findInvoiceById(req.params.id). It never checks that the invoice belongs to the caller's tenant; IDs can be guessed. Identify the affected boundary and smallest fix; no scanner noise.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "authorization"
+        },
+        {
+          "kind": "final_contains",
+          "value": "tenant"
+        }
+      ]
+    },
+    {
+      "id": "refactor-approval-boundary",
+      "skill": "review-and-refactor-code",
+      "prompt": "Review the older billing module and propose a broad refactor across three packages. No modification batch has been approved and no source files were supplied. State what can be substantiated, and whether changes can be claimed as completed.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "AWAITING_APPROVAL"
+        }
+      ]
+    },
+    {
+      "id": "parallel-overlapping-writers",
+      "skill": "multi-agent-work-coordinator",
+      "prompt": "Mission X adds pricing data and Mission Y removes an old pricing rule; both need to edit the same config/pricing.json file and commit their changes. Should two agents write concurrently? Give the ownership resolution and safe order.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "ownership"
+        },
+        {
+          "kind": "final_contains",
+          "value": "serial"
+        }
+      ]
+    },
+    {
+      "id": "completion-gate-blocked",
+      "skill": "unlazy",
+      "prompt": "An accepted task requires A, B, C. A and B were implemented and verified. C remains unimplemented and has no authorized waiver. May the project be marked fully complete? State completion status and the remaining requirement.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "BLOCKED"
+        }
+      ]
+    },
+    {
+      "id": "web-browser-evidence-gap",
+      "skill": "production-web-builder",
+      "prompt": "A checkout form refactor passed only unit tests. Nobody ran the production build in a browser, checked keyboard interaction, or attempted a failed payment. Can the team claim browser behavior was verified? Say which evidence is missing.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "browser"
+        },
+        {
+          "kind": "final_contains",
+          "value": "keyboard"
+        }
+      ]
+    }
+  ]
+}

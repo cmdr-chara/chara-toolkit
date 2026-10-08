@@ -25,6 +25,7 @@ Codex Toolkit accepts small, testable improvements. An issue or pull request sho
 ```sh
 python scripts/validate_skill_pack.py . --as-of YYYY-MM-DD
 python scripts/run_smoke_tests.py . --as-of YYYY-MM-DD
+node --test scripts/test_evaluate_behavioral_runs.mjs
 npm pack --dry-run
 ```
 

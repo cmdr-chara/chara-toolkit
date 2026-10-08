@@ -228,7 +228,7 @@ Its workflows emphasize:
 - verifying important changes before release
 - keeping security findings tied to realistic attack paths
 
-The repository also includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks.
+The repository also includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks. Optional paired Codex traces can assess narrow real-run behavior without substituting for end-to-end correctness tests.
 
 ## For contributors and advanced users
 
@@ -240,6 +240,8 @@ If you want to understand or modify the toolkit itself:
 - [Responsibility matrix](docs/responsibility-matrix.md)
 - [Skill-system design](docs/skill-system-design.md)
 - [Evaluation suite](evaluations/README.md)
+- [Paired Codex behavioral benchmarks](evaluations/behavioral-benchmark.md)
+- [Independent skills research](docs/independent-skill-research-2026-10.md)
 - [Automatic updates](docs/auto-update.md)
 - [Contributing](CONTRIBUTING.md)
 
