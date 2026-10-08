@@ -39,9 +39,13 @@ jobs:
           set -euo pipefail
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "Invalid candidate SHA" >&2; exit 1; }
           test "$(git rev-parse HEAD)" = "$TARGET_SHA" || { echo "Selected SHA does not match current main" >&2; exit 1; }
-          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/check-runs?per_page=100" |
-            jq -e --arg sha "$TARGET_SHA" 'any(.check_runs[]; .name == "validate" and .head_sha == $sha and .status == "completed" and .conclusion == "success")' >/dev/null ||
-            { echo "No passing CI validate check for exact candidate" >&2; exit 1; }
+          checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/check-runs?per_page=100")"
+          for name in "validate" "Enterprise install (windows-latest)" "Enterprise install (macos-latest)" \
+            "analyze (javascript-typescript)" "analyze (python)"; do
+            jq -e --arg sha "$TARGET_SHA" --arg name "$name" \
+              'any(.check_runs[]; .name == $name and .head_sha == $sha and .app.slug == "github-actions" and .status == "completed" and .conclusion == "success")' \
+              <<< "$checks" >/dev/null || { echo "Missing successful exact-revision check: $name" >&2; exit 1; }
+          done
 
       - name: Set up Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
