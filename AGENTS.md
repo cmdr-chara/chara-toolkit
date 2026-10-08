@@ -12,6 +12,8 @@ This repository defines reusable Codex skills, agents, routing, installation, an
 - `unlazy` owns completion discipline; `verification-and-release` owns integrated ship/no-ship judgment. Keep those responsibilities distinct.
 - Managed global `AGENTS.md` installation must preserve all user content outside the toolkit markers and fail closed on malformed/duplicate managed blocks.
 - Auto-update behavior follows published releases, not unreleased `main` commits.
+- Managed enterprise installs require externally signed package approval, disable scheduled updates, and preserve host authorization boundaries.
+- Release publication requires an explicitly approved, CI-verified candidate; no automatic patch publication.
 
 ## Changes
 

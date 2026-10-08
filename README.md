@@ -162,6 +162,12 @@ The installer does not replace your global Codex `AGENTS.md`. It manages only it
 
 See [Automatic updates](docs/auto-update.md) for Windows, macOS, Linux, custom `CODEX_HOME`, and scheduler details.
 
+## Managed enterprise deployments
+
+Enterprises can use a separately approved, **Ed25519-signed** policy to install a fixed reviewed toolkit package with scheduled updates disabled. The managed setup verifies package bytes and installed skills/agents; runtime permissions and organization controls must still be enforced by your IT/Codex environment.
+
+See the [enterprise deployment guide](docs/enterprise-deployment.md) for approved-package preparation, staged rollout, signature verification, GitHub release approvals, and rollback. Personal installation stays unchanged.
+
 ## Want only one skill?
 
 Every skill can also be installed independently.
@@ -242,6 +248,8 @@ If you want to understand or modify the toolkit itself:
 - [Evaluation suite](evaluations/README.md)
 - [Paired Codex behavioral benchmarks](evaluations/behavioral-benchmark.md)
 - [Independent skills research](docs/independent-skill-research-2026-10.md)
+- [Enterprise deployment and release governance](docs/enterprise-deployment.md)
+- [Security reporting](SECURITY.md)
 - [Automatic updates](docs/auto-update.md)
 - [Contributing](CONTRIBUTING.md)
 

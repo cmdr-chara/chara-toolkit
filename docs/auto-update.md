@@ -2,6 +2,8 @@
 
 Codex Toolkit can keep a Codex installation synchronized without a long-running daemon.
 
+> **Enterprise installs:** For organization-controlled version approval, use [managed enterprise deployment](enterprise-deployment.md). Managed homes do not register this scheduled updater.
+
 ## Recommended setup
 
 Run once:
