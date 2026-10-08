@@ -49,6 +49,9 @@ jobs:
       - name: Run helper smoke tests
         run: python scripts/run_smoke_tests.py . --as-of 2026-09-25
 
+      - name: Test paired behavioral evaluator (offline)
+        run: node --test scripts/test_evaluate_behavioral_runs.mjs
+
       - name: Validate installer and updater scripts
         run: |
           node --check bin/install.mjs

@@ -42,7 +42,7 @@ Verify its signals manually.
 5. **Implement data/forms safely.** Validate untrusted input at the server boundary, authorize protected operations, define cache/invalidation ownership, preserve recoverable form input, and control duplicate effects.
 6. **Apply responsive/a11y behavior.** Test intermediate widths, zoom, long/localized content, input modes, reduced motion, focus, and semantic interaction.
 7. **Measure web performance when material.** Read `references/core-web-vitals.md` for field-first LCP/INP/CLS work; use measured evidence rather than Lighthouse-score chasing.
-8. **Verify production behavior.** Use `references/production-readiness.md` for browser journeys, failure paths, observability, build/preview behavior, SEO where relevant, and rollback/flag controls.
+8. **Verify production behavior.** Use `references/production-readiness.md` for browser journeys, failure paths, observability, build/preview behavior, SEO where relevant, and rollback/flag controls. When browser or live-service evidence is material, load `references/operational-evidence.md` and record what was actually observed.
 
 ## Handoffs and interaction boundaries
 

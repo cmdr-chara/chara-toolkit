@@ -35,7 +35,7 @@ Treat scanner output as evidence leads, not ownership truth.
 ## Workflow
 
 1. **Frame the decision.** State what must be mapped and what would change the next action.
-2. **Establish state.** Record branch/ref, worktree changes, languages/workspaces, generated boundaries, and major entry points.
+2. **Establish state.** Record branch/ref, worktree changes, languages/workspaces, generated boundaries, and major entry points. For large/noisy repositories or restartable long tasks, read `references/context-loading.md` and pack only decision-relevant evidence.
 3. **Map components and dependencies.** Trace imports/calls, data/contracts, routes/events, build/runtime links, persistence, and operational boundaries.
 4. **Determine ownership.** Use code/config/history/docs evidence; mark ambiguous ownership rather than inventing it.
 5. **Map impact.** Identify direct edits, consumers, compatibility surfaces, tests, deployment units, migrations, and generated outputs.

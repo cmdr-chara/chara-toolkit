@@ -38,7 +38,7 @@ python skills/verification-and-release/scripts/summarize_test_reports.py --junit
 
 Record command, candidate, environment, pass/fail/skip/flaky state, and relevant artifacts.
 6. **Evaluate evidence quality.** Classify material evidence as current pass, fail, gap, stale, flaky, or not applicable with reason.
-7. **Verify operational readiness.** Check applicable build artifact, configuration, migration ordering, health, flags, observability, support/runbooks, and rollback/forward-recovery.
+7. **Verify operational readiness.** Check applicable build artifact, configuration, migration ordering, health, flags, observability, support/runbooks, and rollback/forward-recovery. For executable agent/skill/plugin distribution or automatic updates, read `references/agent-supply-chain.md` and distinguish advisory instructions from enforced policy.
 8. **Define rollout.** State cohort/staging, kill/rollback trigger, monitoring window, and post-release verification.
 9. **Issue the decision.** Use `references/release-evidence-schema.md`. Residual risk acceptance belongs to the authorized owner, not the skill.
 
