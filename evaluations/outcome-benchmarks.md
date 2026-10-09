@@ -5,7 +5,7 @@ The original paired Codex evaluator in scripts/evaluate_behavioral_runs.mjs chec
 ## Operating procedure
 
 1. Create equivalent isolated A and B copies of the same starter repository with the same revision, dependencies, and acceptance tests. Do not let either agent see test fixtures, rubrics, other candidates, or grading labels. Supply the same organic user request and the same model/runtime settings; vary only the toolkit condition.
-2. Run the agents in the isolated copies with suitable OS-level restrictions. This tool **does not invoke the models** or create the sandboxes.
+2. Run the agents in the isolated copies with suitable OS-level restrictions. This tool **does not invoke the models** or create the sandboxes. For meaningful user journeys, drive each produced application with the opt-in scripts/drive-project-verification.mjs harness in its isolated workspace, and retain the trace/evidence; do not confuse harness startup with proof of all features.
 3. Author a minimal outcomes.json for the independent observer:
 
     {

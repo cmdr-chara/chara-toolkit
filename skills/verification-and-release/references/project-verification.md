@@ -19,7 +19,7 @@ Codex Toolkit ships a cross-agent tool at scripts/project-verification.mjs. Firs
     node scripts/project-verification.mjs generate --workspace /path/to/project --manifest verification-profile.json --out .agents/skills/verify-<app-id> --write
     node scripts/project-verification.mjs check --workspace /path/to/project --manifest verification-profile.json --out .agents/skills/verify-<app-id>
 
-Profile schema and an example are in docs/project-verification.md. Generate only after verifying every launch/doctor/drive argv against the actual project; generation does **not** execute or certify the app. The check fails closed on map drift rather than overwriting user edits. Keep the generated skill project-local and let the project owner choose how it is installed in different agent clients.
+Profile schema and an example are in docs/project-verification.md. Generate only after verifying every launch/doctor/drive argv against the actual project; generation does **not** execute or certify the app. When real execution is authorized in an OS-isolated test workspace, use scripts/drive-project-verification.mjs with explicit --acknowledge-live-execution to launch, health-check, drive, and stop the direct child process. Driver scripts must themselves assert the visible/durable outcome; a clean process exit alone is insufficient. The check fails closed on map drift rather than overwriting user edits. Keep the generated skill project-local and let the project owner choose how it is installed in different agent clients.
 
 ## Handoff
 

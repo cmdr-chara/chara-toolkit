@@ -37,6 +37,12 @@ Verify after every relevant change:
 
     node scripts/project-verification.mjs check --workspace /path/to/project --manifest verification-profile.json --out .agents/skills/verify-checkout-app
 
+To execute the approved launch, readiness check and feature drivers in a deliberately isolated test workspace (scripts may have side effects):
+
+    node scripts/drive-project-verification.mjs --workspace /tmp/isolated-project --manifest verification-profile.json --acknowledge-live-execution
+
+Use --feature buy-item to run one mapped feature. The runner starts the declared process with no shell, retries the doctor check, executes the declared driver argv, records exit codes and output hashes, and terminates **only its direct launched process**. It cannot certify a browser interaction unless that driver actually asserts a user-visible outcome and durable effect. Processes spawned by the test server may need their own project-specific cleanup. Do not point it at personal accounts or production systems.
+
 The check detects changed *listed source files* through SHA-256 fingerprints, modified generated recipes, missing feature entries, and unexpected files. It does not know about newly created routes that are absent from the manifest. Periodically inspect routes, CLI commands, and production behavior for newly introduced features, then update and review the manifest. The generator refuses to overwrite existing output: move a reviewed replacement into place using your project's approved change procedure, preserving edits and backups.
 
 Generated files are ordinary Agent Skills files. Put them under an agent-supported project skill directory for clients that do not discover .agents/skills; do not change the toolkit's 22 global specialists.
