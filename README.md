@@ -228,6 +228,7 @@ Its workflows emphasize:
 
 - preserving existing user work
 - avoiding destructive actions without authorization
+- guarding against accidental drive, home-directory, or workspace deletion across Windows, macOS, and Linux—including full-access sessions
 - measuring performance before claiming improvements
 - separating confirmed bugs from theories
 - keeping migrations reversible where possible
@@ -250,6 +251,7 @@ If you want to understand or modify the toolkit itself:
 - [Independent skills research](docs/independent-skill-research-2026-10.md)
 - [Enterprise deployment and release governance](docs/enterprise-deployment.md)
 - [Security reporting](SECURITY.md)
+- [Cross-platform destructive-operation safety](docs/destructive-operations-safety.md)
 - [Automatic updates](docs/auto-update.md)
 - [Contributing](CONTRIBUTING.md)
 
