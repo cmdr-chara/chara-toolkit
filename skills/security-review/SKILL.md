@@ -42,7 +42,7 @@ Resolve the review scope, candidate/diff identity, entry points that accept untr
 4. **Check network and serialization boundaries.** Review SSRF controls, redirect behavior, unsafe native deserialization, webhook verification, and mass assignment.
 5. **Check secrets and sensitive output.** Inspect client bundles, logs, error messages, fixtures, source maps, configuration, and credential handling when in scope.
 6. **Challenge business invariants.** Look for replay, duplicate effects, privilege transitions, state-machine bypass, quota/payment/ownership mistakes, and authorization gaps not caught by syntactic scanners.
-7. **Filter findings.** Read `references/review-playbook.md`. Raise only findings with a plausible attack path or concrete security control failure; keep uncertain items explicitly labeled.
+7. **Filter findings.** Read `references/review-playbook.md`. When the application uses agents, plugins, or autonomous tools, also read `references/agent-execution-boundaries.md` and verify host-enforced authority rather than treating prompt rules as enforcement. Raise only findings with a plausible attack path or concrete security control failure; keep uncertain items explicitly labeled.
 8. **Propose the smallest fix.** Preserve behavior outside the violated security contract and define focused regression evidence.
 
 ## Handoffs and interaction boundaries

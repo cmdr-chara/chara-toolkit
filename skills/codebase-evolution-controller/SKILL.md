@@ -31,6 +31,7 @@ Verify the resulting signals against authoritative repository evidence.
 - Do not silently upgrade, regenerate, rewrite lockfiles, or remove compatibility paths during discovery.
 - Verify volatile target-version, support, security, and compatibility claims from current primary sources.
 - Keep irreversible data/schema changes behind explicit recovery evidence.
+- Treat human-approved formal laws and proof contracts (including Bend 2 `LAWS.bend`) as protected compatibility surfaces; never silently weaken them to complete a migration.
 
 ## Workflow
 

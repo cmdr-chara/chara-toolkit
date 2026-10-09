@@ -11,12 +11,12 @@
     "url": "https://github.com/cmdr-chara/codex-toolkit/issues"
   },
   "keywords": [
-    "cursor",
-    "claude-code",
-    "coding-agents",
     "charas-toolkit",
-    "codex",
+    "coding-agents",
     "agent-skills",
+    "codex",
+    "claude-code",
+    "cursor",
     "subagents",
     "multi-agent",
     "auto-update",
@@ -45,6 +45,7 @@
     "skills",
     "CHANGELOG.md",
     "LICENSE",
+    "SECURITY.md",
     "README.md",
     "THIRD_PARTY_NOTICES.md"
   ],
