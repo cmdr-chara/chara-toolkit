@@ -1,6 +1,6 @@
 # Contributing
 
-Codex Toolkit accepts small, testable improvements. An issue or pull request should state the user request it addresses and the behavior that should change.
+Chara's Toolkit accepts small, testable improvements. An issue or pull request should state the user request it addresses and the behavior that should change.
 
 ## Before editing
 

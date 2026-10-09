@@ -1,6 +1,6 @@
-# Codex Toolkit routing
+# Chara's Toolkit routing
 
-Codex Toolkit provides specialist skills plus optional multi-stage workflows. Keep this routing layer short: the selected specialist remains authoritative for domain decisions, safety, approval, migration, and release boundaries.
+Chara's Toolkit provides specialist skills plus optional multi-stage workflows. Keep this routing layer short: the selected specialist remains authoritative for domain decisions, safety, approval, migration, and release boundaries.
 
 For substantial software work:
 
