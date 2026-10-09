@@ -58,7 +58,7 @@ npm install --global github:cmdr-chara/codex-toolkit
 chara setup
 ```
 
-The older `codex-toolkit` CLI remains available for existing scripts.
+The older `codex-toolkit` command remains a compatibility alias for existing scripts.
 
 That installs:
 
