@@ -17,7 +17,7 @@ const patterns = [
   { name: "synchronization deletion", pattern: /\b(?:rsync\b[^\n]*--delete\b|robocopy\b[^\n]*\/(?:MIR|PURGE)\b)/i },
   { name: "disk erase or format", pattern: /\b(?:mkfs(?:\.\w+)?|wipefs|diskpart|format-volume|clear-disk|remove-partition|diskutil\s+(?:eraseDisk|eraseVolume)|shred)\b/i },
   { name: "scripted recursive deletion", pattern: /\b(?:shutil\.rmtree|os\.removedirs|fs\.rmSync|fs\.rmdirSync|fs\.rm\(|FileUtils\.rm_rf|Directory\.Delete)\b/i },
-  { name: "Node recursive removal API", pattern: /\b(?:rmSync|rmdirSync)\s*\(/i },
+  { name: "Node recursive removal API", pattern: /(?:\b(?:fs|require\s*\(\s*['"](?:node:)?fs['"]\s*\))\s*\.\s*(?:rmSync|rmdirSync)\s*\()/i },
   { name: "unsafe shell interpreter piping", pattern: /\b(?:curl|wget)\b[^\n]*\|\s*(?:bash|sh|zsh|pwsh|powershell)\b/i },
 ];
 

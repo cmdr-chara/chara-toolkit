@@ -45,7 +45,8 @@ export async function audit(ledger, workspace) {
       if (!within(root, target)) throw Error('Control file escapes workspace');
       const info = await lstat(target).catch(e => { if (e.code === 'ENOENT') return null; throw e; });
       if (info?.isSymbolicLink()) throw Error('Control file cannot be a symlink');
-      exists.push(info?.isFile() === true);
+      const resolved = info?.isFile() === true ? await realpath(target).catch(() => null) : null;
+      exists.push(info?.isFile() === true && resolved !== null && within(root, resolved));
     }
     const repeated = evidence.length >= 2;
     const hasCheck = record.control.layer !== 'instructions' && exists.length > 0 && exists.every(Boolean);

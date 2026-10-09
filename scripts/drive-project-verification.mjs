@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 import { spawn, spawnSync } from 'node:child_process';
 import { readFile, realpath } from 'node:fs/promises';
 import { homedir } from 'node:os';
-import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateProfile } from './project-verification.mjs';
 import { classifyDestructiveCommand } from './guard-destructive-command.mjs';
@@ -51,7 +51,7 @@ export async function runProfile(profile, cwd, { featureId, timeoutMs = 15000 } 
     for (let attempt = 0; attempt < 8; attempt++) {
       await sleep(120);
       if (launchError) throw launchError;
-      if (child.exitCode !== null && child.exitCode !== 0)
+      if (child.exitCode !== null || child.signalCode !== null)
         throw Error('Test application exited before readiness');
       report.doctor = runStep(profile.doctor.argv, cwd, timeoutMs);
       if (report.doctor.success) { ready = true; break; }

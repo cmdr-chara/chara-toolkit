@@ -50,6 +50,16 @@ test('drive real launched process and health-checked user feature', async t => {
   assert.equal((await readFile(join(root, 'ready.flag'), 'utf8')), 'started');
 });
 
+test('does not accept a cleanly exited launch with stale readiness', async t => {
+  const root = await fixture(t);
+  await writeFile(join(root, 'server.mjs'), [
+    "import {writeFileSync} from 'node:fs';",
+    "writeFileSync('ready.flag','started');",
+  ].join('\n'));
+  const plan = make(root, 'Must not pass');
+  await assert.rejects(runProfile(plan, root), /exited before readiness/);
+});
+
 test('failed feature, missing approval, and dangerous command cannot be passed', async t => {
   const root = await fixture(t);
   await writeFile(join(root, 'driver.mjs'), 'process.exit(3);');

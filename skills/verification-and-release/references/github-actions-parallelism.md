@@ -4,7 +4,7 @@ Load when a workflow has independent steps whose serial execution materially del
 
 GitHub Actions supports job-local concurrency with separate logs using background, wait, wait-all, cancel, and parallel. This is distinct from independent jobs using needs and matrix, and does not automatically save billed runner-minutes.
 
-### Small independent group
+## Small independent group
 
     steps:
       - uses: actions/checkout@<approved-commit-sha>

@@ -7,7 +7,7 @@ description: Review code for exploitable security flaws at trust boundaries. Use
 
 Find realistic exploit paths and security regressions without burying the user in generic checklist noise.
 
-This skill is an original Codex Toolkit synthesis informed by MIT-licensed SkillMedev security-review material. See `references/provenance.md`.
+This skill is an original Chara's Toolkit synthesis informed by MIT-licensed SkillMedev security-review material. See `references/provenance.md`.
 
 ## Trigger boundary
 

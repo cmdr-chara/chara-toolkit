@@ -16,6 +16,7 @@ test("normal non-mutating commands remain unobstructed", () => {
   for (const cmd of [
     "npm test", "git status --short", "git diff --check", "cargo check", "Get-ChildItem -LiteralPath 'C:\\Users'",
     "ls -al ./src", "python --version", "node scripts/validate_skill_pack.py",
+    "grep -F 'rmSync(' .",
   ]) assert.equal(classifyDestructiveCommand(cmd), null, cmd);
 });
 

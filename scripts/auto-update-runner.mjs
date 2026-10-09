@@ -38,7 +38,7 @@ async function githubJson(path) {
     {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "codex-toolkit-auto-update",
+        "User-Agent": "charas-toolkit-auto-update",
         "X-GitHub-Api-Version": "2022-11-28",
       },
     },

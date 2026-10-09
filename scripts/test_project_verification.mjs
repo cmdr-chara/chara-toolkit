@@ -27,6 +27,8 @@ function run(home, action, extra = []) {
 test('generator validates grounded feature recipes, not placeholder IDs', () => {
   assert.equal(validateProfile(profile).features.length, 2);
   assert.equal(renderProfile(profile).size, 5);
+  const quoted = renderProfile({ ...profile, app: { ...profile.app, name: 'Billing: Portal' } }).get('SKILL.md');
+  assert.match(quoted, /description: "Verify the real Billing: Portal user journeys/);
   assert.throws(() => validateProfile({ ...profile, features: [profile.features[0], profile.features[0]] }), /duplicate/);
   assert.throws(() => validateProfile({ ...profile, launch: { argv: [] } }), /Invalid verification/);
   assert.throws(() => validateProfile({ ...profile, features: [{ ...profile.features[0], title: 'Unsafe\n# injected' }] }), /Invalid or duplicate/);

@@ -1,5 +1,7 @@
 # Automatic updates
 
+Chara's Toolkit uses the existing Codex Toolkit state directory, scheduler names, and managed markers so upgrades do not orphan an installed updater. See [branding and migration](branding-migration.md) for the transition contract.
+
 Chara's Toolkit can keep a Codex installation synchronized without a long-running daemon.
 
 > **Enterprise installs:** For organization-controlled version approval, use [managed enterprise deployment](enterprise-deployment.md). Managed homes do not register this scheduled updater.
