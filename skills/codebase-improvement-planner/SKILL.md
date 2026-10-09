@@ -34,7 +34,7 @@ Resolve the repository root, working-tree state, user goal, protected contracts,
 
 1. **Frame the decision.** Record scope, desired outcomes, constraints, exclusions, and evidence limits.
 2. **Map the baseline.** Inspect structure, contracts, tests/CI, error handling, operational boundaries, and concentrated change/risk areas. Use `repository-intelligence` first when ownership or blast radius is too uncertain.
-3. **Admit candidates.** Require a concrete signal: failing/weak evidence, repeated cost, risky coupling, unsupported dependency, missing critical verification, or demonstrable delivery friction. Do not turn style preferences into findings.
+3. **Admit candidates.** Require a concrete signal: failing/weak evidence, repeated cost, risky coupling, unsupported dependency, missing critical verification, or demonstrable delivery friction. For recurring agent-created defects, distinguish truly repeated mechanisms from one-off mistakes; choose the closest existing engineering specialist for an enforceable fix, not a new generic rules file. Do not turn style preferences into findings.
 4. **Rank candidates.** Apply `references/improvement-ranking.md`. Keep change magnitude separate from priority.
 5. **Select the next upgrade.** State the evidence, expected value, scope, risk, reversibility, verification method, and owning specialist.
 6. **Stop or execute.** Without prior authorization, return the backlog and mark the selected item `AWAITING_APPROVAL`. With explicit authorization, execute only the selected bounded maintenance slice or hand it to the specialist that owns the concrete task.

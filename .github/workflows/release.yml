@@ -66,7 +66,7 @@ jobs:
           python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
           python scripts/verify_anti_slop_vendor.py .
           python scripts/verify_release_metadata.py .
-          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs
+          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs
           git diff --exit-code -- .github/assets package.json CHANGELOG.md scripts bin skills orchestration
           version="$(node -p "require('./package.json').version")"
           tag="v${version}"

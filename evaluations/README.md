@@ -32,6 +32,10 @@ The validator checks schema/counts, skill/resource existence, local links, front
 
 Run the offline harness test with `node --test scripts/test_evaluate_behavioral_runs.mjs`.
 
+## Independent acceptance evidence
+
+The separate [outcome benchmark guide](outcome-benchmarks.md) documents artifact-level A/B acceptance checks, token usage from real recorded traces, and isolation requirements. Use project-specific user-journey controls where possible; do not equate an answer-text proxy with code correctness. CI only tests this evaluator using synthetic fixtures, not live model performance.
+
 ## Model routing run
 
 For every case in the routing case files:
