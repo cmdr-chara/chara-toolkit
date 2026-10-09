@@ -26,6 +26,16 @@ python scripts/validate_skill_pack.py . --as-of 2026-09-24
 
 The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, dated references, source URLs, unsafe command strings, Python syntax, vendored anti-slop integrity/provenance, licensing, and obvious long-paragraph duplication.
 
+## Paired live behavior probes
+
+[Behavioral benchmark guide](behavioral-benchmark.md) describes optional live Codex baseline-versus-candidate capture, strict suite/model/runtime comparisons, and offline scoring. The fixture probes cover release, security, refactor approval, write ownership, completion, and browser evidence. CI checks only evaluator mechanics with synthetic events; no real-model improvement is claimed without captured traces and human review.
+
+Run the offline harness test with `node --test scripts/test_evaluate_behavioral_runs.mjs`.
+
+## Independent acceptance evidence
+
+The separate [outcome benchmark guide](outcome-benchmarks.md) documents artifact-level A/B acceptance checks, token usage from real recorded traces, and isolation requirements. Use project-specific user-journey controls where possible; do not equate an answer-text proxy with code correctness. CI only tests this evaluator using synthetic fixtures, not live model performance.
+
 ## Model routing run
 
 For every case in the routing case files:

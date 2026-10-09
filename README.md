@@ -15,7 +15,7 @@
 
 ## What is Chara's Toolkit?
 
-Chara's Toolkit is a collection of focused engineering skills for coding agents. The skills use the open Agent Skills format. Codex currently has the complete installer, routing, updater, and six optional agent roles.
+Chara's Toolkit is a collection of focused engineering skills for coding agents. The skills use the open Agent Skills format. Codex currently has the complete installer, routing, updater and six optional agent roles.
 
 You do **not** need to learn the skill names or choose one manually. Install the toolkit, then describe what you want in normal language.
 
@@ -175,6 +175,16 @@ The installer does not replace your global Codex `AGENTS.md`. It manages only it
 
 See [Automatic updates](docs/auto-update.md) for Windows, macOS, Linux, custom `CODEX_HOME`, and scheduler details.
 
+## Platform compatibility
+
+**Agent Skills:** use the relevant portable `SKILL.md` files in compatible agents. **Codex:** full installer, managed routing, scheduled updater and six agent TOMLs. Other platforms do not yet have equivalent first-party orchestration. See [portability](docs/portable-skills.md) before installing.
+
+## Managed enterprise deployments
+
+Enterprises can use a separately approved, **Ed25519-signed** policy to install a fixed reviewed toolkit package with scheduled updates disabled. The managed setup verifies package bytes and installed skills/agents; runtime permissions and organization controls must still be enforced by your IT/Codex environment.
+
+See the [enterprise deployment guide](docs/enterprise-deployment.md) for approved-package preparation, staged rollout, signature verification, GitHub release approvals, and rollback. Personal installation stays unchanged.
+
 ## Want only one skill?
 
 Every skill can also be installed independently.
@@ -235,17 +245,14 @@ Its workflows emphasize:
 
 - preserving existing user work
 - avoiding destructive actions without authorization
+- guarding against accidental drive, home-directory, or workspace deletion across Windows, macOS, and Linux—including full-access sessions
 - measuring performance before claiming improvements
 - separating confirmed bugs from theories
 - keeping migrations reversible where possible
 - verifying important changes before release
 - keeping security findings tied to realistic attack paths
 
-The repository also includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks.
-
-## Platform compatibility
-
-**Agent Skills:** use the relevant portable `SKILL.md` files in compatible agents. **Codex:** full installer, managed routing, scheduled updater, and six agent TOMLs. Other platforms do not yet have equivalent first-party orchestration. See [branding and migration](docs/branding-migration.md) before installing.
+The repository includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks. Optional paired Codex traces expose narrow response proxies, while independent artifact-level acceptance checks can evaluate real code outcomes. Project-owned verification maps can capture and maintain runnable user journeys; neither an unrun map nor a passing proxy score establishes correctness.
 
 ## For contributors and advanced users
 
@@ -257,8 +264,17 @@ If you want to understand or modify the toolkit itself:
 - [Responsibility matrix](docs/responsibility-matrix.md)
 - [Skill-system design](docs/skill-system-design.md)
 - [Evaluation suite](evaluations/README.md)
-- [Automatic updates](docs/auto-update.md)
+- [Paired Codex behavioral benchmarks](evaluations/behavioral-benchmark.md)
+- [Independent skills research](docs/independent-skill-research-2026-10.md)
+- [Enterprise deployment and release governance](docs/enterprise-deployment.md)
+- [Security reporting](SECURITY.md)
+- [Cross-platform destructive-operation safety](docs/destructive-operations-safety.md)
+- [Real application verification and feature maps](docs/project-verification.md)
+- [Outcome-based Codex benchmarks](evaluations/outcome-benchmarks.md)
+- [Preventing recurring agent mistakes](docs/recurring-agent-errors.md)
+- [Portability to other agents](docs/portable-skills.md)
 - [Branding and migration](docs/branding-migration.md)
+- [Automatic updates](docs/auto-update.md)
 - [Contributing](CONTRIBUTING.md)
 
 Repository layout:

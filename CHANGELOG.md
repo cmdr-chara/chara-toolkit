@@ -1,3 +1,9 @@
+## Unreleased
+
+- Add opt-in project verification with live readiness checks and explicit execution acknowledgment.
+- Add signed managed-install approval, cross-platform destructive-operation guards, and offline behavioral/outcome evaluation helpers.
+- Add recurring-error auditing and measured GitHub Actions guidance while keeping claims bounded to available evidence.
+
 ## 0.9.5 - 2026-10-09
 
 - feat: rebrand as Chara's Toolkit (#21) (`113430a3d30f`).
@@ -59,9 +65,7 @@
 
 ## Unreleased
 
-- Rebrand as Chara's Toolkit with the tagline "Better engineering, any agent."
-- Add `chara` as the primary CLI executable and retain `codex-toolkit` as a compatibility alias.
-- Retain existing Codex home, updater, managed block, scheduler, and GitHub repository identities until a separately verified migration.
+- No unreleased changes.
 
 ## 0.8.1 - 2026-08-18
 

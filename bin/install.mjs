@@ -18,7 +18,9 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+// Keep the existing GitHub slug until repository settings complete the rename.
 const repository = "cmdr-chara/codex-toolkit";
+// Keep existing state/scheduler identities to avoid orphaned auto-update tasks.
 const stateDirectoryName = "codex-toolkit";
 const windowsDailyTask = "Codex Toolkit Auto Update";
 const windowsLogonTask = "Codex Toolkit Auto Update Logon";

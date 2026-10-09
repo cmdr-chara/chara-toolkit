@@ -24,6 +24,7 @@ Resolve repository instructions, working-tree/user state, OS/shell, documented c
 - Do not repeatedly retry an unchanged failing mechanism.
 - Use scratch locations for probes that should not affect the repository.
 - Do not bypass execution policy/security controls merely to make a command run.
+- Do not fix shell quoting, Windows command shims, or native-command invocation by nesting interpreters around destructive commands. Apply the cross-platform destructive-operation boundary in the toolkit workflow catalog first.
 
 ## Workflow
 

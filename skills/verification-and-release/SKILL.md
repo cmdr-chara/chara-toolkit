@@ -28,8 +28,8 @@ Resolve the frozen candidate/ref, intended behavior, affected consumers, risk-se
 
 1. **Freeze the candidate and claims.** Every check must prove or challenge a specific behavioral or nonfunctional claim.
 2. **Map risk.** Use `references/risk-test-matrix.md`; risk comes from failure modes and reversibility, not line count.
-3. **Choose minimum sufficient evidence.** Static, unit/component, contract/schema, integration, end-to-end, nonfunctional, and operational layers are options, not a mandatory checklist.
-4. **Review CI architecture when needed.** For GitHub Actions speed, trust boundaries, permissions, caching, or deploy gates, read `references/github-actions.md`.
+3. **Choose minimum sufficient evidence.** Static, unit/component, contract/schema, integration, end-to-end, nonfunctional, and operational layers are options, not a mandatory checklist. For user-facing behavior needing real execution, load `references/project-verification.md` and use a source-grounded project verification map when available. For explicitly formalized obligations, read `references/formal-proof-checks.md`; Bend 2 checks are only relevant to Bend 2 projects.
+4. **Review CI architecture when needed.** For GitHub Actions speed, trust boundaries, permissions, caching, or deploy gates, read `references/github-actions.md`. If independent job-local steps dominate elapsed feedback, conditionally load `references/github-actions-parallelism.md` and benchmark the trade-off.
 5. **Collect exact results.** Where JUnit/LCOV reports exist, use:
 
 ```sh
@@ -38,7 +38,7 @@ python skills/verification-and-release/scripts/summarize_test_reports.py --junit
 
 Record command, candidate, environment, pass/fail/skip/flaky state, and relevant artifacts.
 6. **Evaluate evidence quality.** Classify material evidence as current pass, fail, gap, stale, flaky, or not applicable with reason.
-7. **Verify operational readiness.** Check applicable build artifact, configuration, migration ordering, health, flags, observability, support/runbooks, and rollback/forward-recovery.
+7. **Verify operational readiness.** Check applicable build artifact, configuration, migration ordering, health, flags, observability, support/runbooks, and rollback/forward-recovery. For executable agent/skill/plugin distribution or automatic updates, read `references/agent-supply-chain.md` and distinguish advisory instructions from enforced policy.
 8. **Define rollout.** State cohort/staging, kill/rollback trigger, monitoring window, and post-release verification.
 9. **Issue the decision.** Use `references/release-evidence-schema.md`. Residual risk acceptance belongs to the authorized owner, not the skill.
 
