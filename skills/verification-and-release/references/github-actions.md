@@ -17,4 +17,6 @@ Use this reference when GitHub Actions itself is part of the release risk or fee
 9. Pin third-party actions to immutable revisions when the repository's supply-chain policy requires it.
 10. Required checks must fail loudly; do not hide failures with blanket `continue-on-error` or retries.
 
+Job-level concurrency remains a useful default. GitHub also supports optional job-local parallel steps; when warranted by measured serial bottlenecks, read the standalone `github-actions-parallelism.md` reference before using `background`, `wait`, `wait-all`, `cancel`, or `parallel`. Maintain permission boundaries, isolate mutable outputs, and measure resource contention and billed minutes.
+
 CI speed targets are repository-specific. Optimize from measured critical-path time rather than universal minute thresholds.

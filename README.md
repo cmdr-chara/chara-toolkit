@@ -235,7 +235,7 @@ Its workflows emphasize:
 - verifying important changes before release
 - keeping security findings tied to realistic attack paths
 
-The repository also includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks. Optional paired Codex traces can assess narrow real-run behavior without substituting for end-to-end correctness tests.
+The repository includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks. Optional paired Codex traces expose narrow response proxies, while independent artifact-level acceptance checks can evaluate real code outcomes. Project-owned verification maps can capture and maintain runnable user journeys; neither an unrun map nor a passing proxy score establishes correctness.
 
 ## For contributors and advanced users
 
@@ -252,6 +252,10 @@ If you want to understand or modify the toolkit itself:
 - [Enterprise deployment and release governance](docs/enterprise-deployment.md)
 - [Security reporting](SECURITY.md)
 - [Cross-platform destructive-operation safety](docs/destructive-operations-safety.md)
+- [Real application verification and feature maps](docs/project-verification.md)
+- [Outcome-based Codex benchmarks](evaluations/outcome-benchmarks.md)
+- [Preventing recurring agent mistakes](docs/recurring-agent-errors.md)
+- [Portability to other agents](docs/portable-skills.md)
 - [Automatic updates](docs/auto-update.md)
 - [Contributing](CONTRIBUTING.md)
 
