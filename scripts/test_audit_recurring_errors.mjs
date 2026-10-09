@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -27,4 +27,24 @@ test('reject escaping control paths and malformed ledgers', () => {
   assert.throws(() => validateLedger({ ...ledger, failures: [ledger.failures[0], ledger.failures[0]] }), /Invalid/);
   assert.throws(() => validateLedger({ schema: 1, failures: [{ ...ledger.failures[0],
     control: { layer: 'lint', files: ['../secret'] } }] }), /scope/);
+});
+
+
+test('do not count controls reached through an external symlink', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'agent-failures-root-'));
+  const outside = await mkdtemp(join(tmpdir(), 'agent-failures-outside-'));
+  t.after(() => Promise.all([
+    rm(root, { force: true, recursive: true }),
+    rm(outside, { force: true, recursive: true }),
+  ]));
+  await writeFile(join(outside, 'authorization-rule.mjs'), 'export const rule = true;');
+  try {
+    await symlink(outside, join(root, 'linked'), 'dir');
+  } catch (error) {
+    if (['EPERM', 'EACCES', 'ENOTSUP'].includes(error.code)) return;
+    throw error;
+  }
+  const record = { ...ledger.failures[0], control: { ...ledger.failures[0].control, files: ['linked/authorization-rule.mjs'] } };
+  const out = await audit({ schema: 1, failures: [record] }, root);
+  assert.equal(out[0].control_files_present, false);
 });

@@ -2,7 +2,7 @@
 // Offline scoring and explicitly opt-in, read-only Codex trace capture. No dependencies.
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { chmod, mkdtemp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -85,19 +85,21 @@ async function capture(spec, raw, opts) {
   if (!opts['acknowledge-live-cost']) throw Error('Capture requires --acknowledge-live-cost');
   if (!opts.model || !opts['baseline-home'] || !opts['candidate-home']) throw Error('Capture needs --model and two CODEX_HOME paths');
   const homes = [resolve(opts['baseline-home']), resolve(opts['candidate-home'])];
-  if (homes[0] === homes[1]) throw Error('Baseline and candidate homes must be different');
   for (const home of homes) if (!(await stat(home).catch(() => null))?.isDirectory()) throw Error('Missing CODEX_HOME directory: ' + home);
+  const canonicalHomes = await Promise.all(homes.map((home) => realpath(home)));
+  if (canonicalHomes[0] === canonicalHomes[1]) throw Error('Baseline and candidate homes must be different');
   const timeout = opts['timeout-ms'] === undefined ? 180000 : Number(opts['timeout-ms']);
   if (!Number.isInteger(timeout) || timeout < 1000 || timeout > 900000) throw Error('Invalid --timeout-ms');
-  const root = resolve(opts.out || 'evaluations/.behavioral-runs');
-  await mkdir(root, { recursive: true });
+  const rootPath = resolve(opts.out || 'evaluations/.behavioral-runs');
+  await mkdir(rootPath, { recursive: true });
+  const root = await realpath(rootPath);
   const directory = await mkdtemp(join(root, 'run-'));
   const binary = opts['codex-bin'] || 'codex';
   const version = spawnSync(binary, ['--version'], { encoding: 'utf8', timeout: 10000 });
   if (version.error || version.status !== 0) throw Error('Codex CLI not available: ' + (version.error?.message || version.stderr));
   const runtime = (version.stdout || version.stderr).trim();
   const runs = [];
-  for (const c of spec.cases) for (const [arm, home] of [['baseline', homes[0]], ['candidate', homes[1]]]) {
+  for (const c of spec.cases) for (const [arm, home] of [['baseline', canonicalHomes[0]], ['candidate', canonicalHomes[1]]]) {
     const work = await mkdtemp(join(tmpdir(), 'toolkit-eval-'));
     let response;
     try {
@@ -124,7 +126,7 @@ async function capture(spec, raw, opts) {
 export async function score(spec, suiteRaw, recordPath) {
   const data = JSON.parse(await readFile(recordPath, 'utf8'));
   if (data.schema !== 1 || data.suite_sha256 !== digest(suiteRaw) || !Array.isArray(data.runs)) throw Error('Records mismatch suite');
-  const root = dirname(resolve(recordPath));
+  const root = await realpath(dirname(resolve(recordPath)));
   const index = new Map();
   for (const run of data.runs) {
     if (!['baseline', 'candidate'].includes(run.arm)) throw Error('Unknown arm');
