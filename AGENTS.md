@@ -1,4 +1,4 @@
-# Codex Toolkit agent instructions
+# Chara's Toolkit agent instructions
 
 ## Purpose
 

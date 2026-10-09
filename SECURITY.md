@@ -1,6 +1,6 @@
 # Security policy
 
-Codex Toolkit installs executable tooling and instructions into local Codex environments. Report vulnerabilities affecting installation, signed approval verification, update behavior, CI/release workflows, or bundled scripts.
+Chara's Toolkit installs executable tooling and instructions into local Codex environments. Report vulnerabilities affecting installation, signed approval verification, update behavior, CI/release workflows, or bundled scripts.
 
 ## Reporting
 

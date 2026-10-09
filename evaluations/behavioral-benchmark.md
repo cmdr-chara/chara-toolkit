@@ -1,6 +1,6 @@
 # Opt-in paired Codex behavioral evaluation
 
-Codex Toolkit ships deterministic *decision-boundary probes*, not precomputed claims of agent superiority. A paired comparison uses actual Codex JSONL output from the same prompt, model, and CLI build.
+Chara's Toolkit ships deterministic *decision-boundary probes*, not precomputed claims of agent superiority. A paired comparison uses actual Codex JSONL output from the same prompt, model, and CLI build.
 
 ## Capture
 

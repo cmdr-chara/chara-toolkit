@@ -1,7 +1,7 @@
 {
-  "name": "@cmdr-chara/codex-toolkit",
+  "name": "@cmdr-chara/charas-toolkit",
   "version": "0.9.4",
-  "description": "22 Codex skills and 6 agents with concise routing, security review, completion gates, and release-pinned updates",
+  "description": "Chara's Toolkit: 22 portable engineering skills, six optional Codex agents, safe workflows and verified delivery",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cmdr-chara/codex-toolkit.git"
@@ -11,8 +11,12 @@
     "url": "https://github.com/cmdr-chara/codex-toolkit/issues"
   },
   "keywords": [
-    "codex",
+    "charas-toolkit",
+    "coding-agents",
     "agent-skills",
+    "codex",
+    "claude-code",
+    "cursor",
     "subagents",
     "multi-agent",
     "auto-update",
@@ -28,6 +32,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
+    "chara": "bin/toolkit.mjs",
     "codex-toolkit": "bin/toolkit.mjs"
   },
   "files": [

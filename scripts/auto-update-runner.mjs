@@ -110,7 +110,7 @@ if (
 }
 
 if (state.release === tag && state.commit === commit) {
-  console.log(`Codex Toolkit is already current at ${tag} (${commit.slice(0, 12)}).`);
+  console.log(`Chara's Toolkit is already current at ${tag} (${commit.slice(0, 12)}).`);
   process.exit(0);
 }
 
@@ -142,7 +142,7 @@ if (process.platform === "win32") {
 
 if (result.error) throw result.error;
 if (result.status !== 0) {
-  throw new Error(`Codex Toolkit update failed with exit ${result.status}`);
+  throw new Error(`Chara's Toolkit update failed with exit ${result.status}`);
 }
 
 const installedState = JSON.parse(await readFile(statePath, "utf8").catch(() => "{}"));
@@ -152,4 +152,4 @@ await writeFile(
   "utf8",
 );
 
-console.log(`Codex Toolkit updated to ${tag} (${commit.slice(0, 12)}).`);
+console.log(`Chara's Toolkit updated to ${tag} (${commit.slice(0, 12)}).`);

@@ -1,6 +1,6 @@
 # Destructive operations safety (Windows, macOS, Linux)
 
-This is a cross-cutting rule for every Codex Toolkit skill and Mission Control agent. It applies even when the user chooses **Full Access**, bypasses permission prompts, or asks the agent to clean up. It is not a replacement for a sandbox or filesystem permissions.
+This is a cross-cutting rule for every Chara's Toolkit skill and Mission Control agent. It applies even when the user chooses **Full Access**, bypasses permission prompts, or asks the agent to clean up. It is not a replacement for a sandbox or filesystem permissions.
 
 ## Before touching data
 

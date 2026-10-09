@@ -37,6 +37,15 @@ function run(command, f, extra = []) {
     { encoding: 'utf8', timeout: 40000 });
 }
 
+test('signed approvals recognize both verified repository identities, not arbitrary projects', async t => {
+  const next = await fixture(t, { repository: 'cmdr-chara/charas-toolkit' });
+  const accepted = await verifyBundleApproval({ root, policyPath: next.policyPath, signaturePath: next.signaturePath, trustedKeyPath: next.trustedKeyPath });
+  assert.equal(accepted.repository, 'cmdr-chara/charas-toolkit');
+  const wrong = await fixture(t, { repository: 'untrusted/somewhere' });
+  await assert.rejects(verifyBundleApproval({ root, policyPath: wrong.policyPath,
+    signaturePath: wrong.signaturePath, trustedKeyPath: wrong.trustedKeyPath }), /Unsupported enterprise/);
+});
+
 test('signed approvals reject tampering, expiry, and malformed metadata', async (t) => {
   const f = await fixture(t);
   assert.equal((await verifyBundleApproval({ root, policyPath: f.policyPath, signaturePath: f.signaturePath, trustedKeyPath: f.trustedKeyPath })).revision, f.policy.revision);

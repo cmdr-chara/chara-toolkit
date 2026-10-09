@@ -1,6 +1,6 @@
 # Enterprise deployment
 
-Codex Toolkit includes an opt-in signed-approval installation mode for managed Codex homes. The regular setup command remains for individual developers.
+Chara's Toolkit includes an opt-in signed-approval installation mode for managed Codex homes. The regular setup command remains for individual developers.
 
 ## Control boundaries
 
@@ -44,7 +44,7 @@ Create an `approval.json` OUTSIDE the distributable package, substituting actual
       "expires_at": "2026-12-31T00:00:00Z"
     }
 
-The release value must match the package version. A trusted administrator signs the exact JSON bytes with an Ed25519 key held outside Git and all developer workspaces:
+The release value must match the package version. The new package identity is `@cmdr-chara/charas-toolkit`; the current repository slug remains valid until the administrative rename. New approvals must be signed against the exact bundle bytes. A trusted administrator signs the exact JSON bytes with an Ed25519 key held outside Git and all developer workspaces:
 
     openssl genpkey -algorithm ed25519 -out admin-private.pem
     openssl pkey -in admin-private.pem -pubout -out trusted-public.pem

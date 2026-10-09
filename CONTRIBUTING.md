@@ -1,6 +1,6 @@
 # Contributing
 
-Codex Toolkit accepts small, testable improvements. An issue or pull request should state the user request it addresses and the behavior that should change.
+Chara's Toolkit accepts small, testable improvements. An issue or pull request should state the user request it addresses and the behavior that should change.
 
 ## Before editing
 
@@ -25,7 +25,7 @@ Codex Toolkit accepts small, testable improvements. An issue or pull request sho
 ```sh
 python scripts/validate_skill_pack.py . --as-of YYYY-MM-DD
 python scripts/run_smoke_tests.py . --as-of YYYY-MM-DD
-node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs
+node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs
 npm pack --dry-run
 ```
 

@@ -1,3 +1,9 @@
+## Unreleased
+
+- Rebrand as Chara's Toolkit, with the tagline "Better engineering, any agent."
+- Add `chara` as the primary CLI executable and retain `codex-toolkit` as a compatibility alias.
+- Retain existing Codex home, updater, managed block and GitHub repository identities until a separately verified migration.
+
 ## 0.9.4 - 2026-09-25
 
 - feat: universalize coordination and Mission Control tooling (`278d15739005`).
