@@ -2,298 +2,70 @@
 
 **Better engineering, any agent.**
 
-> 22 portable engineering skills and six optional Codex agents. A clear workflow for building, reviewing, and proving real software.
+[Guida in italiano](docs/guida-italiano.md)
 
-[![CI](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml)
+[![CI](https://github.com/cmdr-chara/chara-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/chara-toolkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/engineering_skills-22-7c3aed.svg)](skills)
-[![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
 <p align="center">
   <img src=".github/assets/charas-toolkit-readme-hero.png" width="900" alt="Chara's Toolkit — Inspect. Change. Prove." />
 </p>
 
-## What is Chara's Toolkit?
+22 engineering skills for coding agents: investigate bugs, review code, build interfaces, improve performance, and verify changes. Codex also gets workflow routing, six optional agent roles, and automatic updates.
 
-Chara's Toolkit is a collection of focused engineering skills for coding agents. The skills use the open Agent Skills format. Codex currently has the complete installer, routing, updater and six optional agent roles.
+## Install
 
-You do **not** need to learn the skill names or choose one manually. Install the toolkit, then describe what you want in normal language.
-
-For example:
-
-```text
-Find important bugs in this repository.
-```
-
-```text
-Make this API faster and prove the improvement.
-```
-
-```text
-Upgrade this framework without breaking compatibility.
-```
-
-```text
-Review this authentication change for security problems.
-```
-
-```text
-Finish this feature completely and verify it before saying it is done.
-```
-
-Chara's Toolkit picks the smallest relevant workflow and loads extra guidance only when it is needed.
-
-## Quick start
-
-### 1. Install
-
-**Codex (fully integrated):** the current repository URL remains in place during the rename transition.
-
-You need **Node.js 18+** and Codex.
+**Codex (fully integrated)** — requires Node.js 18+ and Codex.
 
 ```sh
-npx --yes github:cmdr-chara/codex-toolkit setup
+npx --yes github:cmdr-chara/chara-toolkit setup
 ```
 
-Or install the CLI globally and use its new name:
+Setup installs the skills, Mission Control roles, workflow routing, and a user-level updater. It preserves your instructions outside its managed `AGENTS.md` block. Scheduled updates follow published GitHub releases.
+
+Prefer a global command?
 
 ```sh
-npm install --global github:cmdr-chara/codex-toolkit
+npm install --global github:cmdr-chara/chara-toolkit
 chara setup
 ```
 
-The older `codex-toolkit` command remains a compatibility alias for existing scripts.
+`codex-toolkit` remains a compatibility alias for `chara`.
 
-That installs:
+## Use
 
-- **22 portable skills**
-- **6 optional Mission Control agents**
-- automatic workflow routing
-- automatic updates from published GitHub releases
-
-### 2. Use it normally
-
-In Codex, just ask for the outcome you want.
+Start a fresh Codex task in your project and describe what you need. You usually do not need to choose a skill manually.
 
 ```text
-Fix this intermittent reconnect bug properly.
+Find important bugs in this repository and verify the fixes.
 ```
 
 ```text
-Inspect this codebase and tell me what is worth improving next.
+Make this API faster. Measure it before and after the change.
 ```
 
-```text
-Build this approved web feature and do not stop half-finished.
-```
+The routing instructions guide the agent to the relevant specialist. Your project's `AGENTS.md` takes priority over general toolkit guidance. Skills guide the agent; runtime permissions remain under your control.
 
-```text
-Is this release actually safe to ship?
-```
-
-You can still name a skill explicitly when you want to, but you usually do not need to.
-
-## What can it help with?
-
-### Understand and investigate
-
-| You want to... | Toolkit skill |
-| --- | --- |
-| Understand an unfamiliar repository | [repository-intelligence](skills/repository-intelligence) |
-| Find bugs nobody has reported yet | [bug-finder](skills/bug-finder) |
-| Find the root cause of a known bug | [debugging-investigator](skills/debugging-investigator) |
-| Fix a broken shell, runtime, package-manager, browser, or encoding path | [toolchain-preflight](skills/toolchain-preflight) |
-| Review security-sensitive code | [security-review](skills/security-review) |
-
-### Improve existing code
-
-| You want to... | Toolkit skill |
-| --- | --- |
-| Decide what is worth improving next | [codebase-improvement-planner](skills/codebase-improvement-planner) |
-| Review or refactor code safely | [review-and-refactor-code](skills/review-and-refactor-code) |
-| Make a slow path faster using measurements | [optimize-codebase-performance](skills/optimize-codebase-performance) |
-| Improve TypeScript type safety and lint discipline | [typescript-quality-enforcer](skills/typescript-quality-enforcer) |
-| Upgrade dependencies, frameworks, APIs, schemas, or runtimes | [codebase-evolution-controller](skills/codebase-evolution-controller) |
-| Keep documentation in sync with implementation | [documentation-synchronizer](skills/documentation-synchronizer) |
-
-### Build products and interfaces
-
-| You want to... | Toolkit skill |
-| --- | --- |
-| Define product UX and visual direction | [product-design-director](skills/product-design-director) |
-| Rebuild an interface from screenshots | [screenshot-to-interface](skills/screenshot-to-interface) |
-| Build or audit a production web app | [production-web-builder](skills/production-web-builder) |
-| Choose a mobile architecture | [mobile-architecture-director](skills/mobile-architecture-director) |
-| Build or audit a Flutter app | [flutter-production-builder](skills/flutter-production-builder) |
-| Build or audit an Expo / React Native app | [expo-react-native-builder](skills/expo-react-native-builder) |
-
-### Finish and coordinate work
-
-| You want to... | Toolkit skill |
-| --- | --- |
-| Finish a substantial task without premature "done" claims | [unlazy](skills/unlazy) |
-| Decide whether an integrated change is ready to ship | [verification-and-release](skills/verification-and-release) |
-| Split work safely across multiple agents | [multi-agent-work-coordinator](skills/multi-agent-work-coordinator) |
-| Delegate bounded work to the included agents | [delegate-with-mission-cards](skills/delegate-with-mission-cards) |
-| Inspect or clean provenance and metadata in files you own | [content-provenance-hygiene](skills/content-provenance-hygiene) |
-
-## How it works
-
-A **skill** is a focused set of instructions for one kind of job.
-
-Chara's Toolkit keeps the process simple:
-
-1. It reads what you asked for.
-2. It selects the skill that owns that job.
-3. It loads extra references only when they are relevant.
-4. It keeps project-specific instructions in control.
-5. It hands work to another specialist only when the task actually changes.
-
-This means a simple bug fix stays simple, while a larger migration or release can use more structure when needed.
-
-Your repository's own `AGENTS.md` always takes priority over the toolkit's general guidance.
-
-## Automatic updates
-
-The full setup installs an updater that follows **published GitHub releases**, not unreleased commits on `main`.
-
-Future releases can add skills, improve workflows, and update routing without requiring another manual install.
-
-Check update status:
+## Options
 
 ```sh
-npx --yes github:cmdr-chara/codex-toolkit auto-update status
+# Inspect the installation
+npx --yes github:cmdr-chara/chara-toolkit mission-control check
+
+# Install without scheduling automatic updates
+npx --yes github:cmdr-chara/chara-toolkit setup --no-auto-update
 ```
 
-Disable automatic updates:
+Individual skills work with compatible Agent Skills clients. The full installer, routing, updater, and Mission Control roles are Codex-specific; see [portability](docs/portable-skills.md). Organization-managed installations have a separate [enterprise guide](docs/enterprise-deployment.md).
 
-```sh
-npx --yes github:cmdr-chara/codex-toolkit auto-update remove
-```
+## Documentation
 
-The installer does not replace your global Codex `AGENTS.md`. It manages only its own marked section and leaves the rest of your file untouched.
+- [Guida in italiano: installazione e uso](docs/guida-italiano.md)
+- [Skill catalog](skills/llms.txt) · [Workflow routing](orchestration/workflows.md)
+- [Automatic updates](docs/auto-update.md) · [Application verification](docs/project-verification.md)
+- [Destructive-operation safety](docs/destructive-operations-safety.md) · [Security reporting](SECURITY.md)
+- [Evaluations](evaluations/README.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
 
-See [Automatic updates](docs/auto-update.md) for Windows, macOS, Linux, custom `CODEX_HOME`, and scheduler details.
+## License and credits
 
-## Platform compatibility
-
-**Agent Skills:** use the relevant portable `SKILL.md` files in compatible agents. **Codex:** full installer, managed routing, scheduled updater and six agent TOMLs. Other platforms do not yet have equivalent first-party orchestration. See [portability](docs/portable-skills.md) before installing.
-
-## Managed enterprise deployments
-
-Enterprises can use a separately approved, **Ed25519-signed** policy to install a fixed reviewed toolkit package with scheduled updates disabled. The managed setup verifies package bytes and installed skills/agents; runtime permissions and organization controls must still be enforced by your IT/Codex environment.
-
-See the [enterprise deployment guide](docs/enterprise-deployment.md) for approved-package preparation, staged rollout, signature verification, GitHub release approvals, and rollback. Personal installation stays unchanged.
-
-## Want only one skill?
-
-Every skill can also be installed independently.
-
-List the available skills:
-
-```sh
-npx skills add https://github.com/cmdr-chara/codex-toolkit --list
-```
-
-Install one skill:
-
-```sh
-npx skills add https://github.com/cmdr-chara/codex-toolkit --skill repository-intelligence -g -a codex
-```
-
-A single-skill install does not add the toolkit's automatic routing, Mission Control agents, or updater.
-
-## Mission Control
-
-The full setup also includes six optional agents for work that can be split safely.
-
-Mission Control is **model-agnostic**: the roles do not pin a specific GPT model or reasoning level. They inherit your active Codex/runtime configuration, so the same role definitions can work across compatible current and future models.
-
-It is also **resource-agnostic**. The same mission/ownership model can coordinate code, documents, research, datasets, configuration, reports, and other bounded workspace artifacts.
-
-You do not need to configure or call the agents manually. The toolkit can use them when separate pieces of work have clear boundaries and can be checked independently.
-
-<details>
-<summary><strong>Mission Control agents</strong></summary>
-
-| Agent | Best for |
-| --- | --- |
-| `pathfinder-reader` | Fast discovery and narrow fact lookup |
-| `patcher-writer` | Tiny isolated reversible changes |
-| `investigator-reader` | Debugging, research, tracing, and focused reviews |
-| `builder-writer` | Normal bounded implementation across code, tests, docs, config, and workspace artifacts |
-| `sentinel-reader` | High-consequence read-only review |
-| `architect-writer` | High-consequence cross-cutting implementation |
-
-The parent Codex task remains responsible for decisions, integration, and checking the final result. If a Codex runtime does not expose named custom roles, the same mission-card boundaries can still be used with the parent or an available generic subagent; the toolkit does not pretend that an unavailable role profile was applied.
-
-Check your installed Mission Control bundle:
-
-```sh
-npx --yes github:cmdr-chara/codex-toolkit mission-control check
-```
-
-The check verifies all six roles, read/write sandbox boundaries, model-agnostic role files, the installed Mission Control skill, and any managed toolkit routing that is present.
-
-</details>
-
-## Safety and verification
-
-The toolkit is designed to keep changes evidence-driven and bounded.
-
-Its workflows emphasize:
-
-- preserving existing user work
-- avoiding destructive actions without authorization
-- guarding against accidental drive, home-directory, or workspace deletion across Windows, macOS, and Linux—including full-access sessions
-- measuring performance before claiming improvements
-- separating confirmed bugs from theories
-- keeping migrations reversible where possible
-- verifying important changes before release
-- keeping security findings tied to realistic attack paths
-
-The repository includes structural validation, routing tests, smoke tests, installer tests, release checks, and provenance checks. Optional paired Codex traces expose narrow response proxies, while independent artifact-level acceptance checks can evaluate real code outcomes. Project-owned verification maps can capture and maintain runnable user journeys; neither an unrun map nor a passing proxy score establishes correctness.
-
-## For contributors and advanced users
-
-Most users can stop here.
-
-If you want to understand or modify the toolkit itself:
-
-- [Workflow routing](orchestration/workflows.md)
-- [Responsibility matrix](docs/responsibility-matrix.md)
-- [Skill-system design](docs/skill-system-design.md)
-- [Evaluation suite](evaluations/README.md)
-- [Paired Codex behavioral benchmarks](evaluations/behavioral-benchmark.md)
-- [Independent skills research](docs/independent-skill-research-2026-10.md)
-- [Enterprise deployment and release governance](docs/enterprise-deployment.md)
-- [Security reporting](SECURITY.md)
-- [Cross-platform destructive-operation safety](docs/destructive-operations-safety.md)
-- [Real application verification and feature maps](docs/project-verification.md)
-- [Outcome-based Codex benchmarks](evaluations/outcome-benchmarks.md)
-- [Preventing recurring agent mistakes](docs/recurring-agent-errors.md)
-- [Portability to other agents](docs/portable-skills.md)
-- [Branding and migration](docs/branding-migration.md)
-- [Automatic updates](docs/auto-update.md)
-- [Contributing](CONTRIBUTING.md)
-
-Repository layout:
-
-| Folder | What is inside |
-| --- | --- |
-| `skills` | The 22 installable skills |
-| `agents` | Mission Control agent definitions |
-| `orchestration` | Multi-skill routing and workflow guidance |
-| `evaluations` | Routing and behavior checks |
-| `scripts` | Validation, installer, and maintenance tools |
-| `docs` | Design decisions and supporting documentation |
-
-## Credits
-
-Chara's Toolkit includes or adapts ideas from several MIT-licensed projects, including Leonxlnx's Taste Skill and Unlazy work, Dillon Mulroy's `anti-slop`, Guillaume Meyer's `watermarks-remover`, and selected SkillMedev engineering skills.
-
-Full source mapping, modifications, and preserved license notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-## License
-
-[MIT](LICENSE) © 2026 cmdr-chara
+[MIT](LICENSE) © 2026 cmdr-chara. Third-party sources, modifications, and preserved license notices are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
