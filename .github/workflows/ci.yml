@@ -53,7 +53,7 @@ jobs:
         run: python scripts/run_smoke_tests.py . --as-of 2026-09-25
 
       - name: Test paired behavioral evaluator (offline)
-        run: node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs
+        run: node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs
 
       - name: Validate installer and updater scripts
         run: |
