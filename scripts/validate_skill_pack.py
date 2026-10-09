@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Public structural-validator entrypoint for Codex Toolkit."""
+"""Public structural-validator entrypoint for Chara's Toolkit."""
 from __future__ import annotations
 
 try:

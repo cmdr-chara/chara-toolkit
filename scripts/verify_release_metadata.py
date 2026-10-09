@@ -21,7 +21,7 @@ def git_blob_sha1(data: bytes) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("root", nargs="?", default=".", help="codex-toolkit repository root")
+    parser.add_argument("root", nargs="?", default=".", help="Chara's Toolkit repository root")
     args = parser.parse_args()
     root = Path(args.root).expanduser().resolve()
     if not root.is_dir():
@@ -30,8 +30,8 @@ def main() -> int:
     package_path = root / "package.json"
     catalog_path = root / "skills" / "llms.txt"
     manifest_path = root / ".github" / "assets" / "social-preview-manifest.json"
-    preview_path = root / ".github" / "assets" / "codex-toolkit-social-preview.png"
-    readme_hero_path = root / ".github" / "assets" / "codex-toolkit-readme-hero.png"
+    preview_path = root / ".github" / "assets" / "charas-toolkit-social-preview.png"
+    readme_hero_path = root / ".github" / "assets" / "charas-toolkit-readme-hero.png"
     renderer_path = root / ".github" / "render_social_preview.py"
     changelog_path = root / "CHANGELOG.md"
 

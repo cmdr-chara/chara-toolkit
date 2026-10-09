@@ -1,6 +1,8 @@
 # Automatic updates
 
-Codex Toolkit can keep a Codex installation synchronized without a long-running daemon.
+Chara's Toolkit uses the existing Codex Toolkit state directory, scheduler names, and managed markers so upgrades do not orphan an installed updater. See [branding and migration](branding-migration.md) for the transition contract.
+
+Chara's Toolkit can keep a Codex installation synchronized without a long-running daemon.
 
 ## Recommended setup
 
@@ -91,6 +93,6 @@ are installed under that same Codex home rather than under the default `~/.codex
 want the open skills CLI to own installation. That command does not execute this
 repository's scheduler or global-routing installer.
 
-If you want Codex Toolkit to require no future manual maintenance, compose installed skills
+If you want Chara's Toolkit to require no future manual maintenance, compose installed skills
 through the toolkit workflow rules, and pick up newly added toolkit skills automatically, use
 the `setup` command above.

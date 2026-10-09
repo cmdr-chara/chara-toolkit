@@ -54,7 +54,7 @@ SOFTWARE.
 **License source:** https://github.com/Leonxlnx/unlazy/blob/main/LICENSE  
 **Information checked:** 2026-08-16
 
-Codex Toolkit adapts the upstream completion-gate and Depth Tree method into:
+Chara's Toolkit adapts the upstream completion-gate and Depth Tree method into:
 
 - `skills/unlazy/SKILL.md`
 - `skills/unlazy/references/completion-gates.md`
@@ -74,7 +74,7 @@ No endorsement by Leonxlnx is stated or implied. The Leonxlnx MIT license reprod
 **License source:** https://github.com/guillaumemeyer/watermarks-remover/blob/main/LICENSE  
 **Information checked:** 2026-08-16
 
-`content-provenance-hygiene` was designed after inspecting the upstream service contract and skill. Codex Toolkit does not redistribute the upstream sanitation service, scripts, containers, model backends, or file-cleaning implementation. The toolkit records the inspected HTTP protocol and capability model as an optional integration reference and requires runtime capability checks before relying on it.
+`content-provenance-hygiene` was designed after inspecting the upstream service contract and skill. Chara's Toolkit does not redistribute the upstream sanitation service, scripts, containers, model backends, or file-cleaning implementation. The toolkit records the inspected HTTP protocol and capability model as an optional integration reference and requires runtime capability checks before relying on it.
 
 Meaningful toolkit changes include an inspect-first approval boundary, preservation of the original artifact by default, explicit separation from detector evasion and authorship claims, and before/after integrity verification.
 
@@ -158,7 +158,7 @@ SOFTWARE.
 **License source:** https://github.com/SkillMedev/skills/blob/main/LICENSE  
 **Information checked:** 2026-09-24
 
-Codex Toolkit selectively adapts engineering concepts from these upstream skills:
+Chara's Toolkit selectively adapts engineering concepts from these upstream skills:
 
 - `skills/secure-code-review/SKILL.md` -> `skills/security-review/`
 - `skills/flaky-test-detangler/SKILL.md` -> `skills/debugging-investigator/references/flaky-tests.md`
@@ -170,7 +170,7 @@ Codex Toolkit selectively adapts engineering concepts from these upstream skills
 - `skills/web-performance/SKILL.md` -> `skills/production-web-builder/references/core-web-vitals.md`
 - `skills/skill-tester/SKILL.md` -> the toolkit evaluation methodology.
 
-The adapted material uses original wording and is reorganized around Codex Toolkit ownership boundaries, progressive disclosure, repository-state preservation, evidence quality, approval stops, and existing routing/evaluation contracts. No upstream scripts or binary assets are redistributed.
+The adapted material uses original wording and is reorganized around Chara's Toolkit ownership boundaries, progressive disclosure, repository-state preservation, evidence quality, approval stops, and existing routing/evaluation contracts. No upstream scripts or binary assets are redistributed.
 
 No endorsement by Skill Me or Alexander Ouellet is stated or implied.
 

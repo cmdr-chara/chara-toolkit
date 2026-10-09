@@ -54,6 +54,7 @@ jobs:
           node --check bin/install.mjs
           node --check bin/toolkit.mjs
           node --check scripts/auto-update-runner.mjs
+          node --test scripts/test_branding.mjs
           grep -F "bin\\toolkit.mjs" scripts/install-mission-control.ps1
           ! grep -E 'Copy-Item|Remove-Item|Get-ChildItem' scripts/install-mission-control.ps1
 

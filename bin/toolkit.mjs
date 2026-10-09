@@ -60,7 +60,7 @@ async function installManagedAgentsBlock() {
   const ends = markerCount(current, managedEnd);
   if (!((starts === 0 && ends === 0) || (starts === 1 && ends === 1))) {
     throw new Error(
-      `Refusing to edit ${targetPath}: expected zero or one complete Codex Toolkit managed block, found ${starts} start marker(s) and ${ends} end marker(s).`,
+      `Refusing to edit ${targetPath}: expected zero or one complete Chara's Toolkit managed block, found ${starts} start marker(s) and ${ends} end marker(s).`,
     );
   }
 
@@ -82,7 +82,7 @@ async function installManagedAgentsBlock() {
   if (next === current) return false;
   await backupFile(targetPath, "AGENTS.md");
   if (dryRun) {
-    console.log(`[dry-run] update managed Codex Toolkit block in ${targetPath}`);
+    console.log(`[dry-run] update managed Chara's Toolkit block in ${targetPath}`);
     return true;
   }
   await mkdir(dirname(targetPath), { recursive: true });
@@ -115,12 +115,12 @@ async function installOrchestration() {
   ]);
   const changed = Number(agentsChanged) + Number(workflowsChanged);
   if (changed) {
-    console.log(`Codex Toolkit routing synchronized: ${changed} managed surface(s) changed.`);
+    console.log(`Chara's Toolkit routing synchronized: ${changed} managed surface(s) changed.`);
     if (!dryRun && (await exists(backupRoot))) {
       console.log(`Previous orchestration files backed up to ${backupRoot}`);
     }
   } else {
-    console.log("Codex Toolkit routing was already current.");
+    console.log("Chara's Toolkit routing was already current.");
   }
 }
 
