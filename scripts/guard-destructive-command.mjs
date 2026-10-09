@@ -10,8 +10,8 @@ import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
 const patterns = [
-  { name: "filesystem deletion", pattern: /(?:^|[\s;&|()\n])(?:sudo\s+)?(?:rm|rmdir|rd|del|erase|remove-item|rimraf|unlink)(?:\.exe)?(?=$|[\s;&|()\n])/i },
-  { name: "destructive Git state change", pattern: /\bgit\s+(?:(?:-C\s+\S+\s+)?(?:clean|restore|reset|worktree\s+(?:prune|remove)|stash\s+(?:clear|drop)))(?=$|[\s;&|()\n])/i },
+  { name: "filesystem deletion", pattern: /(?:^|[\s;&|()'"\n])(?:sudo\s+)?(?:rm|rmdir|rd|del|erase|remove-item|rimraf|unlink)(?:\.exe)?(?=$|[\s;&|()'"\n])/i },
+  { name: "destructive Git state change", pattern: /\bgit\s+(?:(?:-C\s+\S+\s+)?(?:clean|restore|reset|worktree\s+(?:prune|remove)|stash\s+(?:clear|drop)))(?=$|[\s;&|()'"\n])/i },
   { name: "recursive permission mutation", pattern: /\b(?:chmod|chown|chgrp)\s+[-\w]*R\b/i },
   { name: "find -delete", pattern: /\bfind\b[^\n]*\s-delete\b/i },
   { name: "synchronization deletion", pattern: /\b(?:rsync\b[^\n]*--delete\b|robocopy\b[^\n]*\/(?:MIR|PURGE)\b)/i },
