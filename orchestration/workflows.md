@@ -1,4 +1,4 @@
-# Codex Toolkit workflow catalog
+# Chara's Toolkit workflow catalog
 
 Use these as **conditional orchestration patterns**, not mandatory chains. A step runs only when its trigger is true, and the primary specialist retains authority over its own decision and stopping conditions.
 

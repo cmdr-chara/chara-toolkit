@@ -66,7 +66,7 @@ jobs:
           python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
           python scripts/verify_anti_slop_vendor.py .
           python scripts/verify_release_metadata.py .
-          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs
+          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs
           git diff --exit-code -- .github/assets package.json CHANGELOG.md scripts bin skills orchestration
           version="$(node -p "require('./package.json').version")"
           tag="v${version}"
@@ -131,7 +131,7 @@ jobs:
           tag="$(cat tag)"
           test "$recorded" = "$TARGET_SHA" || { echo "Candidate identity changed" >&2; exit 1; }
           [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release tag" >&2; exit 1; }
-          test "$archive" = "cmdr-chara-codex-toolkit-${tag#v}.tgz" || { echo "Archive does not match release" >&2; exit 1; }
+          test "$archive" = "cmdr-chara-charas-toolkit-${tag#v}.tgz" || { echo "Archive does not match release" >&2; exit 1; }
           sha256sum --check SHA256SUMS
           cd ..
           test "$(git rev-parse HEAD)" = "$TARGET_SHA" || { echo "Checked-out main advanced" >&2; exit 1; }
@@ -143,8 +143,8 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$tag" -m "Codex Toolkit $tag" "$TARGET_SHA"
+          git tag -a "$tag" -m "Chara's Toolkit $tag" "$TARGET_SHA"
           git push origin "refs/tags/$tag"
-          gh release create "$tag" --verify-tag --title "Codex Toolkit $tag" \
+          gh release create "$tag" --verify-tag --title "Chara's Toolkit $tag" \
             --notes-file "release-bundle/release-notes.md" \
             "release-bundle/$archive" "release-bundle/SHA256SUMS"

@@ -1,19 +1,17 @@
-# Codex Toolkit
+# Chara's Toolkit
 
-> 22 focused Codex skills and 6 optional agents for real software projects.
+**Better engineering, any agent.**
+
+> 22 portable engineering skills and six optional Codex agents. A clear workflow for building, reviewing, and proving real software.
 
 [![CI](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/cmdr-chara/codex-toolkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Codex_skills-22-7c3aed.svg)](skills)
+[![Skills](https://img.shields.io/badge/engineering_skills-22-7c3aed.svg)](skills)
 [![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
-<p align="center">
-  <img src=".github/assets/codex-toolkit-readme-hero.png" width="900" alt="Codex Toolkit — Inspect. Change. Prove." />
-</p>
+## What is Chara's Toolkit?
 
-## What is Codex Toolkit?
-
-Codex Toolkit gives Codex a set of focused workflows for common software-engineering jobs.
+Chara's Toolkit is a collection of focused engineering skills for coding agents. The skills use the open Agent Skills format. Codex currently has the complete installer, routing, updater and six optional agent roles.
 
 You do **not** need to learn the skill names or choose one manually. Install the toolkit, then describe what you want in normal language.
 
@@ -39,11 +37,13 @@ Review this authentication change for security problems.
 Finish this feature completely and verify it before saying it is done.
 ```
 
-Codex Toolkit picks the smallest relevant workflow and loads extra guidance only when it is needed.
+Chara's Toolkit picks the smallest relevant workflow and loads extra guidance only when it is needed.
 
 ## Quick start
 
 ### 1. Install
+
+**Codex (fully integrated):** the current repository URL remains in place during the rename transition.
 
 You need **Node.js 18+** and Codex.
 
@@ -51,16 +51,25 @@ You need **Node.js 18+** and Codex.
 npx --yes github:cmdr-chara/codex-toolkit setup
 ```
 
+Or install the CLI globally and use its new name:
+
+```sh
+npm install --global github:cmdr-chara/codex-toolkit
+chara setup
+```
+
+The older `codex-toolkit` CLI remains available for existing scripts.
+
 That installs:
 
-- **22 Codex skills**
+- **22 portable skills**
 - **6 optional Mission Control agents**
 - automatic workflow routing
 - automatic updates from published GitHub releases
 
-### 2. Use Codex normally
+### 2. Use it normally
 
-Just ask for the outcome you want.
+In Codex, just ask for the outcome you want.
 
 ```text
 Fix this intermittent reconnect bug properly.
@@ -128,7 +137,7 @@ You can still name a skill explicitly when you want to, but you usually do not n
 
 A **skill** is a focused set of instructions for one kind of job.
 
-Codex Toolkit keeps the process simple:
+Chara's Toolkit keeps the process simple:
 
 1. It reads what you asked for.
 2. It selects the skill that owns that job.
@@ -161,6 +170,10 @@ npx --yes github:cmdr-chara/codex-toolkit auto-update remove
 The installer does not replace your global Codex `AGENTS.md`. It manages only its own marked section and leaves the rest of your file untouched.
 
 See [Automatic updates](docs/auto-update.md) for Windows, macOS, Linux, custom `CODEX_HOME`, and scheduler details.
+
+## Platform compatibility
+
+**Agent Skills:** use the relevant portable `SKILL.md` files in compatible agents. **Codex:** full installer, managed routing, scheduled updater and six agent TOMLs. Other platforms do not yet have equivalent first-party orchestration. See [portability](docs/portable-skills.md) before installing.
 
 ## Managed enterprise deployments
 
@@ -256,6 +269,7 @@ If you want to understand or modify the toolkit itself:
 - [Outcome-based Codex benchmarks](evaluations/outcome-benchmarks.md)
 - [Preventing recurring agent mistakes](docs/recurring-agent-errors.md)
 - [Portability to other agents](docs/portable-skills.md)
+- [Branding and migration](docs/branding-migration.md)
 - [Automatic updates](docs/auto-update.md)
 - [Contributing](CONTRIBUTING.md)
 
@@ -272,7 +286,7 @@ Repository layout:
 
 ## Credits
 
-Codex Toolkit includes or adapts ideas from several MIT-licensed projects, including Leonxlnx's Taste Skill and Unlazy work, Dillon Mulroy's `anti-slop`, Guillaume Meyer's `watermarks-remover`, and selected SkillMedev engineering skills.
+Chara's Toolkit includes or adapts ideas from several MIT-licensed projects, including Leonxlnx's Taste Skill and Unlazy work, Dillon Mulroy's `anti-slop`, Guillaume Meyer's `watermarks-remover`, and selected SkillMedev engineering skills.
 
 Full source mapping, modifications, and preserved license notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

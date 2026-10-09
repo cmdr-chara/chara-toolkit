@@ -1,6 +1,6 @@
 # Agent Skills portability
 
-The toolkit's 22 SKILL.md folders use the Agent Skills metadata/content format. Read-only references and per-skill tools can be reused by any compatible agent with the appropriate language/runtime installed. The **global installer**, auto-updater, managed AGENTS.md routing, and six optional TOML roles remain Codex-specific.
+Chara's Toolkit's 22 SKILL.md folders use the Agent Skills metadata/content format. Read-only references and per-skill tools can be reused by any compatible agent with the appropriate language/runtime installed. The **global installer**, auto-updater, managed AGENTS.md routing, and six optional TOML roles remain Codex-specific.
 
 For a client other than Codex, prefer the independent skill installer rather than invoking this repository's Codex setup:
 
