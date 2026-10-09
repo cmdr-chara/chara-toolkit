@@ -7,6 +7,8 @@ const SHA = /^[a-f0-9]{40}$/;
 const DIGEST = /^[a-f0-9]{64}$/;
 const RELEASE = /^v\d+\.\d+\.\d+$/;
 const POLICY_KEYS = ['bundle_sha256', 'expires_at', 'release', 'repository', 'revision', 'schema'];
+// Both signed repository identities are recognized during the transition.
+const ALLOWED_REPOSITORIES = new Set(['cmdr-chara/codex-toolkit', 'cmdr-chara/charas-toolkit']);
 
 async function filesUnder(root, subpath) {
   const path = join(root, subpath);
@@ -45,7 +47,7 @@ export async function verifyBundleApproval({ root, policyPath, signaturePath, tr
   const policy = JSON.parse(policyBytes.toString('utf8'));
   if (!policy || typeof policy !== 'object' || Array.isArray(policy)
     || Object.keys(policy).sort().join(',') !== POLICY_KEYS.join(',') || policy.schema !== 1
-    || policy.repository !== 'cmdr-chara/codex-toolkit'
+    || !ALLOWED_REPOSITORIES.has(policy.repository)
     || !RELEASE.test(policy.release) || !SHA.test(policy.revision)
     || !DIGEST.test(policy.bundle_sha256)
     || typeof policy.expires_at !== 'string'
@@ -53,7 +55,7 @@ export async function verifyBundleApproval({ root, policyPath, signaturePath, tr
     || !Number.isFinite(Date.parse(policy.expires_at))) throw Error('Unsupported enterprise approval policy');
   if (Date.parse(policy.expires_at) <= Date.now()) throw Error('Enterprise approval expired');
   const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
-  if (pkg.name !== '@cmdr-chara/codex-toolkit' || policy.release !== 'v' + pkg.version)
+  if (pkg.name !== '@cmdr-chara/charas-toolkit' || policy.release !== 'v' + pkg.version)
     throw Error('Approved release does not match package metadata');
   const actual = await digestPaths(root);
   if (actual !== policy.bundle_sha256) throw Error('Package does not match approved bundle digest');
