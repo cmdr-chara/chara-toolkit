@@ -9,6 +9,10 @@
 [![Skills](https://img.shields.io/badge/engineering_skills-22-7c3aed.svg)](skills)
 [![Custom agents](https://img.shields.io/badge/custom_agents-6-f97316.svg)](agents/mission-control)
 
+<p align="center">
+  <img src=".github/assets/charas-toolkit-readme-hero.png" width="900" alt="Chara's Toolkit — Inspect. Change. Prove." />
+</p>
+
 ## What is Chara's Toolkit?
 
 Chara's Toolkit is a collection of focused engineering skills for coding agents. The skills use the open Agent Skills format. Codex currently has the complete installer, routing, updater and six optional agent roles.

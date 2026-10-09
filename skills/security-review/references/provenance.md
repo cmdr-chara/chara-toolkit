@@ -6,8 +6,8 @@
 **Copyright:** Copyright (c) 2026 Alexander Ouellet
 **Information checked:** 2026-09-24
 
-The Codex Toolkit `security-review` skill is original wording and structure informed by the upstream `skills/secure-code-review/SKILL.md` focus on high-value exploit classes and filtered actionable findings.
+The Chara's Toolkit `security-review` skill is original wording and structure informed by the upstream `skills/secure-code-review/SKILL.md` focus on high-value exploit classes and filtered actionable findings.
 
-Meaningful toolkit changes include integration with repository-state preservation, calibrated evidence, existing Codex Toolkit routing/handoffs, business-invariant review, explicit fix/regression boundaries, and separation from release approval and dependency migration.
+Meaningful toolkit changes include integration with repository-state preservation, calibrated evidence, existing Chara's Toolkit routing/handoffs, business-invariant review, explicit fix/regression boundaries, and separation from release approval and dependency migration.
 
 No endorsement by Skill Me or Alexander Ouellet is stated or implied. The full MIT notice is preserved in the repository-level `THIRD_PARTY_NOTICES.md`.

@@ -6,7 +6,7 @@
 **Copyright:** Copyright (c) 2026 Leonxlnx  
 **Information checked:** 2026-08-16
 
-Codex Toolkit adapts the following upstream ideas:
+Chara's Toolkit adapts the following upstream ideas:
 
 - completion gates recorded before substantial work;
 - the `CHECK` / `EXPECT` / `EVIDENCE` ledger shape;
@@ -18,7 +18,7 @@ The toolkit does **not** redistribute the upstream JavaScript gate checker, stop
 
 Meaningful modifications include:
 
-- fitting the method into Codex Toolkit's specialist-skill ownership model;
+- fitting the method into Chara's Toolkit's specialist-skill ownership model;
 - preserving existing approval and safety stops instead of using completion pressure to cross them;
 - treating blocked work as `COMPLETION: BLOCKED` rather than counting it as complete;
 - requiring explicit authority for `WAIVED` scope;

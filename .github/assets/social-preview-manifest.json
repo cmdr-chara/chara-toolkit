@@ -1,5 +1,5 @@
 {
-  "file": ".github/assets/codex-toolkit-social-preview.png",
+  "file": ".github/assets/charas-toolkit-social-preview.png",
   "dimensions": {
     "width": 1280,
     "height": 640
@@ -14,7 +14,7 @@
   ],
   "purpose": "GitHub repository social preview",
   "copy_reviewed": true,
-  "version": "0.9.4",
+  "version": "0.9.5",
   "skill_count": 22,
-  "image_git_blob_sha1": "26a24e04a1194fbcf1836e4fa829a39d79de1e9f"
+  "image_git_blob_sha1": "3b73614c750ccb4a593f35270d4cc51288d976cf"
 }

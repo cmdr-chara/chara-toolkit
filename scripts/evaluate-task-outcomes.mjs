@@ -45,11 +45,10 @@ export function traceUsage(events) {
   for (const event of events) {
     if (event.type === 'item.started' && event.item?.type === 'command_execution') tool_calls++;
     if (event.type !== 'turn.completed' || !event.usage) continue;
+    const fields = Object.keys(totals);
+    if (!fields.every((field) => Number.isInteger(event.usage[field]) && event.usage[field] >= 0)) return null;
     observed++;
-    for (const field of Object.keys(totals)) {
-      const n = event.usage[field];
-      if (Number.isInteger(n) && n >= 0) totals[field] += n;
-    }
+    for (const field of fields) totals[field] += event.usage[field];
   }
   return observed ? { ...totals, tool_calls } : null;
 }

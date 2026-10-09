@@ -18,6 +18,7 @@ const events = [
 test('count actual trace token usage, not guessed numbers', () => {
   assert.deepEqual(traceUsage(events), { input_tokens: 30, cached_input_tokens: 10, output_tokens: 12, tool_calls: 1 });
   assert.equal(traceUsage([{ type: 'turn.completed' }]), null);
+  assert.equal(traceUsage([{ type: 'turn.completed', usage: { input_tokens: 30 } }]), null);
   assert.throws(() => validatePlan({ ...plan, cases: [{ ...plan.cases[0], folder: '../home' }] }), /folder/);
   assert.throws(() => validatePlan({ ...plan, cases: [{ ...plan.cases[0], commands: ['npm test'] }] }), /argv/);
 });

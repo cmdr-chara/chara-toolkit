@@ -1,4 +1,4 @@
-# Independent engineering-skill research — 2026-10-09
+# Independent engineering-skill research — completed 2026-10-09
 
 This is a design note, **not imported code or copied skill instructions**. The corresponding toolkit changes were independently written to fit existing specialist ownership. No new third-party notices are needed for these original additions; all pre-existing notices and bundled licenses remain intact.
 

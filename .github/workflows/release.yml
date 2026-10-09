@@ -138,13 +138,23 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "$TARGET_SHA" || { echo "Main advanced; aborting" >&2; exit 1; }
           if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
-            echo "Tag already exists; cannot overwrite immutable release identity" >&2
-            exit 1
+            git fetch --force origin "refs/tags/$tag:refs/tags/$tag"
+            existing_tag_target="$(git rev-list -n 1 "$tag^{}")"
+            if [[ "$existing_tag_target" != "$TARGET_SHA" ]]; then
+              echo "Tag already points to a different commit" >&2
+              exit 1
+            fi
+            echo "Tag already points to this candidate; continuing."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$tag" -m "Chara's Toolkit $tag" "$TARGET_SHA"
+            git push origin "refs/tags/$tag"
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$tag" -m "Chara's Toolkit $tag" "$TARGET_SHA"
-          git push origin "refs/tags/$tag"
-          gh release create "$tag" --verify-tag --title "Chara's Toolkit $tag" \
-            --notes-file "release-bundle/release-notes.md" \
-            "release-bundle/$archive" "release-bundle/SHA256SUMS"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release already exists; nothing to publish."
+          else
+            gh release create "$tag" --verify-tag --title "Chara's Toolkit $tag" \
+              --notes-file "release-bundle/release-notes.md" \
+              "release-bundle/$archive" "release-bundle/SHA256SUMS"
+          fi

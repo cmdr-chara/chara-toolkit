@@ -31,7 +31,7 @@ Resolve repository/scope, base/head or bounded area, intended behavior, public/i
 2. **Admit findings.** Use `references/finding-contract.md`. Separate correctness/integration findings from optional structural improvements. When separate incidents show a recurring agent-created failure mechanism, read `references/recurring-errors.md` and prefer a verified mechanical preventive control over additional prose.
 3. **Define parity.** Before refactoring, state behavior that must remain stable using `references/behavior-parity.md`.
 4. **Characterize legacy behavior when needed.** If important untested code must change, read `references/characterization-testing.md` and pin observed behavior before structural edits.
-5. **Propose the smallest useful slice.** State files, invariants, expected complexity reduction, risks, and focused verification. When redefining module contracts or domain language, read `references/module-seams.md` to avoid adding shallow abstractions. Stop at `AWAITING_APPROVAL` if broad changes were not authorized.
+5. **Propose the smallest useful slice.** State files, invariants, expected complexity reduction, risks, and focused verification. When redefining module contracts, domain language, or responsibility placement, read `references/module-seams.md` to avoid adding shallow abstractions. Stop at `AWAITING_APPROVAL` if broad changes were not authorized.
 6. **Refactor incrementally.** Keep interfaces explicit, preserve compatibility, avoid speculative abstraction, and remove old paths only after replacements are wired.
 7. **Verify the final slice.** Run targeted parity/correctness checks and inspect the final diff for accidental behavior changes.
 

@@ -685,7 +685,7 @@ function help() {
 
 Usage:
   chara setup
-      Full setup when installed globally; codex-toolkit remains a compatible alias.
+      Full setup when installed globally; codex-toolkit remains a compatibility alias.
 
   chara mission-control check
       Inspect the active Codex integration.
