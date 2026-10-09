@@ -1,199 +1,160 @@
-name: Release
+name: Release (approved)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - package.json
-      - CHANGELOG.md
-      - .github/assets/social-preview-manifest.json
-      - .github/assets/charas-toolkit-social-preview.png
-      - .github/assets/charas-toolkit-readme-hero.png
-      - .github/render_social_preview.py
-      - scripts/verify_release_metadata.py
-      - .github/workflows/release.yml
   workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: "Reviewed, CI-passing main commit SHA (40 lowercase hex characters)"
+        required: true
+        type: string
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: codex-toolkit-manual-release
+  cancel-in-progress: false
 
 jobs:
-  preview:
+  verify:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      changed: ${{ steps.refresh.outputs.changed }}
-      target_sha: ${{ steps.refresh.outputs.target_sha }}
-
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      checks: read
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
+      - name: Check out exact source candidate
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "24"
-
-      - name: Set up social-preview renderer
-        run: python -m pip install --disable-pip-version-check --no-input Pillow
-
-      - name: Render and persist canonical artwork
-        id: refresh
+      - name: Refuse stale commits and missing checks
+        env:
+          TARGET_SHA: ${{ inputs.candidate_sha }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          python .github/render_social_preview.py
-          if git diff --quiet -- \
-            .github/assets/charas-toolkit-social-preview.png \
-            .github/assets/charas-toolkit-readme-hero.png \
-            .github/assets/social-preview-manifest.json
-          then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            .github/assets/charas-toolkit-social-preview.png \
-            .github/assets/charas-toolkit-readme-hero.png \
-            .github/assets/social-preview-manifest.json
-          version="$(node -p "require('./package.json').version")"
-          git commit -m "chore: refresh v${version} artwork"
-          git push origin HEAD:main
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-  release:
-    needs: preview
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Check out release candidate
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-          ref: ${{ needs.preview.outputs.target_sha }}
-
-      - name: Assert candidate identity
-        env:
-          TARGET_SHA: ${{ needs.preview.outputs.target_sha }}
-        run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "Invalid candidate SHA" >&2; exit 1; }
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA" || { echo "SHA does not match current main" >&2; exit 1; }
+          checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/check-runs?per_page=100")"
+          for name in "validate" "Enterprise install (windows-latest)" "Enterprise install (macos-latest)" \
+            "analyze (javascript-typescript)" "analyze (python)"; do
+            jq -e --arg sha "$TARGET_SHA" --arg name "$name" \
+              'any(.check_runs[]; .name == $name and .head_sha == $sha and .app.slug == "github-actions" and .status == "completed" and .conclusion == "success")' \
+              <<< "$checks" >/dev/null || { echo "Missing successful exact-revision check: $name" >&2; exit 1; }
+          done
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.13"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "24"
 
-      - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-09-25
-
-      - name: Verify anti-slop vendor integrity
-        run: python scripts/verify_anti_slop_vendor.py .
-
-      - name: Run TypeScript quality regressions
-        run: python scripts/test_typescript_quality_regressions.py .
-
-      - name: Verify release metadata
-        run: python scripts/verify_release_metadata.py .
-
-      - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-09-25
-
-      - name: Test branding and CLI compatibility
-        run: node --test scripts/test_branding.mjs
-
-      - name: Inspect package contents
-        run: npm pack --dry-run
-
-      - name: Prepare release notes
-        id: release
+      - name: Validate, package, and prepare release evidence
+        env:
+          TARGET_SHA: ${{ inputs.candidate_sha }}
         shell: bash
         run: |
+          set -euo pipefail
+          python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
+          python scripts/verify_anti_slop_vendor.py .
+          python scripts/verify_release_metadata.py .
+          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs
+          git diff --exit-code -- .github/assets package.json CHANGELOG.md scripts bin skills orchestration
           version="$(node -p "require('./package.json').version")"
           tag="v${version}"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          python - "$version" "$RUNNER_TEMP/release-notes.md" <<'PY'
+          mkdir -p release-bundle
+          python - "$version" "release-bundle/release-notes.md" <<'PY'
           import re
           import sys
           from pathlib import Path
-
           version, output = sys.argv[1], Path(sys.argv[2])
           text = Path("CHANGELOG.md").read_text(encoding="utf-8")
           pattern = rf"(?ms)^## {re.escape(version)} - [^\n]+\n\n(.*?)(?=^## |\Z)"
           match = re.search(pattern, text)
-          if match is None:
-              raise SystemExit(f"missing CHANGELOG section for {version}")
-          notes = match.group(1).strip()
-          if not notes:
-              raise SystemExit(f"empty CHANGELOG section for {version}")
-          output.write_text(notes + "\n", encoding="utf-8")
+          if match is None or not match.group(1).strip():
+              raise SystemExit(f"missing/non-empty CHANGELOG section for {version}")
+          output.write_text(match.group(1).strip() + "\n", encoding="utf-8")
           PY
+          archive="$(npm pack --silent)"
+          mv "$archive" release-bundle/
+          (cd release-bundle && sha256sum "$archive" > SHA256SUMS)
+          printf '%s\n' "$TARGET_SHA" > release-bundle/candidate-sha
+          printf '%s\n' "$archive" > release-bundle/archive-name
+          printf '%s\n' "$tag" > release-bundle/tag
 
-      - name: Check existing tag and release
-        id: existing
+      - name: Upload candidate package for approved promotion
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: vetted-release-bundle
+          path: release-bundle/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: release-approval
+    permissions:
+      contents: write
+    steps:
+      - name: Check out current main without running project scripts
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+
+      - name: Download vetted package from this workflow run
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: vetted-release-bundle
+          path: release-bundle
+
+      - name: Publish approved immutable release
         env:
+          TARGET_SHA: ${{ inputs.candidate_sha }}
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.release.outputs.tag }}
         shell: bash
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "tag=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "tag=false" >> "$GITHUB_OUTPUT"
-          fi
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "release=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "release=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create version tag
-        if: steps.existing.outputs.tag != 'true'
-        env:
-          TAG: ${{ steps.release.outputs.tag }}
-          TARGET_SHA: ${{ needs.preview.outputs.target_sha }}
-        run: |
-          git tag "$TAG" "$TARGET_SHA"
-          git push origin "refs/tags/$TAG"
-
-      - name: Create GitHub release
-        if: steps.existing.outputs.release != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.release.outputs.tag }}
-          VERSION: ${{ steps.release.outputs.version }}
-        run: >-
-          gh release create "$TAG"
-          --verify-tag
-          --title "Chara's Toolkit $VERSION"
-          --notes-file "$RUNNER_TEMP/release-notes.md"
-
-      - name: Remove known merged release branches
-        shell: bash
-        run: |
-          for branch in \
-            feat/codebase-improvement-planner \
-            feat/typescript-quality-enforcer \
-            feat/content-provenance-hygiene \
-            noop-do-not-create
-          do
-            if git ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null 2>&1; then
-              git push origin --delete "$branch"
+          set -euo pipefail
+          cd release-bundle
+          recorded="$(cat candidate-sha)"
+          archive="$(cat archive-name)"
+          tag="$(cat tag)"
+          test "$recorded" = "$TARGET_SHA" || { echo "Candidate identity changed" >&2; exit 1; }
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release tag" >&2; exit 1; }
+          test "$archive" = "cmdr-chara-charas-toolkit-${tag#v}.tgz" || { echo "Archive does not match release" >&2; exit 1; }
+          sha256sum --check SHA256SUMS
+          cd ..
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA" || { echo "Checked-out main advanced" >&2; exit 1; }
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$TARGET_SHA" || { echo "Main advanced; aborting" >&2; exit 1; }
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            git fetch --force origin "refs/tags/$tag:refs/tags/$tag"
+            existing_tag_target="$(git rev-list -n 1 "$tag^{}")"
+            if [[ "$existing_tag_target" != "$TARGET_SHA" ]]; then
+              echo "Tag already points to a different commit" >&2
+              exit 1
             fi
-          done
+            echo "Tag already points to this candidate; continuing."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$tag" -m "Chara's Toolkit $tag" "$TARGET_SHA"
+            git push origin "refs/tags/$tag"
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release already exists; nothing to publish."
+          else
+            gh release create "$tag" --verify-tag --title "Chara's Toolkit $tag" \
+              --notes-file "release-bundle/release-notes.md" \
+              "release-bundle/$archive" "release-bundle/SHA256SUMS"
+          fi

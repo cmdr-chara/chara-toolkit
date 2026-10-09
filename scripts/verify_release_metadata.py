@@ -101,7 +101,7 @@ def main() -> int:
     if "image_git_blob_sha1" not in renderer or "git_blob_sha1(OUTPUT)" not in renderer:
         return fail("renderer must record the committed preview using Git blob identity")
     if "README_HERO" not in renderer or "render_readme_hero()" not in renderer:
-        return fail("renderer must generate the canonical README hero")
+        return fail("renderer must validate the canonical README hero")
     if f"## {version} - " not in changelog:
         return fail(f"CHANGELOG.md has no release section for {version}")
 

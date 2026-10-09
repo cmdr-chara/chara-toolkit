@@ -7,3 +7,4 @@ auth.json
 sessions/
 archived_sessions/
 memories/
+evaluations/.behavioral-runs/
