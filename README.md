@@ -2,7 +2,7 @@
 
 **Better engineering, any agent.**
 
-22 engineering skills for coding agents, plus a complete Codex workflow.
+22 engineering skills for coding agents, with optional workflow tooling for Codex.
 
 [Guida in italiano](docs/guida-italiano.md)
 
@@ -13,13 +13,13 @@
   <img src=".github/assets/charas-toolkit-readme-hero.png" width="900" alt="Chara's Toolkit — Inspect. Change. Prove." />
 </p>
 
-Chara's Toolkit gives coding agents focused instructions for understanding repositories, finding bugs, changing code safely, and proving that a change works. Each skill is a self-contained `SKILL.md` folder. The Codex setup adds routing, six optional Mission Control roles, and release-based updates.
+Chara's Toolkit gives coding agents focused instructions for understanding repositories, finding bugs, changing code safely, and proving that a change works. Each skill is a self-contained `SKILL.md` folder that can be installed in a compatible Agent Skills client. The full Codex integration adds routing, six optional Mission Control roles, and release-based updates.
 
 ## Choose your setup
 
-### Codex (fully integrated)
+### Full toolkit
 
-Requires **Node.js 18+** and a configured **Codex** installation.
+Requires **Node.js 18+** and a configured **Codex** installation for the complete installer and routing layer.
 
 ```sh
 npx --yes github:cmdr-chara/chara-toolkit setup
@@ -49,14 +49,14 @@ Browse the catalog:
 npx skills add https://github.com/cmdr-chara/chara-toolkit --list
 ```
 
-Install one skill for Codex at user level:
+Install one skill for a compatible client at user level. Replace `codex` with the client adapter you use:
 
 ```sh
 npx skills add https://github.com/cmdr-chara/chara-toolkit \
   --skill repository-intelligence -g -a codex
 ```
 
-This uses the portable `SKILL.md` format. It does not install Codex routing, Mission Control roles, or the toolkit updater. See the [portability guide](docs/portable-skills.md) for client-specific details.
+This uses the portable `SKILL.md` format. It does not install the full toolkit routing layer, Mission Control roles, or the updater. See the [portability guide](docs/portable-skills.md) for client-specific details.
 
 ## Start using it
 
@@ -113,12 +113,12 @@ The machine-readable catalog is in [`skills/llms.txt`](skills/llms.txt). The six
 
 ## What works where
 
-| Capability | Full Codex setup | Compatible Agent Skills client |
+| Capability | Full toolkit | Individual skills |
 | --- | --- | --- |
-| Individual `SKILL.md` folders | Yes | Yes, when the client supports the format |
-| Natural-language routing across the toolkit | Yes | No, install and select skills through the client |
-| Mission Control roles and workflow orchestration | Yes | No, Codex-specific |
-| Toolkit updater and managed `AGENTS.md` block | Yes | No, Codex-specific |
+| Individual `SKILL.md` folders | Included | Installable in compatible clients |
+| Natural-language routing across the toolkit | Codex integration | Client selects installed skills |
+| Mission Control roles and workflow orchestration | Codex integration | Not included |
+| Toolkit updater and managed `AGENTS.md` block | Codex integration | Not included |
 
 The skill folders provide instructions, references, and scripts. They do not grant runtime permissions, API keys, or network access.
 
