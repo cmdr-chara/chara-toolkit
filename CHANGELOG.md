@@ -55,7 +55,9 @@
 
 ## Unreleased
 
-- No unreleased changes.
+- Rebrand as Chara's Toolkit with the tagline "Better engineering, any agent."
+- Add `chara` as the primary CLI executable and retain `codex-toolkit` as a compatibility alias.
+- Retain existing Codex home, updater, managed block, scheduler, and GitHub repository identities until a separately verified migration.
 
 ## 0.8.1 - 2026-08-18
 
@@ -69,7 +71,7 @@
 
 - Add `bug-finder` for proactive discovery of previously unknown correctness defects using explicit invariants, high-risk surface prioritization, and proof/falsification before confirmation.
 - Separate unknown-defect discovery from causal debugging: confirmed bug candidates hand off to `debugging-investigator` only when their root-cause chain or minimal explanatory fix is still uncertain.
-- Add managed global workflow routing to full `setup`: preserve user-authored `AGENTS.md` content outside a Codex Toolkit managed block and install the conditional workflow catalog under the active `CODEX_HOME`.
+- Add managed global workflow routing to full `setup`: preserve user-authored `AGENTS.md` content outside a Chara's Toolkit managed block and install the conditional workflow catalog under the active `CODEX_HOME`.
 - Make routing updates follow the existing release-pinned auto-updater, so new skills and workflow changes arrive together without following unreleased `main` commits.
 - Add fail-closed marker validation, conflict backups, idempotent routing synchronization, package checks, and CI coverage for twenty installable skills and nineteen production routes.
 

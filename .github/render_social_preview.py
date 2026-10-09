@@ -1,4 +1,4 @@
-"""Render canonical GitHub artwork for Codex Toolkit."""
+"""Render canonical GitHub artwork for Chara's Toolkit."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / ".github" / "assets"
-OUTPUT = ASSET_DIR / "codex-toolkit-social-preview.png"
-README_HERO = ASSET_DIR / "codex-toolkit-readme-hero.png"
+OUTPUT = ASSET_DIR / "charas-toolkit-social-preview.png"
+README_HERO = ASSET_DIR / "charas-toolkit-readme-hero.png"
 MANIFEST = ASSET_DIR / "social-preview-manifest.json"
 PACKAGE = ROOT / "package.json"
 CATALOG = ROOT / "skills" / "llms.txt"
@@ -62,6 +62,11 @@ def font(size: int, *, bold: bool = False, mono: bool = False) -> ImageFont.Free
                 if bold
                 else "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
             ),
+            Path(
+                "/usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf"
+                if bold
+                else "/usr/share/fonts/TTF/DejaVuSansMono.ttf"
+            ),
         ]
     else:
         candidates = [
@@ -71,6 +76,11 @@ def font(size: int, *, bold: bool = False, mono: bool = False) -> ImageFont.Free
                 if bold
                 else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
             ),
+            Path(
+                "/usr/share/fonts/TTF/DejaVuSans-Bold.ttf"
+                if bold
+                else "/usr/share/fonts/TTF/DejaVuSans.ttf"
+            ),
         ]
     for candidate in candidates:
         if candidate.exists():
@@ -79,7 +89,7 @@ def font(size: int, *, bold: bool = False, mono: bool = False) -> ImageFont.Free
 
 
 def draw_toolkit_logo(draw: ImageDraw.ImageDraw, x: int, y: int, scale: float = 1.0) -> None:
-    """Draw the three-part Codex Toolkit mark used in the README hero."""
+    """Draw the three-part Chara's Toolkit mark used in the README hero."""
     def points(values: list[tuple[int, int]]) -> list[tuple[int, int]]:
         return [(x + int(px * scale), y + int(py * scale)) for px, py in values]
 
@@ -106,7 +116,7 @@ def render_social_preview() -> Path:
     draw.rectangle((0, 0, 18, 640), fill=BLUE)
     draw.rectangle((18, 0, 28, 640), fill=TEAL)
 
-    draw.text((70, 48), "CODEX TOOLKIT", font=font(19, bold=True, mono=True), fill=BLUE)
+    draw.text((70, 48), "CHARA'S TOOLKIT", font=font(19, bold=True, mono=True), fill=BLUE)
     draw.text(
         (70, 84),
         f"{skill_count} SKILLS  /  6 AGENTS  /  OFFLINE CHECKS",
@@ -178,7 +188,7 @@ def render_social_preview() -> Path:
 
 
 def render_readme_hero() -> Path:
-    """Render the 16:9 README hero approved for Codex Toolkit."""
+    """Render the 16:9 README hero approved for Chara's Toolkit."""
     version, skill_count = release_metadata()
     width, height = 1200, 675
     image = Image.new("RGB", (width, height), HERO_PAPER)
@@ -189,7 +199,7 @@ def render_readme_hero() -> Path:
 
     draw_toolkit_logo(draw, 73, 47, 0.72)
     draw.line((200, 70, 200, 145), fill=HERO_RULE, width=1)
-    draw.text((218, 72), "CODEX TOOLKIT", font=font(31, bold=True, mono=True), fill=HERO_INK)
+    draw.text((218, 72), "CHARA'S TOOLKIT", font=font(31, bold=True, mono=True), fill=HERO_INK)
     draw.text((218, 116), "UNDERSTAND  IMPROVE  SHIP", font=font(15, mono=True), fill=HERO_MUTED)
 
     draw.text((890, 78), f"v{version}", font=font(14, mono=True), fill=HERO_MUTED)

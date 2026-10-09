@@ -10,7 +10,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: codex-toolkit-auto-release
+  group: charas-toolkit-auto-release
   cancel-in-progress: false
 
 jobs:

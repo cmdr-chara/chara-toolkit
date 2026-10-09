@@ -514,14 +514,14 @@ async function installLinuxScheduler(launcher) {
     const service = join(userDir, `${linuxUnit}.service`);
     const timer = join(userDir, `${linuxUnit}.timer`);
     const serviceBody = `[Unit]
-Description=Update Codex Toolkit from the latest published release
+Description=Update Chara's Toolkit from the latest published release
 
 [Service]
 Type=oneshot
 ExecStart=/bin/sh ${shQuote(launcher)}
 `;
     const timerBody = `[Unit]
-Description=Periodically update Codex Toolkit
+Description=Periodically update Chara's Toolkit
 
 [Timer]
 OnBootSec=5min
@@ -665,7 +665,7 @@ async function setup() {
   }
 
   console.log(
-    `Codex Toolkit ${releaseTag} synchronized: ${skills.names.length} skills and 6 Mission Control agents.`,
+    `Chara's Toolkit ${releaseTag} synchronized: ${skills.names.length} skills and 6 Mission Control agents.`,
   );
   if (skills.changed || agentChanges) {
     console.log(`Changed surfaces: ${skills.changed + agentChanges}`);
@@ -679,9 +679,15 @@ async function setup() {
 }
 
 function help() {
-  console.log(`Codex Toolkit installer
+  console.log(`Chara's Toolkit installer
 
 Usage:
+  chara setup
+      Full setup when installed globally; codex-toolkit remains a compatibility alias.
+
+  chara mission-control check
+      Inspect the active Codex integration.
+
   npx --yes github:cmdr-chara/codex-toolkit
       Install/update Mission Control only (legacy behavior).
 

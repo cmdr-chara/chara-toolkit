@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Configured validator core for Codex Toolkit.
+"""Configured validator core for Chara's Toolkit.
 
 The large stable implementation lives in the private sibling module. This module
 applies the current route/provenance/schema extensions and is a supported
@@ -193,8 +193,10 @@ def validate_responsibility_and_provenance(result):
         except impl.json.JSONDecodeError as exc:
             result.error(f"package.json: invalid JSON: {exc}")
         else:
+            if package_data.get("bin", {}).get("chara") != "bin/toolkit.mjs":
+                result.error("package.json: chara bin must route through bin/toolkit.mjs")
             if package_data.get("bin", {}).get("codex-toolkit") != "bin/toolkit.mjs":
-                result.error("package.json: codex-toolkit bin must route through bin/toolkit.mjs")
+                result.error("package.json: codex-toolkit compatibility bin must route through bin/toolkit.mjs")
             files = package_data.get("files", [])
             if not isinstance(files, list) or "orchestration" not in files:
                 result.error("package.json: orchestration directory must be included in package files")

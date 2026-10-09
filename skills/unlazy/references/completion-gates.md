@@ -1,6 +1,6 @@
 # Completion gates
 
-This reference adapts the gate-ledger and Depth Tree concepts from Leonxlnx's MIT-licensed `unlazy` project for Codex Toolkit's safety and evidence model.
+This reference adapts the gate-ledger and Depth Tree concepts from Leonxlnx's MIT-licensed `unlazy` project for Chara's Toolkit's safety and evidence model.
 
 ## Gate schema
 
@@ -87,7 +87,7 @@ The final candidate, not an intermediate snapshot, must satisfy the high-value g
 
 ## Depth Tree adaptation
 
-The original `unlazy` method uses a Depth Tree to split substantial work. Codex Toolkit keeps the structural idea and removes effort arithmetic.
+The original `unlazy` method uses a Depth Tree to split substantial work. Chara's Toolkit keeps the structural idea and removes effort arithmetic.
 
 Rules:
 
