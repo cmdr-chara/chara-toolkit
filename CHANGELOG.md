@@ -1,3 +1,7 @@
+## 0.9.5 - 2026-10-09
+
+- feat: rebrand as Chara's Toolkit (#21) (`113430a3d30f`).
+
 ## 0.9.4 - 2026-09-25
 
 - feat: universalize coordination and Mission Control tooling (`278d15739005`).
