@@ -37,7 +37,7 @@ test("README and generated artwork use the public brand", async () => {
   const readme = await readFile(join(root, "README.md"), "utf8");
   assert.match(readme, /^# Chara's Toolkit/m);
   assert.match(readme, /Better engineering, any agent\./);
-  assert.match(readme, /Codex \(fully integrated\)/);
+  assert.match(readme, /Full toolkit/);
   assert.match(readme, /codex-toolkit.*compatibility alias/);
   assert.doesNotMatch(readme, /codex-toolkit-readme-hero/);
   assert.match(readme, /charas-toolkit-readme-hero/);
