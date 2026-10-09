@@ -9,6 +9,7 @@ This repository defines reusable Codex skills, agents, routing, installation, an
 - Route to the smallest specialist/workflow that owns the task. Do not turn optional workflow edges into mandatory chains.
 - Repository-local `AGENTS.md` instructions remain authoritative over generic toolkit guidance.
 - Specialist safety, approval, migration, and stop conditions cannot be bypassed by orchestration or completion helpers.
+- Treat destructive filesystem, Git, database, and shell operations as a separate authorization boundary on Windows, macOS, and Linux—even in full-access mode. Check literal resolved targets and ownership before acting; never delete drive/filesystem roots, home directories, repository roots, backups, or unrelated work. Do not retry a blocked action using another shell, language, or tool.
 - `unlazy` owns completion discipline; `verification-and-release` owns integrated ship/no-ship judgment. Keep those responsibilities distinct.
 - Managed global `AGENTS.md` installation must preserve all user content outside the toolkit markers and fail closed on malformed/duplicate managed blocks.
 - Auto-update behavior follows published releases, not unreleased `main` commits.

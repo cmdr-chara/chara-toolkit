@@ -12,6 +12,20 @@ Use these as **conditional orchestration patterns**, not mandatory chains. A ste
 - A workflow never overrides a specialist's `AWAITING_APPROVAL`, safety restriction, migration boundary, or user constraint.
 - When a handoff changes the task class, explicitly pass the evidence and scope that justified the transition.
 
+## Cross-platform destructive-operation safety
+
+This boundary applies **before** any task-specific workflow when a proposed action can remove, overwrite, reset, move, or irreversibly alter files or data. It applies equally to Windows PowerShell/CMD/Git Bash/WSL, macOS, and Linux, and remains in force under Full Access / bypass permissions. Instructions are not OS-enforced protection.
+
+1. **Establish authority separately.** Permission to fix, build, test, refactor, or clean does not authorize broad deletion or destruction of existing work. Stop for specific user approval if scope is not already explicit and bounded.
+2. **Verify exact literal targets.** Check the working directory, OS/shell, resolved absolute paths, intended workspace boundary, symlinks/junctions, mounts, globs, environment-variable expansion, and the target listing/diff before execution. No unresolved variables, relative-parent hops, wildcard roots, or interpolated shell strings for destructive targets.
+3. **Protect irrecoverable surfaces.** Never recursively target any drive/filesystem/share root, the home/profile directory, a parent of the workspace, the repository root, mount points, backups, unrelated user directories, or .git metadata. Never treat empty/missing path variables as a valid target. Abort if the target changes between preview and execution.
+4. **Avoid shell ambiguity.** On Windows do not nest PowerShell → cmd /c → rd/rmdir, and do not use backslash as a PowerShell quote escape. For known in-scope inspection use PowerShell -LiteralPath and -WhatIf rather than interpolated command strings. On macOS/Linux do not assume rm root protection prevents deleting home folders, mounts, or other trees. Do not rely on GNU-only flags on BSD/macOS tools.
+5. **Prefer reversible, scoped changes.** Edit files directly, preserve uncommitted work, use throwaway build directories, and inspect with the read-only target preview if deletion is actually needed. Avoid force/recursive operations where a narrower action works. Treat destructive Git, sync-with-delete, scripting deletion APIs, and bulk permission changes as equivalent risks.
+6. **Stop on denial or uncertainty.** Do not switch to Python/Node/PowerShell/Bash/another agent to bypass a restriction. Escalate for precise approval or move the operation into an isolated, least-privilege environment; ordinary tool permission prompts cannot substitute for a sandbox.
+7. **Report evidence.** State exact authorized paths, inspected preview, what was changed or not changed, and any skipped unsafe cleanup. Do not claim a policy file or lexical hook made unrestricted shell execution safe.
+
+For detailed OS examples, optional command hooks, and non-destructive checks, consult docs/destructive-operations-safety.md in the toolkit repository. The optional scripts/guard-destructive-command.mjs and scripts/preview-delete-target.mjs ship with the package but are not enabled automatically.
+
 ## Toolchain preflight
 
 Use when the real task is blocked by an unknown or broken local shell, runtime, package-manager shim, native-command argument boundary, browser capability, or text encoding.

@@ -15,4 +15,6 @@ For substantial software work:
 9. Use `verification-and-release` for final integrated ship/no-ship judgment, not as a generic test runner.
 10. Preserve repository-local `AGENTS.md` instructions. More specific project rules override this generic routing guidance.
 
+**Destructive-operation boundary (always applies):** Full filesystem access is not authorization to delete. Before recursive cleanup, overwrites, mass renames, destructive Git commands, or shell-based file removal, apply the cross-platform safety rules in the installed workflow catalog; inspect exact canonical in-scope paths and stop on ambiguity. Never target filesystem/drive roots, home directories, repository roots, mounts, backups, or user data outside the explicit scope. A denied operation must not be retried through another shell, script, or agent. Host-enforced sandboxing and independently configured tool restrictions remain necessary.
+
 For multi-stage tasks, read the workflow catalog at `~/.codex/codex-toolkit/workflows.md` (or the equivalent path under the active `CODEX_HOME`) and select the smallest matching workflow. Workflow sequencing never grants permissions that an individual specialist does not have.

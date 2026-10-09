@@ -89,7 +89,7 @@ Return format:
 Stop or escalate when:
 ```
 
-Writers preserve unrelated work, avoid opportunistic cleanup, and stop before leaving their ownership boundary.
+Writers preserve unrelated work, avoid opportunistic cleanup, and stop before leaving their ownership boundary. A write scope does not authorize deleting its root, the workspace root, backups, or unapproved user data; blocked destructive work returns to the parent for explicit authorization, never an alternate-tool workaround.
 
 ## Review every handoff
 
