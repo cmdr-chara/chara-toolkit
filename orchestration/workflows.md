@@ -118,7 +118,7 @@ repository-intelligence? → review-and-refactor-code
                          → verification-and-release?
 ```
 
-A defined PR/branch/diff should route here rather than to `bug-finder`.
+A defined PR/branch/diff should route here rather than to `bug-finder`. Its conditional PR protocol scales review depth to the change, challenges candidate findings, separates introduced defects from pre-existing ones, and stops automated fix/re-review after three rounds. Independent readers are optional and read-only. Security-only PR reviews stay with `security-review`; release approval remains with repository protections and `verification-and-release`.
 
 ## Security review
 
