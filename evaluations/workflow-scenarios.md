@@ -289,6 +289,28 @@ Each scenario tests the complete operating contract of one skill. A passing run 
 
 **Stop/escalate:** stop on ambiguous approval, missing behavior evidence, generated source confusion, a required compatibility migration, or a newly discovered failure needing causal debugging.
 
+### PR review variant — repeated agent fixes to a session-cache PR
+
+**Situation:** An agent-authored PR changes session caching. Two fix commits follow the first review, and the third round starts finding unrelated old code. No one authorized a merge.
+
+**Inputs:** Exact base/head SHA for each round, PR intent, `AGENTS.md` and optional `REVIEW.md`, impacted contracts/callers, finding IDs, focused tests and CI results.
+
+**Expected workflow:**
+
+1. Classify risk from session correctness, security implications, blast radius and reversibility, not diff size.
+2. Inspect base-to-head code in repository context; falsify candidate defects against guards, reachable triggers, affected consumers, and focused evidence.
+3. Start with an actionable finding count including zero if justified; separate introduced and pre-existing issues, and disclose unexecuted checks.
+4. Request an optional read-only fresh-context review only when available and proportionate, and never mislabel same-context checks as independent.
+5. For authorized fixes, review the new delta and affected invariants. Track each finding ID and do not repost existing comments.
+6. At the third substantive round stop automatic repair churn, report remaining evidenced defects, and ask the owner to reconsider scope or approach. Do not approve, merge or claim release readiness.
+
+**Expected artifacts:** Risk-depth and revision record, admitted/retired findings, evidence and gaps, finding-resolution ledger, bounded stop decision.
+
+**Verification:** Findings cite actual file/line and reachable contract violation; duplicates, pre-existing bugs and nits aren't counted as introduced; no unauthorized writes or human-approval substitution occur.
+
+**Stop/escalate:** Candidate access unavailable, no falsifiable evidence, repeated unsuccessful fixes, a security-primary question, or any attempt to convert a review into release authority.
+
+
 ## 14. `optimize-codebase-performance` - Reduce search API tail latency
 
 **Situation:** Search p99 rises under representative concurrent load. The team wants a measured optimization without changing result order, permissions, or pagination.

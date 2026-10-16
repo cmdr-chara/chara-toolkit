@@ -668,6 +668,18 @@
           "prompt": "Assess whether this duplicated checkout logic is worth consolidating. Separate real defects from optional cleanup and stop with a proposal.",
           "expected": "activate",
           "reason": "Requests review plus refactor feasibility without immediate edits."
+        },
+        {
+          "id": "review-and-refactor-code-p5",
+          "prompt": "Review this PR against main for introduced correctness bugs. Verify real triggers and affected callers, report risk and the actionable finding count, but do not edit, approve or merge.",
+          "expected": "activate",
+          "reason": "Evidence-first read-only review of a defined PR is owned by review-and-refactor-code."
+        },
+        {
+          "id": "review-and-refactor-code-p6",
+          "prompt": "The author pushed follow-up fixes to this reviewed PR. Inspect only newly changed lines and affected invariants, resolve old finding IDs, and stop the automatic loop at round three.",
+          "expected": "activate",
+          "reason": "Bounded delta-based re-review and convergence belong to the defined-change reviewer."
         }
       ],
       "negative": [
@@ -691,6 +703,13 @@
           "expected": "do_not_activate",
           "route_to": "codebase-evolution-controller",
           "reason": "A compatibility transition is evolution, not refactoring."
+        },
+        {
+          "id": "review-and-refactor-code-n4",
+          "prompt": "Audit the OAuth callback diff only for exploitable authentication bypass, cross-tenant access and secret disclosure. Ignore unrelated quality improvements.",
+          "expected": "do_not_activate",
+          "route_to": "security-review",
+          "reason": "Security exploitability is the main decision even for a specific PR."
         }
       ]
     },
