@@ -1,14 +1,14 @@
 # Mobile Platform Decision Matrix — 2026-07-17
 
-**Information checked:** 2026-07-17  
-**Next review:** 2026-10-15 or earlier after a platform/framework/store change.  
+**Information checked:** 2026-07-17 (original decision-matrix snapshot; follow-up checked 2026-10-16)  
+**Next review:** 2026-11-10 or earlier after a platform/framework/store change.  
 **Purpose:** Current evidence prompts for architecture selection; not a universal ranking.
 
 ## Current framework observations
 
-- Flutter stable documentation and release notes identify Flutter 3.44 as current.
-- Expo SDK 57 was released on 2026-06-30 and maps to React Native 0.86, React 19.2.3, and minimum Node.js 22.13.x in Expo's SDK table.
-- React Native 0.86 is active; 0.85 is also active; 0.84 is end-of-cycle; 0.87 is scheduled as a future release for 2026-08-10.
+- Flutter's current stable feature line is Flutter 3.47, announced August 12, 2026, per official release notes.
+- Expo SDK 58 was announced on 2026-10-15 and maps to React Native 0.88, React 19.3.0, and minimum Node.js 22.13.x in Expo's versioned table; SDK 57 remains a separate historical compatibility line.
+- React Native 0.87 was released on 2026-08-11 with Strict TypeScript API defaults, Metro changes, experimental Swift Package Manager support, and higher Node/Android build-tool requirements. Recheck the standalone RN support schedule and the chosen Expo SDK's pinned RN version.
 - Expo SDK 55+ always uses React Native's New Architecture; it cannot be disabled.
 
 Recheck exact patch versions, OS/toolchain minimums, and store requirements during implementation.
@@ -40,9 +40,15 @@ Recheck exact patch versions, OS/toolchain minimums, and store requirements duri
 
 Every score needs evidence and confidence. Apply disqualifiers before totals and perform sensitivity analysis.
 
+## Targeted source recheck — 2026-10-16
+
+- Flutter 3.47, Expo SDK 58, and React Native 0.87 have superseded the original July framework snapshot. The platform fit/risks comparison remains conditional rather than a new stack recommendation.
+- Expo 58's compatibility table lists React Native 0.88; the separately dated React Native 0.87 post establishes Strict TypeScript and toolchain changes. Use the Expo SDK table for Expo app compatibility, not a generic RN roadmap.
+- Sources: https://docs.flutter.dev/release/release-notes/release-notes-3.47.0 ; https://expo.dev/changelog/sdk-58 ; https://docs.expo.dev/versions/v58.0.0/ ; https://reactnative.dev/blog/2026/08/11/react-native-0.87
+
 ## Source URLs
 
-- https://docs.flutter.dev/release/release-notes/release-notes-3.44.0
+- https://docs.flutter.dev/release/release-notes/release-notes-3.47.0
 - https://docs.flutter.dev/app-architecture
 - https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility
 - https://docs.flutter.dev/perf
