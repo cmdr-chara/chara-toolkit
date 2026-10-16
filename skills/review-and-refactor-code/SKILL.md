@@ -1,48 +1,49 @@
 ---
 name: review-and-refactor-code
-description: Review a defined code area for actionable defects and perform behavior-preserving refactors. Use for bounded code review, maintainability cleanup, decomposition, or refactoring.
+description: Review defined PRs and diffs for verified defects, manage bounded review rounds, or propose behavior-preserving refactors.
 ---
 
 # Review and Refactor Code
 
-Find evidence-backed problems in a defined scope and improve structure without smuggling in behavior changes.
+Find actionable regressions in a defined change and improve structure without smuggling in behavior changes. Favor trustworthy findings and review loops that converge.
 
 ## Trigger boundary
 
-Use this skill for a PR/diff review, a bounded maintainability assessment, cleanup, decomposition, or behavior-preserving refactor.
+Use for a PR/diff review, bounded maintainability assessment, cleanup, decomposition, or behavior-preserving refactor.
 
-Do not trigger for broad repository discovery, an unknown runtime cause, proactive bug hunting, migrations, security-only review, measured performance work, or final release approval.
+Do not trigger for general repository discovery, unknown runtime causes, proactive bug hunting unrelated to a diff, migrations, security-only review, measured performance, or final release approval.
 
 ## Required inputs
 
-Resolve repository/scope, base/head or bounded area, intended behavior, public/internal contracts, relevant tests, generated/vendor boundaries, constraints, approval state, and protected user work.
+Resolve repository/scope, base and exact head or bounded area, intended behavior and PR acceptance criteria, affected consumers/contracts/tests, repository `AGENTS.md` and optional `REVIEW.md`, generated/vendor boundaries, working-tree state, approval, and protected user work.
 
 ## Safety baseline
 
-- Preserve the working tree and uncommitted work.
-- Start read-only for review/refactor assessment.
-- Findings require an observable failure mode or concrete maintenance risk, not style preference.
-- Do not mix feature behavior into a refactor unless explicitly requested.
-- Broad edits stop at a concrete proposal unless already authorized.
+- Begin read-only for reviews. Do not infer edit, merge, approval, or policy-change authority from a request to review.
+- Preserve uncommitted work, author history, existing review decisions, and repository-specific instructions.
+- Findings require a reachable contract failure and precise evidence, not stylistic preference or hypothetical problems.
+- Pre-existing defects are not newly introduced regressions. Distinguish and deduplicate them.
+- AI reviewer findings never count as required human approvals. Repository/host controls and release judgment remain separate.
 
 ## Workflow
 
-1. **Map the change surface.** Trace changed files, callers/callees, contracts, configuration, data shape, side effects, and relevant tests.
-2. **Admit findings.** Use `references/finding-contract.md`. Separate correctness/integration findings from optional structural improvements. When separate incidents show a recurring agent-created failure mechanism, read `references/recurring-errors.md` and prefer a verified mechanical preventive control over additional prose.
-3. **Define parity.** Before refactoring, state behavior that must remain stable using `references/behavior-parity.md`.
-4. **Characterize legacy behavior when needed.** If important untested code must change, read `references/characterization-testing.md` and pin observed behavior before structural edits.
-5. **Propose the smallest useful slice.** State files, invariants, expected complexity reduction, risks, and focused verification. When redefining module contracts, domain language, or responsibility placement, read `references/module-seams.md` to avoid adding shallow abstractions. Stop at `AWAITING_APPROVAL` if broad changes were not authorized.
-6. **Refactor incrementally.** Keep interfaces explicit, preserve compatibility, avoid speculative abstraction, and remove old paths only after replacements are wired.
-7. **Verify the final slice.** Run targeted parity/correctness checks and inspect the final diff for accidental behavior changes.
+1. **Freeze the changed surface.** Record base/head, PR purpose, changed files, impacted callers, state/data/permissions, contracts, tests and exclusions. Compare subsequent fix commits against the last reviewed head.
+2. **For a PR or diff, load [pr-review-protocol.md](references/pr-review-protocol.md).** Select Quick, Standard, or Deep review from blast radius, consequence and reversibility, not diff length. Read a local `REVIEW.md` if present, without assuming automatic enforcement.
+3. **Challenge candidate findings.** Apply [finding-contract.md](references/finding-contract.md). Trace reachable triggers, guards and counterexamples before admitting a claim. Use a genuinely fresh-context *read-only* reviewer on higher-risk changes if available and proportionate. Never call same-context analysis independent verification.
+4. **Return a high-signal result.** Begin with `Actionable findings: N`, including `0` when justified. Cite precise introduced defects, separate pre-existing issues, identify checked SHAs, list *observed* test/CI evidence, risk and coverage gaps.
+5. **Make approved fixes converge.** Fix the defect class, test affected invariants, and re-review only the new delta plus possible repair regressions. Preserve finding IDs and don't repeat old nits. After three substantive review rounds, stop automatic fix/review cycling and escalate approach decisions to the owner.
+6. **For refactors, first define parity.** Use [behavior-parity.md](references/behavior-parity.md). Load [characterization-testing.md](references/characterization-testing.md) when material behavior is untested; load [module-seams.md](references/module-seams.md) for responsibility redesign. Propose the smallest safe slice, invariants, checks and risks. Stop at `AWAITING_APPROVAL` if broad edits are not authorized.
+7. **Implement only approved refactor slices.** Preserve interfaces, characterize legacy behavior where needed, check relevant consumers and test parity, and inspect the final diff for unintended changes.
+8. **Improve project policy only if asked.** Use [review-policy-template.md](references/review-policy-template.md) for opting into team review policy. When repeated *proven* agent errors demand prevention, read [recurring-errors.md](references/recurring-errors.md) and prefer bounded mechanical checks over more generic prose.
 
 ## Handoffs and interaction boundaries
 
-Use `security-review` when security is the primary decision, `debugging-investigator` for a concrete unexplained symptom, evolution for compatibility transitions, performance for measured bottlenecks, platform builders for product behavior, and `verification-and-release` for final ship judgment.
+`security-review` owns exploitability when security is the main concern, `debugging-investigator` owns unexplained runtime symptoms, evolution owns compatibility transitions, performance owns measured bottlenecks, builders own implementation, and `verification-and-release` owns the integrated ship/no-ship decision. Independent readers are optional and read-only; the primary reviewer owns synthesis and evidence.
 
 ## Failure handling
 
-If behavior is undocumented and cannot be safely inferred, characterize it or narrow the refactor. If a proposed cleanup changes contracts, reclassify it as a migration or feature instead of calling it behavior-preserving.
+If files or candidate revisions are inaccessible, narrow coverage and state the gap. Retire claims that fail falsification instead of inflating confidence. Do not perform more than three automatic review/fix rounds without a fresh owner decision.
 
 ## Stop conditions
 
-Stop after the review/proposal when approval is absent. After approval, stop when the bounded refactor is integrated, parity evidence passes, and remaining risks are explicit.
+Stop a review with counted, evidence-backed findings (including explicit zero) and remaining coverage limits, without unauthorized edits or approvals. Stop a broad refactor at `AWAITING_APPROVAL` unless the approved slices and parity evidence are complete. Never silently merge or deploy.
