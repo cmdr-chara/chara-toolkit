@@ -89,7 +89,7 @@ Your project's `AGENTS.md` remains higher priority than general toolkit guidance
 | `repository-intelligence` | Map architecture, ownership, dependencies, hotspots, and change impact. |
 | `bug-finder` | Hunt for previously unknown correctness defects and prove or retire candidates. |
 | `debugging-investigator` | Reproduce a concrete failure, trace its cause, and design a focused fix. |
-| `review-and-refactor-code` | Review a defined area and make behavior-preserving refactors. |
+| `review-and-refactor-code` | Review PRs with verified findings and bounded re-review, or plan behavior-preserving refactors. |
 | `security-review` | Trace trust boundaries and assess exploitable security flaws. |
 | `optimize-codebase-performance` | Measure a named bottleneck and compare a bounded optimization. |
 | `codebase-evolution-controller` | Plan dependency, API, schema, and framework transitions with rollback paths. |
@@ -108,6 +108,14 @@ Your project's `AGENTS.md` remains higher priority than general toolkit guidance
 | `delegate-with-mission-cards` | Split independent work into bounded missions with explicit ownership. |
 | `multi-agent-work-coordinator` | Coordinate safe parallel work across non-overlapping resources. |
 | `content-provenance-hygiene` | Inspect and sanitize authorized metadata and provenance surfaces. |
+
+### Evidence-first pull request review
+
+Use `review-and-refactor-code` with a specific PR or diff. It now adjusts review depth to risk, validates suspected bugs against real code paths, distinguishes introduced from pre-existing issues, and stops agent fix/review cycles after three substantive rounds. Findings begin with a count, including zero when supported by the inspected scope.
+
+The [PR review protocol](skills/review-and-refactor-code/references/pr-review-protocol.md) defines the workflow. The [opt-in policy guide](skills/review-and-refactor-code/references/review-policy-template.md) includes a `REVIEW.md` example and adoption guidance. Chara's Toolkit itself now includes [`REVIEW.md`](REVIEW.md) and a [pull-request template](.github/PULL_REQUEST_TEMPLATE.md).
+
+This is a skill upgrade, not an automatically installed review bot, enforced GitHub protection, or human approval. The existing security and release specialists retain their responsibilities.
 
 The machine-readable catalog is in [`skills/llms.txt`](skills/llms.txt). The six optional roles are `architect-writer`, `builder-writer`, `investigator-reader`, `patcher-writer`, `pathfinder-reader`, and `sentinel-reader`.
 
