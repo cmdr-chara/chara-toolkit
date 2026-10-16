@@ -1,5 +1,12 @@
 ## Unreleased
 
+- No unreleased changes.
+
+## 0.9.6 - 2026-10-16
+
+- Upgrade PR review with evidence-checked findings, risk-adjusted depth, optional independent verification, and a three-round convergence stop (#22).
+- Add opt-in review policy guidance, repository REVIEW.md, PR template, and regression-focused routing/workflow evaluations.
+
 - Add opt-in project verification with live readiness checks and explicit execution acknowledgment.
 - Add signed managed-install approval, cross-platform destructive-operation guards, and offline behavioral/outcome evaluation helpers.
 - Add recurring-error auditing and measured GitHub Actions guidance while keeping claims bounded to available evidence.
