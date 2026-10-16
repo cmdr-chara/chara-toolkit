@@ -1,6 +1,6 @@
 ---
 name: review-and-refactor-code
-description: Review defined PRs and diffs for verified defects, manage bounded review rounds, or propose behavior-preserving refactors.
+description: Use for defined PR/diff reviews, verified defect findings, bounded review rounds, or behavior-preserving refactors.
 ---
 
 # Review and Refactor Code
@@ -9,7 +9,7 @@ Find actionable regressions in a defined change and improve structure without sm
 
 ## Trigger boundary
 
-Use for a PR/diff review, bounded maintainability assessment, cleanup, decomposition, or behavior-preserving refactor.
+Use this skill for a defined PR/diff review, bounded maintainability assessment, cleanup, decomposition, or behavior-preserving refactor.
 
 Do not trigger for general repository discovery, unknown runtime causes, proactive bug hunting unrelated to a diff, migrations, security-only review, measured performance, or final release approval.
 
