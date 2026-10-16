@@ -1,15 +1,15 @@
 # Web Ecosystem Reference — 2026-09-24
 
-**Information checked:** 2026-09-24
-**Next review:** 2026-09-30 for the scheduled Next.js September security release, or earlier after a framework/security change.
+**Information checked:** 2026-09-24 (original inventory; targeted follow-up checked 2026-10-16)
+**Next review:** 2026-10-30 or earlier after a Next.js/React advisory or release.
 **Scope:** React/Next.js production interfaces and conditional supporting packages.  
 **Rule:** Recheck registry peer dependencies, lockfile resolution, official releases, advisories, and licenses at execution time. This file is evidence, not a fixed stack.
 
 ## Framework baseline
 
 - React 19.3 is the current documented feature line, released 2026-09-09. Recheck the resolved React/React DOM/RSC versions and current advisories before release.
-- Next.js 16.x remains Active LTS and 15.x Maintenance LTS. Next.js 16.3 is stable.
-- The 2026-09-22 out-of-band security update requires at least Next.js 16.3.6 (Active LTS) or 15.5.26 (Maintenance LTS). A scheduled September security release is announced for 2026-09-30 with 16.3.7 and 15.5.27, so recheck the official security page before any release after that date.
+- Next.js 16.x remains Active LTS and 15.x Maintenance LTS. Next.js 16.4 is stable as of 2026-10-16.
+- September 30 security patches shipped as Next.js 16.3.8 / 15.5.27; 16.3.7 was not the security release. October 14 security advisories supersede those minimums: use 16.4.1 (16.x) or 15.5.28 (15.x), then check for later advisories and verify the resolved lockfile.
 - Create React App is deprecated for new applications; choose a framework or maintained build tool based on product needs.
 
 ## Conditional package evidence
@@ -18,7 +18,7 @@
 
 | Package/capability | Compatibility and maintenance checked | License | Security/deprecation | Runtime/build cost | Built-in alternative | Choose when | Avoid when | Sources |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Next.js | 16.x Active LTS; 15.x Maintenance LTS. Next.js 16.3 is stable; verify the resolved patch against current security releases. | MIT | As of 2026-09-24, use at least 16.3.6 or 15.5.26 due the September 22 out-of-band security update; a scheduled September 30 release is already announced, so recheck before shipping. | Framework server/build/client runtime; client boundaries and adapter behavior affect cost. | React plus a smaller build/router/server stack when framework features are unnecessary. | Routing, rendering, data/cache, deployment integration, and SEO/server needs justify a framework. | Static widget/library, incompatible deployment contract, or team cannot own server/framework semantics. | https://nextjs.org/blog/next-16-3 ; https://nextjs.org/blog ; https://nextjs.org/support-policy ; https://nextjs.org/docs |
+| Next.js | 16.x Active LTS; 15.x Maintenance LTS. Next.js 16.4 is stable; verify the resolved 16.4.1+ or 15.5.28+ patch against current advisories. | MIT | As of 2026-10-16, use at least 16.4.1 or 15.5.28 on the respective supported lines: October 14 advisories include critical RCE and high-severity denial-of-service issues. September-only patches no longer suffice. | Framework server/build/client runtime; client boundaries and adapter behavior affect cost. | React plus a smaller build/router/server stack when framework features are unnecessary. | Routing, rendering, data/cache, deployment integration, and SEO/server needs justify a framework. | Static widget/library, incompatible deployment contract, or team cannot own server/framework semantics. | https://nextjs.org/blog ; https://nextjs.org/support-policy ; https://nextjs.org/docs ; https://github.com/vercel/next.js/releases/tag/v16.4.1 ; https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr ; https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw ; https://github.com/vercel/next.js/security/advisories/GHSA-p3m5-59mp-jv5r |
 | React | 19.3 is the current documented release line as of 2026-09-24; verify framework peer support and resolved React DOM/RSC patches. | MIT | Review current React security guidance and actual transitive RSC packages; CRA remains deprecated. | Client hydration/render work depends on architecture; Server Components can reduce client code when used deliberately. | Native HTML/JS for noncomponent/simple pages. | Stateful component UI and ecosystem/framework integration are warranted. | Static content with no component/runtime need or unsupported framework peer range. | https://react.dev/blog/2026/09/09/react-19-3 ; https://react.dev/blog/2025/12/11/denial-of-service-and-source-code-exposure-in-react-server-components ; https://react.dev/blog/2025/02/14/sunsetting-create-react-app |
 | Base UI | Current official React headless-component docs/repository; verify component package peers against repository React version. | MIT | No deprecation found in checked official sources; still review advisories/lockfile. | Per-component client code and behavior; styling remains application-owned. | Native elements and existing design-system primitives. | Accessible complex primitives are needed and Base UI matches the existing system. | Simple native controls or a repository already standardized on another primitive layer. | https://base-ui.com/ ; https://github.com/mui/base-ui |
 | Radix Primitives | Maintained by WorkOS; official docs and repository active. Verify each package peer range and React 19 behavior in the target app. | MIT | No deprecation found in checked official sources; inspect package advisories. | Client behavior per imported primitive; custom styling and portal/focus behavior require integration tests. | Native elements or existing primitives. | Dialog/menu/popover/tabs/combobox-like behavior needs established accessible primitives. | Adding a second primitive system or wrapping simple controls unnecessarily. | https://www.radix-ui.com/primitives ; https://github.com/radix-ui/primitives |
@@ -49,6 +49,13 @@ Framework/security/accessibility/performance sources used in the skill:
 - https://web.dev/articles/lcp
 - https://web.dev/articles/inp
 - https://web.dev/articles/cls
+
+## Targeted source recheck — 2026-10-16
+
+- Reviewed the official October 14 Next.js security advisories for RCE and denial-of-service vulnerabilities. Older September patch levels must no longer be recommended as the current security baseline.
+- The official Next.js release feed now includes 16.4 stable (October 6), and React's September 9 release notes document the React 19.3 feature line.
+- This is a targeted framework/security update. Other package publication ages in the table are historical September 24 observations, not claims that all peers, licenses, and security advisories were rechecked.
+- Primary sources: https://github.com/vercel/next.js/releases/tag/v16.4.1 ; https://github.com/vercel/next.js/releases/tag/v15.5.28 ; https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr ; https://github.com/vercel/next.js/security/advisories/GHSA-p3m5-59mp-jv5r ; https://react.dev/blog/2026/09/09/react-19-3
 
 ## Refresh procedure
 
