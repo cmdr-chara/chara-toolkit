@@ -93,3 +93,16 @@ The dispatch contract also degrades explicitly: when named custom roles are unav
 | https://claude.dev/blog/solving-code-review-at-anthropic/ (Anthropic, published 2026-10-15) | 2026-10-16 | Pre-PR verification, contextual PR review, independently challenged findings, risk-based depth, layered CI/security/human gates, bounded review rounds, delta-only re-review, incident evaluations and fast rollback | Updated the existing `review-and-refactor-code` owner with opt-in PR review and policy references. Kept `security-review`, `verification-and-release`, human approvals and GitHub enforcement separate. |
 
 The article describes Anthropic's own internally reported outcomes, not measured improvements in this toolkit. No article prose, code or imagery was copied. A `REVIEW.md` is advisory until explicitly read; host controls govern CI, approvals and merges.
+
+## Release freshness follow-up — 2026-10-16
+
+The manual 0.9.6 release job failed because four dated references had past `Next review` deadlines. Ordinary CI used a hard-coded 2026-09-25 `--as-of`, while release verification used the actual UTC date; this discrepancy is corrected by checking the current UTC date in both CI phases. No validator rule or release approval control was weakened.
+
+Original dated-reference filenames and their initial `Information checked` dates remain historical. Each affected file now has a dated, scoped October 16 update for materially changed facts, plus a new finite review deadline.
+
+- Next.js October 14 critical/high advisories and patch releases: https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr ; https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw ; https://github.com/vercel/next.js/security/advisories/GHSA-p3m5-59mp-jv5r
+- Expo SDK 58/SDK 57 corrections: https://expo.dev/changelog/sdk-58 ; https://docs.expo.dev/versions/v58.0.0/ ; https://expo.dev/changelog/sdk-57
+- Flutter 3.47 and selected package metadata: https://docs.flutter.dev/release/release-notes/release-notes-3.47.0 ; https://pub.dev/packages/go_router/versions ; https://pub.dev/packages/flutter_riverpod/versions ; https://pub.dev/packages/freezed/versions ; https://pub.dev/packages/flutter_secure_storage/versions ; https://pub.dev/packages/drift/versions
+- React Native 0.87: https://reactnative.dev/blog/2026/08/11/react-native-0.87
+
+This is a targeted follow-up, not a claim that the unchanged package rows have been comprehensively reaudited. Resolve the actual target project's dependency graph, SDK/platform requirements, licenses, and advisories before choosing new versions.
