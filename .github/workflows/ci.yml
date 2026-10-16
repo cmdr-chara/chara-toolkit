@@ -38,7 +38,7 @@ jobs:
         run: ruby -e 'require "yaml"; Dir.glob(".github/workflows/*.yml").each { |path| YAML.parse_file(path) }'
 
       - name: Validate skill pack
-        run: python scripts/validate_skill_pack.py . --as-of 2026-09-25
+        run: python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
 
       - name: Verify anti-slop vendor integrity
         run: python scripts/verify_anti_slop_vendor.py .
@@ -50,7 +50,7 @@ jobs:
         run: python scripts/verify_release_metadata.py .
 
       - name: Run helper smoke tests
-        run: python scripts/run_smoke_tests.py . --as-of 2026-09-25
+        run: python scripts/run_smoke_tests.py . --as-of "$(date -u +%Y-%m-%d)"
 
       - name: Test paired behavioral evaluator (offline)
         run: node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs

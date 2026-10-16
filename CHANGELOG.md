@@ -6,6 +6,7 @@
 
 - Upgrade PR review with evidence-checked findings, risk-adjusted depth, optional independent verification, and a three-round convergence stop (#22).
 - Add opt-in review policy guidance, repository REVIEW.md, PR template, and regression-focused routing/workflow evaluations.
+- Refresh Next.js, Expo/React Native, Flutter, and mobile architecture references against current releases/security advisories; make ordinary CI use today's UTC date for freshness checks, matching release verification.
 
 - Add opt-in project verification with live readiness checks and explicit execution acknowledgment.
 - Add signed managed-install approval, cross-platform destructive-operation guards, and offline behavioral/outcome evaluation helpers.
