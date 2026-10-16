@@ -86,3 +86,10 @@ Mission Control now defines role identity through sandbox authority, scope, exec
 
 The dispatch contract also degrades explicitly: when named custom roles are unavailable, the parent or an available generic subagent may execute the same bounded mission card, but the toolkit must not claim that an unavailable role or sandbox profile was applied.
 
+## Evidence-first PR review synthesis — 2026-10-16
+
+| Source | Checked | Source-derived practices | Toolkit adaptation |
+| --- | --- | --- | --- |
+| https://claude.dev/blog/solving-code-review-at-anthropic/ (Anthropic, published 2026-10-15) | 2026-10-16 | Pre-PR verification, contextual PR review, independently challenged findings, risk-based depth, layered CI/security/human gates, bounded review rounds, delta-only re-review, incident evaluations and fast rollback | Updated the existing `review-and-refactor-code` owner with opt-in PR review and policy references. Kept `security-review`, `verification-and-release`, human approvals and GitHub enforcement separate. |
+
+The article describes Anthropic's own internally reported outcomes, not measured improvements in this toolkit. No article prose, code or imagery was copied. A `REVIEW.md` is advisory until explicitly read; host controls govern CI, approvals and merges.

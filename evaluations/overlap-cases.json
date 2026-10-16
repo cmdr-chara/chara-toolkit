@@ -242,6 +242,25 @@
       ],
       "primary_decision": "The request is a platform-wide production audit.",
       "anti_route": "Do not make the performance skill co-primary for one concern inside a broader Flutter audit."
+    },
+    {
+      "id": "overlap-25",
+      "prompt": "Review the payment feature PR for regressions, then decide if the final integrated candidate can ship with its CI evidence and rollback plan.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "verification-and-release"
+      ],
+      "primary_decision": "Defined change findings are owned by review; frozen-candidate release judgment belongs to verification-and-release.",
+      "anti_route": "A clean PR review is not a bot approval or sufficient evidence to release without the final gate."
+    },
+    {
+      "id": "overlap-26",
+      "prompt": "Review this feature PR exclusively for reachable SSRF and authentication bypass vulnerabilities.",
+      "expected_sequence": [
+        "security-review"
+      ],
+      "primary_decision": "Security exploitability is primary; a PR wrapper does not make generic review co-primary.",
+      "anti_route": "Do not report speculative scanner warnings or invoke general refactor review for style."
     }
   ]
 }

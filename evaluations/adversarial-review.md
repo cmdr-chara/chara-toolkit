@@ -37,3 +37,14 @@
 4. Resolve framework/package claims against the target project's actual lockfiles before using them.
 5. Run routing cases in the intended Codex client/harness; static validation cannot measure model activation precision.
 6. Run platform/device/browser/store scenarios with real toolchains where consequence warrants it; this build runtime did not include every ecosystem SDK or store credential.
+
+## PR review and convergence upgrade — 2026-10-16
+
+- **False positives:** Suspect lines are not findings until a reachable contract violation survives counterexample checks with exact source evidence.
+- **Ping-pong:** Re-review new deltas and touched invariants, track finding IDs, and stop after three substantive rounds instead of generating unlimited agent corrections.
+- **Risk theater:** Deep review is not required for unrelated low-risk copy, and Quick review never authorizes a merge or replaces required human sign-off.
+- **Routing collisions:** General PR defects stay in `review-and-refactor-code`. Security exploitability stays in `security-review` and final release decision in `verification-and-release`.
+- **Fake independence:** A same-context review must not claim an independent verifier. Fresh read-only reviewers are optional, availability- and risk-dependent.
+- **Policy vs enforcement:** `REVIEW.md`, PR templates and skills do not enforce branch protection, status checks or review approvals.
+
+These are new operating controls and expected adversarial outcomes, not evidence of improved live-model defect recall. Structural validation, PR CI and live routing evaluations must be reported separately.
