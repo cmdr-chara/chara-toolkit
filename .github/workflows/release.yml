@@ -64,9 +64,10 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
-          python scripts/verify_anti_slop_vendor.py .
+          npm install --no-save --no-package-lock --no-audit --no-fund --prefix "$RUNNER_TEMP/oxlint" oxlint@1.89.0
+          OXLINT_BIN="$RUNNER_TEMP/oxlint/node_modules/.bin/oxlint" node --test scripts/test_chara_lint.mjs
           python scripts/verify_release_metadata.py .
-          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs
+          node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs scripts/test_retired_skills.mjs scripts/test_agent_targets.mjs scripts/test_mission_control.mjs
           git diff --exit-code -- .github/assets package.json CHANGELOG.md scripts bin skills orchestration
           version="$(node -p "require('./package.json').version")"
           tag="v${version}"

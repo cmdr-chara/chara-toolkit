@@ -1,6 +1,6 @@
 ---
 name: codebase-evolution-controller
-description: Plan and execute dependency, framework, schema, API, or runtime transitions with compatibility and rollback. Use when a known current state must move safely to a defined target.
+description: Plan and execute dependency, framework, schema, API, or runtime transitions with compatibility and rollback. Use when a known current state must move safely to a defined target. Not for unexplained failures, feature work, or performance tuning.
 ---
 
 # Codebase Evolution Controller
@@ -47,7 +47,7 @@ Verify the resulting signals against authoritative repository evidence.
 
 ## Handoffs and interaction boundaries
 
-Use `repository-intelligence` for unclear blast radius, `security-review` for security-first code assessment, `debugging-investigator` when a migration uncovers an unexplained failure, platform builders for implementation details, documentation synchronization for migration docs, and `verification-and-release` for final ship judgment.
+Use `repository-intelligence` for unclear blast radius, `security-review` for security-first code assessment, `debugging-investigator` when a migration uncovers an unexplained failure, a platform builder (`production-web-builder`, `flutter-production-builder`, or `expo-react-native-builder`) for implementation details, `documentation-synchronizer` for migration docs, and `verification-and-release` for final ship judgment.
 
 ## Failure handling
 

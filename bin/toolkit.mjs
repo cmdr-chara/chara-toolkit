@@ -5,19 +5,24 @@ import { cp, lstat, mkdir, readFile, readdir, rename, rm, stat, writeFile } from
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { verifyBundleApproval, verifyInstalled } from "../scripts/enterprise-approval.mjs";
+import { resolveTargets } from "./agent-targets.mjs";
 import { fileURLToPath } from "node:url";
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const legacyInstaller = join(packageRoot, "bin", "install.mjs");
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
+const optionValue = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
+const userHome = optionValue("--home") || homedir();
 const codexHomeIndex = args.indexOf("--codex-home");
 const codexHomeArg = codexHomeIndex >= 0 ? args[codexHomeIndex + 1] : undefined;
-const codexHome = codexHomeArg || process.env.CODEX_HOME || join(homedir(), ".codex");
+const codexHome = codexHomeArg || process.env.CODEX_HOME || join(userHome, ".codex");
 
 if (codexHomeIndex >= 0 && !codexHomeArg) {
   throw new Error("--codex-home requires a path");
 }
+const agentsSpec = optionValue("--agents") || "auto";
+const standardSkillsRoot = join(userHome, ".agents", "skills");
 
 // Existing managed markers remain stable across the public name change.
 const managedStart = "<!-- codex-toolkit:start -->";
@@ -147,9 +152,10 @@ async function assertNoSymlinks(paths) {
 
 async function preflightEnterpriseHome() {
   const paths = [codexHome, join(codexHome, "skills"), join(codexHome, "agents"),
-    join(codexHome, "codex-toolkit"), join(codexHome, "AGENTS.md"), marker];
-  const skillsPath = join(codexHome, "skills");
-  if (await exists(skillsPath)) {
+    join(codexHome, "codex-toolkit"), join(codexHome, "AGENTS.md"), marker,
+    join(userHome, ".agents"), standardSkillsRoot];
+  for (const skillsPath of [join(codexHome, "skills"), standardSkillsRoot]) {
+    if (!(await exists(skillsPath))) continue;
     for (const entry of await readdir(join(packageRoot, "skills"), { withFileTypes: true })) {
       if (entry.isDirectory()) paths.push(join(skillsPath, entry.name));
     }
@@ -169,7 +175,7 @@ async function preflightEnterpriseHome() {
 }
 
 function parseEnterpriseArgs() {
-  const values = {}, opts = new Set(["--policy", "--signature", "--trusted-key", "--codex-home"]);
+  const values = {}, opts = new Set(["--policy", "--signature", "--trusted-key", "--codex-home", "--home"]);
   const seen = new Set();
   for (let i = 1; i < args.length; i++) {
     const key = args[i];
@@ -207,11 +213,12 @@ async function enterpriseCommand() {
     if (state.schema !== 1 || state.policy_sha256 !== approval.policy_sha256
       || state.bundle_sha256 !== approval.bundle_sha256 || state.trusted_key_sha256 !== approval.trusted_key_sha256)
       throw Error("Installed managed approval does not match supplied signed policy");
-    const checked = await verifyInstalled({ root: packageRoot, codexHome });
+    const checked = await verifyInstalled({ root: packageRoot, codexHome, skillsRoot: standardSkillsRoot });
     console.log("Managed installation verified: " + checked.skills + " skills, " + checked.roles + " roles");
     return;
   }
-  const legacyArgs = ["setup", "--no-auto-update", "--codex-home", codexHome];
+  // Managed installs stay scoped to the Codex integration and the standard skills folder.
+  const legacyArgs = ["setup", "--no-auto-update", "--codex-home", codexHome, "--home", userHome, "--agents", "codex"];
   if (dryRun) legacyArgs.push("--dry-run");
   runLegacy(legacyArgs);
   await installOrchestration();
@@ -219,7 +226,7 @@ async function enterpriseCommand() {
     console.log("Enterprise dry-run: signed approval verified; no files changed");
     return;
   }
-  const checked = await verifyInstalled({ root: packageRoot, codexHome });
+  const checked = await verifyInstalled({ root: packageRoot, codexHome, skillsRoot: standardSkillsRoot });
   const stampState = { schema: 1, release: approval.release, revision: approval.revision,
     bundle_sha256: approval.bundle_sha256, policy_sha256: approval.policy_sha256,
     trusted_key_sha256: approval.trusted_key_sha256, installed_at: new Date().toISOString() };
@@ -245,11 +252,14 @@ if (command === "enterprise-setup" || command === "enterprise-check") {
   if (managed && modifying) {
     throw Error("This CODEX_HOME has a managed installation; use enterprise-setup with a signed approval");
   }
+  // Decide before installing: setup itself creates toolkit state under CODEX_HOME.
+  const { codex } = command === "setup"
+    ? await resolveTargets({ spec: agentsSpec, home: userHome, codexHome, codexExplicit: Boolean(codexHomeArg || process.env.CODEX_HOME) })
+    : { codex: true };
   runLegacy();
 
   if (command === "setup") {
-    await installOrchestration();
-    console.log("Start a fresh Codex task to load updated skills, agents, and routing instructions.");
+    if (codex) await installOrchestration();
   } else if (command === "auto-update" && args[1] === "remove") {
     await installOrchestration();
     console.log("Toolkit routing remains installed; only automatic updates were disabled.");

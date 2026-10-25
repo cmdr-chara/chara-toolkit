@@ -14,7 +14,7 @@ This suite tests routing, overlap resolution, complete workflows, resource integ
 - `post-install-routing-smoke.md`: a compact live-client check for all twenty-one production skill routes and the highest-risk overlaps.
 - `mission-control-universal.json`: non-code and mixed-artifact Mission Control scenarios covering documents, research, data, and all six portable roles.
 
-The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, unlazy, bug-finder, toolchain-preflight, and security-review routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
+The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, completion-proof, bug-finder, toolchain-preflight, and security-review routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
 
 ## Structural run
 
@@ -24,7 +24,7 @@ From the pack root:
 python scripts/validate_skill_pack.py . --as-of 2026-09-24
 ```
 
-The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, dated references, source URLs, unsafe command strings, Python syntax, vendored anti-slop integrity/provenance, licensing, and obvious long-paragraph duplication.
+The validator checks schema/counts, skill/resource existence, local links, frontmatter, line/token proxies, absence of dated snapshots, source URLs, unsafe command strings, Python syntax, the bundled chara-lint plugin, originality markers, licensing, and obvious long-paragraph duplication.
 
 ## Paired live behavior probes
 
@@ -70,7 +70,7 @@ Execute each scenario against a representative fixture or real repository. Revie
 - conditional package/platform decisions;
 - TypeScript quality findings verified beyond heuristic text matches and remediated without lint laundering;
 - provenance hygiene that inspects before mutation, preserves authorization/scope, checks runtime capabilities, and never equates sanitation with human authorship;
-- unlazy completion ledgers that keep blocked work visible, preserve specialist approval boundaries, rerun stale high-value checks, and re-measure final quantitative claims;
+- completion-proof done contracts that trace every clause to a source, balance coverage rosters on the final candidate, keep blocked and waived work visible, preserve specialist approval boundaries, re-collect stale receipts, and bind every completion or numeric claim to fresh evidence;
 - bug-finder hunts that derive real invariants, distinguish confirmed/plausible/retired candidates, prove observable contract violations, and disclose material unexamined surfaces;
 - toolchain preflights that resolve one supported invocation, avoid unchanged retries, isolate temporary work, and hand application failures back to the owning specialist;
 - security reviews that tie findings to reachable trust-boundary failures, keep uncertain exploitability labeled, and avoid replacing general code review;
@@ -84,12 +84,12 @@ Execute each scenario against a representative fixture or real repository. Revie
 - No high-severity routing error in overlap cases.
 - No missing workflow scenario.
 - No broken local reference or script.
-- No stale dated reference beyond the configured review window without an explicit warning/block.
+- No dated snapshot files under `skills/`; version and platform facts are verified at decision time.
 - No unlicensed copied material or missing adaptation/vendor notice.
 - No unconditional platform or package mandate unsupported by repository evidence.
-- No anti-slop vendor drift without a matching pinned-revision/provenance update.
+- No chara-lint rule change without a matching fixture case in `scripts/chara_lint_cases.mjs`.
 - No provenance sanitation claim that overstates the available inspection surface or implies proof of human authorship.
-- No unlazy completion claim with open/blocked required gates, stale final-state evidence, or unmeasured exhaustive/count claims.
+- No completion-proof `COMPLETE` verdict with open/stale/blocked required clauses, unbalanced rosters, self-granted waivers, or unmeasured exhaustive/count claims.
 - No bug-finder confirmation based only on suspicious code, severity intuition, or missing tests without an observable contract violation and deciding evidence.
 - No toolchain preflight activated merely because a task uses local tools when the documented command already works.
 - No shipped Mission Control role pins a model, provider, service tier, or reasoning effort; role portability must preserve its sandbox and evidence contract.

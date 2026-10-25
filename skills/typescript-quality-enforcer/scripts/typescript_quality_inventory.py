@@ -3,7 +3,7 @@
 
 This helper never changes the target repository. It reports configuration and
 heuristic source signals that require manual or parser-backed verification; it
-must not be treated as an anti-slop rule engine.
+must not be treated as a lint rule engine.
 """
 from __future__ import annotations
 
@@ -288,10 +288,12 @@ def scan_sources(root: Path) -> tuple[Counter[str], dict[str, list[dict[str, obj
 
 def build_report(root: Path) -> dict[str, object]:
     counts, examples, files_scanned = scan_sources(root)
-    anti_slop_paths = [
+    # Existing local Oxlint plugin copies, including those from earlier toolkit releases.
+    plugin_paths = [
         path.relative_to(root).as_posix()
         for path in iter_repository_files(root)
-        if path.name == "index.ts" and "anti-slop" in path.as_posix().lower()
+        if path.name in {"index.mjs", "index.js", "index.ts"}
+        and any(marker in path.as_posix().lower() for marker in ("chara-lint", "anti-slop", "oxlint-plugin"))
     ]
     return {
         "root": str(root),
@@ -299,7 +301,7 @@ def build_report(root: Path) -> dict[str, object]:
         "package": package_summary(root),
         "tsconfigs": tsconfig_summary(root),
         "lint_config_files": config_files(root),
-        "anti_slop_candidate_paths": sorted(anti_slop_paths)[:20],
+        "lint_plugin_candidate_paths": sorted(plugin_paths)[:20],
         "heuristic_counts": dict(sorted(counts.items())),
         "examples": {name: values for name, values in sorted(examples.items())},
         "disclaimer": "Heuristic text signals only; verify findings manually and with parser-backed lint rules before remediation.",
@@ -313,7 +315,7 @@ def markdown(report: dict[str, object]) -> str:
         f"- Root: `{report['root']}`",
         f"- Source files scanned: {report['files_scanned']}",
         f"- Lint configs: {', '.join(report['lint_config_files']) or 'none detected at root'}",
-        f"- anti-slop candidate paths: {', '.join(report['anti_slop_candidate_paths']) or 'none detected'}",
+        f"- Local lint plugin paths: {', '.join(report['lint_plugin_candidate_paths']) or 'none detected'}",
         "",
         "## Package/tooling",
         "",

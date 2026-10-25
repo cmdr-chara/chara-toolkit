@@ -1,15 +1,15 @@
 # Time-Sensitive Package and Platform Claim Review
 
-Use this protocol before accepting a dated ecosystem reference as current.
+Use this protocol when a package, framework, service, store rule, or target SDK decision is made from the toolkit's selection guides. The guides deliberately contain no versions or dates; the claims below are gathered at decision time and recorded with the decision.
 
 ## Scope
 
-Review each named framework, package, service, store rule, or target SDK in:
+The selection guides are:
 
-- `skills/production-web-builder/references/web-ecosystem-*.md`
-- `skills/flutter-production-builder/references/flutter-ecosystem-*.md`
-- `skills/expo-react-native-builder/references/expo-react-native-ecosystem-*.md`
-- `skills/mobile-architecture-director/references/platform-decision-matrix-*.md`
+- `skills/production-web-builder/references/package-selection.md`
+- `skills/flutter-production-builder/references/package-selection.md`
+- `skills/expo-react-native-builder/references/package-selection.md`
+- `skills/mobile-architecture-director/references/platform-decision-matrix.md`
 
 ## Per-row review
 

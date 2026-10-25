@@ -2,6 +2,22 @@
 
 - No unreleased changes.
 
+## 0.10.0 - 2026-10-25
+
+- **All shipped content is now original work.** Rewrite every skill and reference that previously adapted third-party material, remove `THIRD_PARTY_NOTICES.md`, and add a validator guard that rejects reintroduced notices or upstream markers.
+- **Breaking: `unlazy` is replaced by `completion-proof`**, a new completion-discipline method (done contract, coverage accounting, final-candidate pass). `chara setup` moves a toolkit-installed `unlazy` copy into the backup folder and leaves a user-owned skill of the same name untouched.
+- **Replace the vendored Oxlint runtime with `chara-lint`**, 15 original rules written from a clean-room behavioral spec as dependency-free `.mjs` modules for Oxlint 1.89. Rule names changed (see `assets/chara-lint/README.md`). New options: `allowEnvironmentChecks` on `no-typeof-checks`; `terms` and `ignoreForeignMembers` on `no-banned-identifier-terms`. Open-dictionary checks now ignore finite-key records and homomorphic mapped types. A fixture suite runs every case through real Oxlint in CI.
+- **Agent-neutral setup.** `chara setup` installs skills into the standard `~/.agents/skills` folder and into every detected agent (Claude Code, Cursor, Gemini CLI, GitHub Copilot, OpenCode, Windsurf, Factory Droid, Kiro CLI, Roo Code, Goose); choose explicitly with `--agents`, and use `--home` for a different base folder. The Codex integration (Mission Control roles, `AGENTS.md` routing) installs only when Codex is targeted. Toolkit copies in the deprecated `$CODEX_HOME/skills` move to the backup folder so Codex does not list them twice; user-created skills stay. The updater remembers `--home` and `--agents`.
+- **Mission Control on every agent.** The six roles are now neutral role cards inside `delegate-with-mission-cards`; `scripts/build_mission_control.mjs` generates native subagents for Codex, Claude Code, and Gemini CLI, and setup installs them where those agents are present. Other agents use the cards through a generic subagent or the main session. Read-only roles get a tool allowlist in Claude Code and Gemini CLI. Codex role files drop `sandbox_mode`, which Codex ignores in custom agent files, and state access in their instructions instead.
+- Fix the documented `doc_drift_scan.py` command in `documentation-synchronizer`, which failed without `--base` or `--files`, and name every handoff target by its exact skill name.
+- Remove time-sensitive content from skills, following Anthropic's skill-authoring guidance: the four dated ecosystem/platform snapshots become durable selection guides (`package-selection.md` for web, Flutter, Expo/React Native; `platform-decision-matrix.md` for mobile) that end with a checklist for verifying current versions, support, and advisories at decision time. Dated phrasing elsewhere in references is gone. The validator now rejects dated snapshot files in skills instead of requiring them, which also removes the review-deadline failure mode that blocked the 0.9.6 release job.
+- Add 27 behavioral decision-boundary probes, three for each of the nine skills that had none, so every evaluated skill is checked for outcome, not only for routing.
+- Every skill description now states when not to use the skill, following the published Anthropic and OpenAI skill-authoring guidance; reference files over 100 lines start with a contents list.
+- Scope `typescript-quality-enforcer` to JavaScript/TypeScript only, with routing cases that keep it away from Python and Dart lint work.
+- Rewrite `product-design-director`, `screenshot-to-interface` (new `measure_tokens.py` helper for contrast, color-token snapping, and spacing scale), and `security-review` (new finding calibration).
+- Make `content-provenance-hygiene` backend-agnostic: a local inspection-toolchain reference and a read-only `inspect_text_invisibles.py` scanner replace the single-service protocol.
+- Rewrite the flaky-test, characterization-testing, dependency-risk, database-migration, GitHub Actions, Core Web Vitals, and TypeScript strictness references.
+
 ## 0.9.6 - 2026-10-16
 
 - Upgrade PR review with evidence-checked findings, risk-adjusted depth, optional independent verification, and a three-round convergence stop (#22).

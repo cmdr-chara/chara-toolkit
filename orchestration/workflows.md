@@ -7,7 +7,7 @@ Use these as **conditional orchestration patterns**, not mandatory chains. A ste
 - Prefer the smallest workflow that covers the user's request.
 - Keep one primary specialist at a time. Supporting skills provide evidence, completion discipline, orchestration, or final release judgment.
 - Skip `repository-intelligence` when the relevant architecture and blast radius are already known.
-- Do not use `unlazy` for trivial work. Use it when the accepted task is substantial enough that incomplete delivery is a realistic failure mode.
+- Do not use `completion-proof` for trivial work. Use it when the accepted task is substantial enough that incomplete delivery is a realistic failure mode.
 - Do not use `verification-and-release` unless there is an integrated candidate whose readiness actually needs judgment.
 - A workflow never overrides a specialist's `AWAITING_APPROVAL`, safety restriction, migration boundary, or user constraint.
 - When a handoff changes the task class, explicitly pass the evidence and scope that justified the transition.
@@ -46,7 +46,7 @@ Use when the user asks to find important bugs that are not already known.
 repository-intelligence? → bug-finder
                          → debugging-investigator? (per confirmed candidate needing causal proof)
                          → owning implementation specialist? (when a fix is authorized)
-                         → unlazy? (substantial remediation)
+                         → completion-proof? (substantial remediation)
                          → verification-and-release? (integrated release candidate)
 ```
 
@@ -64,7 +64,7 @@ Use when the user already supplied a concrete wrong behavior but the cause is un
 ```text
 repository-intelligence? → debugging-investigator
                          → owning implementation specialist? (authorized fix)
-                         → unlazy? (multi-surface remediation)
+                         → completion-proof? (multi-surface remediation)
                          → verification-and-release?
 ```
 
@@ -75,7 +75,7 @@ Do not insert `bug-finder`: the symptom is already known.
 ```text
 repository-intelligence? → owning specialist
                          → multi-agent-work-coordinator? (safe parallel decomposition)
-                         → unlazy? (substantial accepted scope)
+                         → completion-proof? (substantial accepted scope)
                          → documentation-synchronizer? (public/config/ops behavior changed)
                          → verification-and-release?
 ```
@@ -89,7 +89,7 @@ Use when the user has not preselected the improvement.
 ```text
 repository-intelligence → codebase-improvement-planner
                         → selected specialist
-                        → unlazy? (substantial approved execution)
+                        → completion-proof? (substantial approved execution)
                         → verification-and-release?
 ```
 
@@ -103,7 +103,7 @@ Use for a named slow path or measurable resource problem.
 repository-intelligence? → optimize-codebase-performance
                          → debugging-investigator? (unexpected correctness/lifecycle symptom)
                          → owning implementation specialist? (authorized change)
-                         → unlazy?
+                         → completion-proof?
                          → verification-and-release?
 ```
 
@@ -113,7 +113,7 @@ Do not optimize from intuition alone. Preserve comparable baseline/candidate evi
 
 ```text
 repository-intelligence? → review-and-refactor-code
-                         → unlazy? (approved multi-slice refactor)
+                         → completion-proof? (approved multi-slice refactor)
                          → documentation-synchronizer? (contracts/docs changed)
                          → verification-and-release?
 ```
@@ -128,7 +128,7 @@ Use when exploitability, authorization, untrusted-input handling, secrets, or an
 repository-intelligence? → security-review
                          → debugging-investigator? (security-related symptom needs causal proof)
                          → owning implementation specialist? (authorized fix)
-                         → unlazy? (substantial remediation)
+                         → completion-proof? (substantial remediation)
                          → verification-and-release?
 ```
 
@@ -139,7 +139,7 @@ A normal PR/code-quality review stays with `review-and-refactor-code`. Dependenc
 ```text
 repository-intelligence? → typescript-quality-enforcer
                          → selected specialist? (architectural finding leaves lint scope)
-                         → unlazy? (approved staged remediation)
+                         → completion-proof? (approved staged remediation)
                          → verification-and-release?
 ```
 
@@ -151,7 +151,7 @@ Do not disguise migrations, runtime bugs, or structural redesign as lint cleanup
 repository-intelligence? → codebase-evolution-controller
                          → debugging-investigator? (unknown migration failure)
                          → documentation-synchronizer
-                         → unlazy? (large approved migration)
+                         → completion-proof? (large approved migration)
                          → verification-and-release
 ```
 
@@ -163,7 +163,7 @@ Direction first when product behavior/visual intent is unresolved:
 
 ```text
 product-design-director → production-web-builder | flutter-production-builder | expo-react-native-builder
-                       → unlazy?
+                       → completion-proof?
                        → verification-and-release?
 ```
 
@@ -171,7 +171,7 @@ Reference reconstruction instead:
 
 ```text
 screenshot-to-interface → relevant builder? (production integration)
-                        → unlazy?
+                        → completion-proof?
                         → verification-and-release?
 ```
 
@@ -189,21 +189,21 @@ multi-agent-work-coordinator
         ↓
 integration gates
         ↓
-unlazy? → verification-and-release?
+completion-proof? → verification-and-release?
 ```
 
 Mission Control may select reader/writer agents for approved missions. The parent task remains responsible for accepting handoffs and integrated verification.
 
 ## Completion and release
 
-`unlazy` and `verification-and-release` are deliberately different:
+`completion-proof` and `verification-and-release` are deliberately different:
 
 ```text
-unlazy
-= Did we actually finish the accepted task and prove every required deliverable?
+completion-proof
+= Does the final candidate prove every required clause of the accepted task's done contract?
 
 verification-and-release
 = Is the final integrated candidate safe and sufficiently evidenced to ship?
 ```
 
-A task can be `COMPLETION: PASS` and still be blocked from release because release-specific evidence, rollout, rollback, platform coverage, or operational controls are missing.
+A task can be `COMPLETE` under `completion-proof` and still be blocked from release because release-specific evidence, rollout, rollback, platform coverage, or operational controls are missing.

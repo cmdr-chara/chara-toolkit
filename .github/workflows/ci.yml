@@ -40,8 +40,11 @@ jobs:
       - name: Validate skill pack
         run: python scripts/validate_skill_pack.py . --as-of "$(date -u +%Y-%m-%d)"
 
-      - name: Verify anti-slop vendor integrity
-        run: python scripts/verify_anti_slop_vendor.py .
+      - name: Test chara-lint rules against Oxlint
+        shell: bash
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund --prefix "$RUNNER_TEMP/oxlint" oxlint@1.89.0
+          OXLINT_BIN="$RUNNER_TEMP/oxlint/node_modules/.bin/oxlint" node --test scripts/test_chara_lint.mjs
 
       - name: Run TypeScript quality regressions
         run: python scripts/test_typescript_quality_regressions.py .
@@ -53,7 +56,7 @@ jobs:
         run: python scripts/run_smoke_tests.py . --as-of "$(date -u +%Y-%m-%d)"
 
       - name: Test paired behavioral evaluator (offline)
-        run: node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs
+        run: node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs scripts/test_retired_skills.mjs scripts/test_agent_targets.mjs scripts/test_mission_control.mjs
 
       - name: Validate installer and updater scripts
         run: |
@@ -80,15 +83,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          temp_home="$(mktemp -d)"
+          temp_user="$(mktemp -d)"
+          temp_home="$temp_user/.codex"
+          mkdir -p "$temp_home" "$temp_user/.claude"
           cat > "$temp_home/AGENTS.md" <<'EOF'
           # User instructions
 
           Keep this user-authored rule exactly present.
           EOF
 
-          node bin/toolkit.mjs setup --no-auto-update --codex-home "$temp_home"
-          test "$(find "$temp_home/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
+          node bin/toolkit.mjs setup --no-auto-update --home "$temp_user"
+          test "$(find "$temp_user/.agents/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
+          test "$(find "$temp_user/.claude/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
+          test ! -e "$temp_home/skills"
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
           ! grep -R -E '^(model|model_reasoning_effort|model_provider|service_tier)[[:space:]]*=' "$temp_home/agents"
           test -f "$temp_home/codex-toolkit/workflows.md"
@@ -100,11 +107,11 @@ jobs:
           grep -F 'security-review' "$temp_home/AGENTS.md"
           grep -F 'Bug hunt — unknown defects' "$temp_home/codex-toolkit/workflows.md"
           grep -F 'Security review' "$temp_home/codex-toolkit/workflows.md"
-          node bin/toolkit.mjs mission-control check --codex-home "$temp_home"
+          node bin/toolkit.mjs mission-control check --home "$temp_user"
 
           agents_before="$(sha256sum "$temp_home/AGENTS.md" | cut -d' ' -f1)"
           workflows_before="$(sha256sum "$temp_home/codex-toolkit/workflows.md" | cut -d' ' -f1)"
-          node bin/toolkit.mjs setup --no-auto-update --codex-home "$temp_home"
+          node bin/toolkit.mjs setup --no-auto-update --home "$temp_user"
           test "$agents_before" = "$(sha256sum "$temp_home/AGENTS.md" | cut -d' ' -f1)"
           test "$workflows_before" = "$(sha256sum "$temp_home/codex-toolkit/workflows.md" | cut -d' ' -f1)"
           test "$(grep -c '<!-- codex-toolkit:start -->' "$temp_home/AGENTS.md")" -eq 1
@@ -113,7 +120,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          temp_home="$(mktemp -d)"
+          temp_user="$(mktemp -d)"
+          temp_home="$temp_user/.codex"
+          mkdir -p "$temp_home"
           cat > "$temp_home/AGENTS.md" <<'EOF'
           # Existing user instructions
           preserve-me
@@ -121,7 +130,7 @@ jobs:
           incomplete managed block
           EOF
           before="$(sha256sum "$temp_home/AGENTS.md" | cut -d' ' -f1)"
-          if node bin/toolkit.mjs setup --no-auto-update --codex-home "$temp_home"; then
+          if node bin/toolkit.mjs setup --no-auto-update --home "$temp_user"; then
             echo "setup unexpectedly accepted malformed managed markers" >&2
             exit 1
           fi
@@ -131,18 +140,19 @@ jobs:
       - name: Test legacy Mission Control installer
         shell: bash
         run: |
-          temp_home="$(mktemp -d)"
-          node bin/toolkit.mjs --codex-home "$temp_home"
-          test -f "$temp_home/skills/delegate-with-mission-cards/SKILL.md"
+          temp_user="$(mktemp -d)"
+          temp_home="$temp_user/.codex"
+          node bin/toolkit.mjs --home "$temp_user"
+          test -f "$temp_user/.agents/skills/delegate-with-mission-cards/SKILL.md"
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
-          node bin/toolkit.mjs mission-control check --codex-home "$temp_home"
+          node bin/toolkit.mjs mission-control check --home "$temp_user"
           test ! -e "$temp_home/AGENTS.md"
 
       - name: Validate automatic-update scheduler plan
         shell: bash
         run: |
-          temp_home="$(mktemp -d)"
-          node bin/toolkit.mjs auto-update install --dry-run --codex-home "$temp_home"
+          temp_user="$(mktemp -d)"
+          node bin/toolkit.mjs auto-update install --dry-run --home "$temp_user"
 
       - name: Validate immutable-release update runner
         shell: bash

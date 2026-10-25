@@ -1,6 +1,6 @@
 ---
 name: expo-react-native-builder
-description: Build or audit production Expo/React Native applications. Use when Expo/React Native is already selected and implementation, native integration, updates, or release behavior is in scope.
+description: Build or audit production Expo/React Native applications. Use when Expo/React Native is already selected and implementation, native integration, updates, or release behavior is in scope. Not for choosing the mobile platform or an Expo SDK upgrade.
 ---
 
 # Expo React Native Builder
@@ -39,7 +39,7 @@ Treat its output as signals to verify, not semantic truth.
 
 1. **Establish ownership.** Map routing, app lifecycle, native directories/prebuild policy, development builds, backend/data boundaries, and release/update configuration.
 2. **Model behavior.** Define loading, empty, error, retry, offline/stale, auth, permission, background, interruption, and process-restart states before choosing libraries.
-3. **Choose dependencies conditionally.** Do not start with a package list. Check existing/built-in capability first; for new packages verify compatibility, maintenance, license, security/deprecation, runtime/build cost, and removal path. Use `references/expo-react-native-ecosystem-2026-07-17.md` when package selection matters.
+3. **Choose dependencies conditionally.** Do not start with a package list. Check existing/built-in capability first; for new packages verify compatibility, maintenance, license, security/deprecation, runtime/build cost, and removal path. Use `references/package-selection.md` when package selection matters; verify current SDK compatibility with its checklist.
 4. **Implement boundaries.** Keep navigation, server state, durable local state, forms, device APIs, and native modules owned by the layer that can enforce their lifecycle and trust requirements.
 5. **Handle offline/update risk.** Read `references/offline-updates-and-security.md` for durable queues, conflict/idempotency, storage, update compatibility, and sensitive data.
 6. **Verify the feature.** Use focused unit/integration tests plus representative device/emulator checks for native, permission, background, deep-link, accessibility, and performance behavior that cannot be proven in JS alone.
@@ -47,7 +47,7 @@ Treat its output as signals to verify, not semantic truth.
 
 ## Handoffs and interaction boundaries
 
-Use product/screenshot skills for unresolved design intent. Use `security-review` when security is the primary decision. Hand migrations to evolution, causal failures to debugging, documentation drift to documentation synchronization, and final ship judgment to `verification-and-release`.
+Use `product-design-director` or `screenshot-to-interface` for unresolved design intent. Use `security-review` when security is the primary decision. Hand migrations to `codebase-evolution-controller`, causal failures to `debugging-investigator`, documentation drift to `documentation-synchronizer`, and final ship judgment to `verification-and-release`.
 
 ## Failure handling
 

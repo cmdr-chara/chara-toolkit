@@ -1,5 +1,17 @@
 # Violation Remediation Guide
 
+## Contents
+
+- Anti-laundering rules
+- Assertion findings
+- `unknown` findings
+- Unsafe dictionary findings
+- Known-value widening
+- Runtime `typeof`
+- Reflection
+- Module mocking
+- Verification
+
 The central rule is: **repair the violated invariant, not the diagnostic text.**
 
 ## Anti-laundering rules

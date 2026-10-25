@@ -1,6 +1,6 @@
 import { createHash, createPublicKey, verify } from 'node:crypto';
 import { lstat, readFile, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 
 const ROOTS = ['agents', 'bin', 'orchestration', 'scripts', 'skills', 'package.json'];
 const SHA = /^[a-f0-9]{40}$/;
@@ -63,7 +63,7 @@ export async function verifyBundleApproval({ root, policyPath, signaturePath, tr
     trusted_key_sha256: createHash('sha256').update(key.export({ type: 'spki', format: 'der' })).digest('hex') };
 }
 
-export async function verifyInstalled({ root, codexHome }) {
+export async function verifyInstalled({ root, codexHome, skillsRoot = join(codexHome, 'skills') }) {
   const names = (await readdir(join(root, 'skills'), { withFileTypes: true }))
     .filter((x) => x.isDirectory()).map((x) => x.name).sort();
   let skills = 0;
@@ -71,7 +71,7 @@ export async function verifyInstalled({ root, codexHome }) {
     const path = join(root, 'skills', name, 'SKILL.md');
     try { await lstat(path); } catch (error) { if (error.code === 'ENOENT') continue; throw error; }
     const original = await digestPaths(root, ['skills/' + name]);
-    const installed = await digestPaths(codexHome, ['skills/' + name]);
+    const installed = await digestPaths(dirname(skillsRoot), [basename(skillsRoot) + '/' + name]);
     if (installed !== original) throw Error('Installed skill differs: ' + name);
     skills++;
   }

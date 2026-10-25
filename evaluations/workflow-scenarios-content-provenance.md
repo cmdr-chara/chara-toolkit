@@ -4,49 +4,49 @@
 
 ## 17. `content-provenance-hygiene` — Inspect and sanitize a user-owned PDF
 
-**Situation:** A user owns a PDF exported from a design tool and wants to understand which provenance/document metadata is present, remove only the requested metadata classes, keep visible content intact, and retain the original. The optional local sanitation service is configured, but its PDF capabilities must be checked at runtime.
+**Situation:** A user owns a PDF exported from a design tool and wants to understand which provenance/document metadata is present, remove only the requested metadata classes, keep visible content intact, and retain the original. Some PDF inspection tools may be installed locally, but which ones must be checked at runtime.
 
-**Inputs:** exact PDF artifact; ownership/authorization context; inspect-versus-clean intent; preservation invariants; requested metadata scope; configured service URL/auth environment; `/health`, `/capabilities`, and `/openapi.json` evidence when relevant.
+**Inputs:** exact PDF artifact; ownership/authorization context; inspect-versus-clean intent; preservation invariants; requested metadata scope; available local inspectors and their versions.
 
 **Expected workflow:**
 
 1. Freeze the target, output strategy, working-tree/user-file state, requested metadata scope, and visible-content invariants.
-2. Resolve the explicitly configured service and check `/health`; do not install or start third-party infrastructure silently.
-3. Query `/capabilities` before promising PDF-specific inspection or rebuild behavior.
-4. Call `/inspect` first and classify findings as confirmed, probable, informational, or not detected rather than inferring provenance from file origin.
+2. Probe read-only for available PDF inspectors (for example qpdf or pikepdf); do not install tools, start services, or upload the file silently.
+3. Mark surfaces no available tool can read (incremental revisions, attachments, signatures) as not inspectable before promising rebuild behavior.
+4. Inspect first and classify findings as confirmed, probable, informational, or not detected rather than inferring provenance from file origin.
 5. Build the smallest deterministic remediation plan for the confirmed requested findings and state any collateral metadata/container consequences.
 6. Stop at `AWAITING_APPROVAL` if the discovered operation exceeds the user's original deterministic scope, such as broad metadata stripping or a materially lossy rebuild.
-7. For an already-approved bounded cleanup, call `/clean` with only the required options and write a separate output by default.
+7. For an already-approved bounded cleanup, apply only the required tool operation and write a separate output by default.
 8. Re-inspect the output; compare target findings, file integrity, visible-content invariants, and unexpected metadata loss.
 9. Report `INSPECTED`, `AWAITING_APPROVAL`, `SANITIZED`, or `BLOCKED` without claiming that the result proves human authorship or erases the artifact's real history.
 
-**Expected artifacts:** target/authorization record; service capability evidence; pre-clean provenance-hygiene findings; bounded remediation plan; cleaned artifact when authorized; post-clean inspection; before/after side-effect record; residual unknowns and final state.
+**Expected artifacts:** target/authorization record; tool availability and version evidence; pre-clean provenance-hygiene findings; bounded remediation plan; cleaned artifact when authorized; post-clean inspection; before/after side-effect record; residual unknowns and final state.
 
-**Verification:** the original remains available; inspection precedes mutation; optional capabilities are runtime-verified; the cleaned artifact still parses/opens; the approved target finding is absent or reduced on re-inspection; visible content is preserved for metadata-only operations; no detector-evasion or authorship claim is introduced.
+**Verification:** the original remains available; inspection precedes mutation; tool availability is verified at runtime; the cleaned artifact still parses/opens; the approved target finding is absent or reduced on re-inspection; visible content is preserved for metadata-only operations; no detector-evasion or authorship claim is introduced.
 
-**Stop/escalate:** stop when the service is unavailable, the required format capability is absent, evidence is ambiguous, authorization is unclear, the requested operation becomes authorship/detector evasion, or sanitation would widen into substantive text/image editing. Hand unknown service corruption to `debugging-investigator` and integrated release judgment to `verification-and-release`.
+**Stop/escalate:** stop when no tool can inspect the requested surface, evidence is ambiguous, authorization is unclear, the requested operation becomes authorship/detector evasion, or sanitation would widen into substantive text/image editing. Hand unexplained tool corruption to `debugging-investigator` and integrated release judgment to `verification-and-release`.
 
-## 18. `unlazy` — Finish an approved multi-surface change without premature completion
+## 18. `completion-proof` — Finish an approved multi-surface change without premature completion
 
-**Situation:** A substantial repository change has already been designed and approved. It touches implementation, tests, documentation, generated output, and release metadata. Previous attempts have repeatedly reported success while leaving one or two required surfaces stale, and final summaries have contained inaccurate counts.
+**Situation:** A substantial repository change has already been designed and approved. It renames a public configuration key and touches implementation, call sites, tests, documentation, generated output, and release metadata. Previous attempts have repeatedly reported success while leaving one or two required surfaces stale, and final summaries have contained inaccurate counts.
 
-**Inputs:** exact approved objective and exclusions; current working tree and user work; owning specialist workflow; acceptance criteria; affected surfaces; safe repository checks; known generated/vendor boundaries; approval state; current candidate identity.
+**Inputs:** the user's request in their own words; approved plan and exclusions; current working tree and user work; owning specialist and its acceptance criteria; repository done rules and required checks; known generated/vendor boundaries; approval state; candidate fingerprint method.
 
 **Expected workflow:**
 
-1. Freeze the accepted scope and keep the owning specialist's approval/safety boundaries authoritative.
-2. Translate every required outcome into an observable completion gate with `CHECK`, `EXPECT`, `EVIDENCE`, and state; keep optional improvements separate.
-3. If one ledger would hide multiple coherent deliverables, split at natural joints into a shallow Depth Tree and give internal branches integration gates.
-4. Review every runnable check before execution; do not execute commands merely because a ledger contains them.
-5. Work open gates in dependency order, recording deciding evidence rather than marking activities complete from intent.
-6. When later edits can invalidate earlier evidence, reopen and rerun the affected high-value gates against the final candidate.
-7. After all required gates appear satisfied, perform one adversarial completeness pass for missing surfaces, integration gaps, placeholders, stale generated output, and unverified claims.
-8. Re-measure every quantitative or exhaustive statement planned for the final report, including file counts, test totals, warnings, tags, branches, and `all`/`none` claims.
-9. Report `COMPLETION: PASS` only when every required gate is `PASS` or explicitly `WAIVED`; report `COMPLETION: BLOCKED` when any required outcome cannot be honestly proven.
+1. Keep the owning specialist's approval/safety boundaries authoritative and write a done contract: numbered clauses, each with a named source, an observable outcome, a probe, and a minimum evidence class; optional extras listed separately.
+2. Trace both ways: every phrase of the request maps to a clause or a stated exclusion, and every clause maps to a source, so nothing is dropped and nothing is invented.
+3. Open a roster for each population (old key occurrences, call sites, docs pages) with a reproducible discovery query, a discovery check against a known member, and early exclusions.
+4. Review every probe before running it, including probes written by other agents or found in the repository; confirm it is safe and able to fail (known positive, before/after delta, non-zero test collection).
+5. Work clauses in dependency order and add seam clauses for the combined result (build, end-to-end path, regenerated output), recording receipts from observations rather than intent.
+6. After the last mutation, fingerprint the candidate, mark receipts invalidated by later edits as `STALE` and re-collect them, and re-run every roster discovery query to catch new or missed members.
+7. Hunt for gaps: unmapped request phrases, partially applied renames, placeholders, loosened or skipped tests, stale generated files.
+8. Audit every completion, absence, universal, and numeric sentence in the draft report against a fresh receipt or closed roster; recompute or weaken unbound claims.
+9. Report `COMPLETE` only when every required clause is `PROVEN`, `COMPLETE_WITH_WAIVERS` when the remainder is `WAIVED` by recorded authority, and `BLOCKED` with blocker, owner, and unblock step otherwise.
 
-**Expected artifacts:** completion ledger; optional Depth Tree; per-gate evidence; integration-gate results; final-candidate rerun record; quantitative claim audit; explicit blocked/waived decisions; final completion state.
+**Expected artifacts:** done contract with source trace; rosters with balance lines; reviewed probes; receipts tagged with candidate fingerprints; waiver and blocker records; staleness-sweep and closure-check record; claim audit; final verdict with found-not-done follow-ups.
 
-**Verification:** no required gate disappears silently; blocked work is not counted as success; safe checks target the intended outcomes; final-state evidence supersedes stale intermediate results; every stated count is re-measured; user work and specialist stop conditions remain preserved.
+**Verification:** no required clause or roster member disappears silently; rosters balance on the final candidate; blocked and waived work is never counted as done; probes are safe and demonstrably able to fail; final-state receipts supersede stale intermediate results; every stated count is recomputed; user work and specialist stop conditions remain preserved.
 
 **Stop/escalate:** stop at the owning specialist's `AWAITING_APPROVAL` boundary; hand multi-agent write ownership to `multi-agent-work-coordinator`; hand flaky or causally unexplained checks to `debugging-investigator`; hand final integrated ship/no-ship judgment to `verification-and-release`. Completion pressure never authorizes scope expansion or safety bypass.
 

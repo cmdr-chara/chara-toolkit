@@ -2,7 +2,7 @@
 
 **Information checked:** 2026-07-17; provenance and methodology refreshed through 2026-09-25
 **Research mode:** current public web, repository tree/raw-file inspection, official documentation, official package registries/repositories, and release/advisory pages.  
-**Refresh policy:** stable workflow principles remain in `SKILL.md`; changing version/package/platform facts remain in dated references and must be rechecked before use.
+**Refresh policy:** skills hold durable principles and selection criteria only; version, package, and platform facts are verified at decision time with each selection guide's checklist and are never stored in skills.
 
 ## Method and evidence rules
 
@@ -22,11 +22,6 @@
 | https://raw.githubusercontent.com/cmdr-chara/codex-toolkit/main/skills/delegate-with-mission-cards/SKILL.md | Delegation gate, mission cards, exclusive writer ownership, waves, handoff review | `multi-agent-work-coordinator` must add a generic work DAG/ownership/integration layer, not duplicate the six-role adapter. | 2026-07-17 |
 | https://raw.githubusercontent.com/cmdr-chara/codex-toolkit/main/LICENSE | MIT terms, copyright | Pack root license preserves `Copyright (c) 2026 cmdr-chara`. | 2026-07-17 |
 | https://github.com/Emanuele-web04/skills/tree/main/skills | Four public Markdown prompts covering code review, refactoring, and two overlapping performance workflows; no license file was exposed | Only general workflow ideas informed an independent two-skill design. No source prose or code was copied; the two performance concepts were merged to avoid ambiguous routing. | 2026-07-31 |
-| https://github.com/Leonxlnx/taste-skill | Repository tree, README, design skill variants, local registry | Source separates taste, redesign, image-to-code, brand, and image-generation concerns. Only relevant concepts were selected. | 2026-07-17 |
-| https://github.com/Leonxlnx/taste-skill/blob/main/skills/taste-skill/SKILL.md | Brief inference, direction calibration, anti-template constraints, preflight concepts | Re-expressed as product evidence, design axes, system rules, states, accessibility, and handoffs. | 2026-07-17 |
-| https://github.com/Leonxlnx/taste-skill/blob/main/skills/redesign-skill/SKILL.md | Audit-before-redesign concept | Re-expressed as a bounded redesign audit that preserves validated behavior and distinguishes diagnosis from direction. | 2026-07-17 |
-| https://github.com/Leonxlnx/taste-skill/blob/main/skills/image-to-code-skill/SKILL.md | Reference analysis and iterative fidelity concepts | Re-expressed as provenance-aware structural decomposition, asset rights, responsive hypotheses, component boundaries, and evidence-based visual comparison. | 2026-07-17 |
-| https://github.com/Leonxlnx/taste-skill/blob/main/LICENSE | MIT terms, copyright | Complete notice and adapted-file map preserved in `THIRD_PARTY_NOTICES.md`. | 2026-07-17 |
 
 ### Inspection limitation
 
@@ -46,14 +41,7 @@ The original 0.2.0 build could not clone the repository in its runtime. The 0.3.
 
 ## Volatile ecosystem evidence
 
-Current framework, package, platform, security, and store facts do **not** live in this ledger. They are maintained in dated references so stale claims can be rejected mechanically:
-
-- `skills/production-web-builder/references/web-ecosystem-2026-09-24.md`
-- `skills/flutter-production-builder/references/flutter-ecosystem-2026-07-17.md`
-- `skills/expo-react-native-builder/references/expo-react-native-ecosystem-2026-07-17.md`
-- `skills/mobile-architecture-director/references/platform-decision-matrix-2026-07-17.md`
-
-The repository validator checks those files for their evidence date, next-review date, source URLs, and required compatibility/maintenance/license/security/deprecation/runtime-cost/alternative fields. Execution-time decisions still recheck the target project's resolved versions and current primary sources.
+Current framework, package, platform, security, and store facts do **not** live in this ledger or in the skills. Earlier releases kept them in dated reference files; since 2026-10-25 the skills carry durable selection guides instead (`package-selection.md` for web, Flutter, and Expo/React Native, and `platform-decision-matrix.md` for mobile), each ending with a checklist for verifying the current state at decision time. The validator rejects dated snapshot files under `skills/`. The dated files remain available in Git history.
 
 This ledger records provenance, authoring decisions, and durable methodology only. Historical release facts remain in `CHANGELOG.md` rather than being copied forward as current guidance.
 
@@ -63,17 +51,6 @@ This ledger records provenance, authoring decisions, and durable methodology onl
 | --- | --- | --- | --- |
 | https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra | Current OpenAI guidance on skill discovery metadata, context cost, progressive disclosure, and over-prescriptive legacy prompts | Keep discovery descriptions short, avoid defensive ceremony that newer models no longer need, and route conditional detail through references. | 2026-09-24 |
 | https://developers.openai.com/plugins/build/skills | Current OpenAI skill structure and progressive-disclosure guidance | Keep `SKILL.md` concise; put detailed references/scripts/assets beside it and load them only when relevant. | 2026-09-24 |
-| https://github.com/SkillMedev/skills | Portable engineering skill collection and repository structure | Selectively adapt narrowly useful specialist methods rather than importing a second overlapping routing system. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/LICENSE | MIT license | Preserve attribution and complete license text for adapted concepts. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/secure-code-review/SKILL.md | Focused exploit-class review and finding filtering | Re-expressed as `security-review` with Chara's Toolkit trust-boundary, evidence, handoff, and regression contracts. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/flaky-test-detangler/SKILL.md | Hidden-dependency model for flaky tests | Folded into debugging as a conditional reference; retries/sleeps are not accepted as root-cause fixes. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/characterization-test-writer/SKILL.md | Pin observed legacy behavior before refactoring | Folded into review/refactor as a conditional legacy-code safety-net reference. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/dependency-risk-audit/SKILL.md | Reachability-aware dependency/security/license review | Folded into evolution for dependency additions/upgrades. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/migration-safety-checker/SKILL.md | Production database lock/backfill/expand-contract safety | Folded into evolution as database-migration guidance. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/github-actions/SKILL.md | CI graph, cache, privilege, fork, and deployment controls | Folded into release verification as GitHub Actions guidance without universal timing budgets. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/typescript-strict/SKILL.md | Staged TypeScript strictness migration | Folded into TypeScript quality enforcement. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/web-performance/SKILL.md | Field-first Core Web Vitals workflow | Folded into the production web builder; numeric thresholds remain current-source checks rather than permanent root instructions. | 2026-09-24 |
-| https://github.com/SkillMedev/skills/blob/main/skills/skill-tester/SKILL.md | Positive, negative, neighbor-collision, and realistic behavior scenarios | Integrated into the toolkit evaluation methodology. | 2026-09-24 |
 
 ## 2026-09-25 Mission Control portability refresh
 
@@ -106,3 +83,14 @@ Original dated-reference filenames and their initial `Information checked` dates
 - React Native 0.87: https://reactnative.dev/blog/2026/08/11/react-native-0.87
 
 This is a targeted follow-up, not a claim that the unchanged package rows have been comprehensively reaudited. Resolve the actual target project's dependency graph, SDK/platform requirements, licenses, and advisories before choosing new versions.
+
+## 2026-10-25 agent-neutral setup and Mission Control
+
+| Source | Material inspected | Finding retained in the pack | Checked |
+| --- | --- | --- | --- |
+| https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices | Anthropic skill-authoring guidance | Descriptions state what a skill does and when to use it; references stay one level deep; long references get a contents list. | 2026-10-25 |
+| https://developers.openai.com/codex/skills | Codex skill discovery and authoring | Descriptions say when a skill should and should not trigger, front-load the use case, and share a ~8,000-character default budget; user skills live in `~/.agents/skills`. | 2026-10-25 |
+| https://github.com/vercel-labs/skills/blob/main/docs/agents.md | Global skills folder per agent | Source for the installer's per-agent skills folders. | 2026-10-25 |
+| https://developers.openai.com/codex/subagents | Codex custom agent file schema | Required `name`, `description`, `developer_instructions`; `sandbox_mode` in a custom agent file does not override the parent session, so read-only roles are instruction-enforced in Codex. | 2026-10-25 |
+| https://code.claude.com/docs/en/sub-agents | Claude Code subagent frontmatter | `~/.claude/agents/*.md` with `name`, `description`, optional `tools` allowlist and `model: inherit`; read-only roles use a write-free allowlist. | 2026-10-25 |
+| https://geminicli.com/docs/core/subagents/ | Gemini CLI subagent frontmatter and tool names | `~/.gemini/agents/*.md` with `name`, `description`, `kind: local`, optional `tools` list; read-only roles list only read and search tools. | 2026-10-25 |

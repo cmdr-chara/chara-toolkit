@@ -18,16 +18,19 @@ Chara's Toolkit accepts small, testable improvements. An issue or pull request s
 | Workflow or stopping point | Matching workflow scenario and adversarial review note |
 | Helper script | A smoke fixture that proves output and input preservation |
 | Time-sensitive package claim | Primary source, checked date, and refresh boundary |
-| New skill | `SKILL.md`, `agents/openai.yaml`, routing cases, workflow scenario, and any required notices |
+| New skill | `SKILL.md`, `agents/openai.yaml`, routing cases, and workflow scenario; only original content |
 
 ## Run the checks
 
 ```sh
 python scripts/validate_skill_pack.py . --as-of YYYY-MM-DD
 python scripts/run_smoke_tests.py . --as-of YYYY-MM-DD
-node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs
+node --test scripts/test_evaluate_behavioral_runs.mjs scripts/test_enterprise_approval.mjs scripts/test_destructive_safety.mjs scripts/test_project_verification.mjs scripts/test_drive_project_verification.mjs scripts/test_evaluate_task_outcomes.mjs scripts/test_audit_recurring_errors.mjs scripts/test_branding.mjs scripts/test_retired_skills.mjs scripts/test_agent_targets.mjs scripts/test_mission_control.mjs
+OXLINT_BIN=/path/to/oxlint node --test scripts/test_chara_lint.mjs
 npm pack --dry-run
 ```
+
+`test_chara_lint.mjs` runs every fixture in `scripts/chara_lint_cases.mjs` through a real Oxlint binary (CI pins `oxlint@1.89.0`). Without `OXLINT_BIN` or a local `node_modules/.bin/oxlint` it skips the fixture groups and says so.
 
 Use the date on which you checked time-sensitive sources. The pull request should explain any warning instead of hiding it with an older date.
 

@@ -1,6 +1,6 @@
 ---
 name: review-and-refactor-code
-description: Use for defined PR/diff reviews, verified defect findings, bounded review rounds, or behavior-preserving refactors.
+description: Review a defined PR or diff and make behavior-preserving refactors. Use for PR/diff reviews, verified defect findings, bounded review rounds, or refactors that must not change behavior. Not for open-ended repository discovery, unknown runtime failures, or migrations.
 ---
 
 # Review and Refactor Code

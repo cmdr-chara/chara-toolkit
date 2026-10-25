@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import { cpSync, existsSync, mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const skillRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const source = resolve(skillRoot, "assets/anti-slop");
+const source = resolve(skillRoot, "assets/chara-lint");
 const [targetArgument] = process.argv.slice(2);
-const target = resolve(process.cwd(), targetArgument ?? "tools/oxlint/anti-slop");
+const target = resolve(process.cwd(), targetArgument ?? "tools/oxlint/chara-lint");
 
 if (existsSync(target)) {
   console.error(`Refusing to overwrite existing destination: ${target}`);
@@ -16,5 +16,6 @@ if (existsSync(target)) {
 
 mkdirSync(dirname(target), { recursive: true });
 cpSync(source, target, { recursive: true, force: false, errorOnExist: true });
-console.log(`Copied the vendored anti-slop runtime to ${target}`);
-console.log(`Preserved upstream license at ${target}/LICENSE`);
+const entry = `./${relative(process.cwd(), resolve(target, "index.mjs")).replaceAll("\\", "/")}`;
+console.log(`Copied chara-lint to ${target}`);
+console.log(`Add it to .oxlintrc.json: "jsPlugins": ["${entry}"], then enable approved rules as "chara-lint/<rule>".`);

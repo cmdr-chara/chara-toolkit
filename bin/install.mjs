@@ -17,6 +17,8 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { resolveTargets } from "./agent-targets.mjs";
+
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 // Keep the existing GitHub slug until repository settings complete the rename.
 const repository = "cmdr-chara/codex-toolkit";
@@ -29,12 +31,12 @@ const linuxUnit = "codex-toolkit-update";
 const managedStart = "<!-- codex-toolkit:start -->";
 const managedEnd = "<!-- codex-toolkit:end -->";
 const missionControlAgents = [
-  { file: "pathfinder-reader.toml", name: "pathfinder-reader", sandbox: "read-only" },
-  { file: "patcher-writer.toml", name: "patcher-writer", sandbox: "workspace-write" },
-  { file: "investigator-reader.toml", name: "investigator-reader", sandbox: "read-only" },
-  { file: "builder-writer.toml", name: "builder-writer", sandbox: "workspace-write" },
-  { file: "sentinel-reader.toml", name: "sentinel-reader", sandbox: "read-only" },
-  { file: "architect-writer.toml", name: "architect-writer", sandbox: "workspace-write" },
+  { file: "pathfinder-reader.toml", name: "pathfinder-reader", access: "read-only" },
+  { file: "patcher-writer.toml", name: "patcher-writer", access: "workspace-write" },
+  { file: "investigator-reader.toml", name: "investigator-reader", access: "read-only" },
+  { file: "builder-writer.toml", name: "builder-writer", access: "workspace-write" },
+  { file: "sentinel-reader.toml", name: "sentinel-reader", access: "read-only" },
+  { file: "architect-writer.toml", name: "architect-writer", access: "workspace-write" },
 ];
 const missionControlPinnedField =
   /^(model|model_reasoning_effort|model_provider|service_tier)\s*=/m;
@@ -52,15 +54,23 @@ function flag(name) {
   return argv.includes(name);
 }
 
+// Base for every agent's user-level skills directory (~/.agents, ~/.claude, ...).
+const homeArg = option("--home");
+const userHome = homeArg || homedir();
 const codexHomeArg = option("--codex-home");
-const codexHome = codexHomeArg || process.env.CODEX_HOME || join(homedir(), ".codex");
+const codexHome = codexHomeArg || process.env.CODEX_HOME || join(userHome, ".codex");
+const agentsSpec = option("--agents") || "auto";
+const standardSkillsRoot = join(userHome, ".agents", "skills");
+const legacyCodexSkillsRoot = join(codexHome, "skills");
 const dryRun = flag("--dry-run");
 const scheduled = flag("--scheduled");
 const noAutoUpdate = flag("--no-auto-update");
 const sourceRelease = option("--source-release");
 
-if (argv.includes("--codex-home") && !codexHomeArg) {
-  throw new Error("--codex-home requires a path");
+for (const name of ["--codex-home", "--home", "--agents"]) {
+  if (argv.includes(name) && (!option(name) || option(name).startsWith("--"))) {
+    throw new Error(`${name} requires a value`);
+  }
 }
 if (argv.includes("--source-release") && !sourceRelease) {
   throw new Error("--source-release requires a tag");
@@ -176,18 +186,99 @@ async function toolkitSkillNames() {
   return names.sort();
 }
 
-async function installAllSkills() {
+// Skills removed or renamed by the toolkit. An installed copy is moved to the
+// backup root only when its marker file proves the toolkit installed it, so a
+// user's own skill with the same name is never touched.
+const retiredSkills = [
+  {
+    name: "unlazy",
+    replacement: "completion-proof",
+    marker: join("references", "upstream-provenance.md"),
+    markerPattern: /(Chara's|Codex) Toolkit adapts/,
+  },
+];
+
+async function retireSkills(skillsRoot, backupPrefix) {
+  let changed = 0;
+  for (const skill of retiredSkills) {
+    const target = join(skillsRoot, skill.name);
+    if (!(await exists(target))) continue;
+    let marker = "";
+    try {
+      marker = await readFile(join(target, skill.marker), "utf8");
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+    if (!skill.markerPattern.test(marker)) {
+      console.log(
+        `Left ${target} untouched: it is not a toolkit-managed copy of the retired ${skill.name} skill.`,
+      );
+      continue;
+    }
+    await backup(target, join(backupPrefix, skill.name));
+    console.log(`Retired ${skill.name} from ${skillsRoot}; it is replaced by ${skill.replacement}.`);
+    changed += 1;
+  }
+  return changed;
+}
+
+async function installAllSkills(targets) {
   const names = await toolkitSkillNames();
   let changed = 0;
-  for (const name of names) {
-    const didChange = await syncDirectory(
-      join(packageRoot, "skills", name),
-      join(codexHome, "skills", name),
-      join("skills", name),
-    );
-    if (didChange) changed += 1;
+  for (const target of targets) {
+    const backupPrefix = join("skills", target.id);
+    changed += await retireSkills(target.skillsRoot, backupPrefix);
+    for (const name of names) {
+      const didChange = await syncDirectory(
+        join(packageRoot, "skills", name),
+        join(target.skillsRoot, name),
+        join(backupPrefix, name),
+      );
+      if (didChange) changed += 1;
+    }
+  }
+  if (targets.some((target) => target.skillsRoot === standardSkillsRoot)) {
+    changed += await migrateLegacyCodexSkills(names);
   }
   return { names, changed };
+}
+
+// Codex now reads user skills from ~/.agents/skills and treats
+// $CODEX_HOME/skills as deprecated; it does not merge the two, so a toolkit
+// copy left in the old place shows up twice. Move toolkit-installed copies to
+// the backup root. A same-named skill the toolkit did not install stays put.
+async function migrateLegacyCodexSkills(names) {
+  if (legacyCodexSkillsRoot === standardSkillsRoot || !(await exists(legacyCodexSkillsRoot))) return 0;
+  const installedByToolkit = await exists(join(toolkitStateRoot, "state.json"));
+  let moved = await retireSkills(legacyCodexSkillsRoot, join("skills", "codex-legacy"));
+  for (const name of names) {
+    const legacy = join(legacyCodexSkillsRoot, name);
+    if (!(await exists(legacy))) continue;
+    const matchesRelease = (await treeDigest(legacy)) === (await treeDigest(join(packageRoot, "skills", name)));
+    if (!installedByToolkit && !matchesRelease) {
+      console.log(`Left ${legacy} untouched: it was not installed by the toolkit.`);
+      continue;
+    }
+    await backup(legacy, join("skills", "codex-legacy", name));
+    moved += 1;
+  }
+  if (moved) console.log(`Moved ${moved} toolkit skill(s) from ${legacyCodexSkillsRoot} to the backup folder; Codex now reads ${standardSkillsRoot}.`);
+  return moved;
+}
+
+// Mission Control roles for agents with their own subagent format. The files
+// are generated from the neutral role cards; Codex roles are handled by
+// installMissionControl because they belong to the Codex integration.
+async function installNativeRoles(targets) {
+  let changed = 0;
+  for (const target of targets) {
+    if (!target.rolesRoot) continue;
+    const source = join(packageRoot, "agents", target.id);
+    for (const file of (await readdir(source)).filter((name) => name.endsWith(".md")).sort()) {
+      if (await syncFile(join(source, file), join(target.rolesRoot, file), join("agents", target.id, file))) changed += 1;
+    }
+  }
+  return changed;
 }
 
 async function installMissionControl({ includeSkill = true } = {}) {
@@ -197,8 +288,8 @@ async function installMissionControl({ includeSkill = true } = {}) {
     if (
       await syncDirectory(
         join(packageRoot, "skills", skillName),
-        join(codexHome, "skills", skillName),
-        join("skills", skillName),
+        join(standardSkillsRoot, skillName),
+        join("skills", "agents", skillName),
       )
     ) {
       changed += 1;
@@ -233,9 +324,13 @@ async function checkMissionControl() {
   };
 
   const skillSource = join(packageRoot, "skills", "delegate-with-mission-cards");
-  const skillTarget = join(codexHome, "skills", "delegate-with-mission-cards");
+  const skillTarget = join(standardSkillsRoot, "delegate-with-mission-cards");
   if (!(await exists(skillTarget))) {
-    fail("Mission Control skill is not installed");
+    if (await exists(join(legacyCodexSkillsRoot, "delegate-with-mission-cards"))) {
+      fail(`Mission Control skill is only in the deprecated ${legacyCodexSkillsRoot}; run setup to migrate it`);
+    } else {
+      fail("Mission Control skill is not installed");
+    }
   } else if ((await treeDigest(skillSource)) !== (await treeDigest(skillTarget))) {
     fail("Mission Control skill differs from this toolkit release");
   } else {
@@ -257,16 +352,32 @@ async function checkMissionControl() {
       pass(`${role.name} is current`);
     }
     const expectedName = `name = "${role.name}"`;
-    const expectedSandbox = `sandbox_mode = "${role.sandbox}"`;
     if (!text.split(/\r?\n/).some((line) => line.trim() === expectedName)) {
       fail(`${role.name} has the wrong name field`);
-    }
-    if (!text.split(/\r?\n/).some((line) => line.trim() === expectedSandbox)) {
-      fail(`${role.name} has the wrong sandbox_mode`);
     }
     if (missionControlPinnedField.test(text)) {
       fail(`${role.name} pins model/provider/reasoning settings`);
     }
+  }
+
+  for (const [id, label, rolesRoot] of [
+    ["claude-code", "Claude Code", join(userHome, ".claude", "agents")],
+    ["gemini-cli", "Gemini CLI", join(userHome, ".gemini", "agents")],
+  ]) {
+    const files = (await readdir(join(packageRoot, "agents", id))).filter((name) => name.endsWith(".md"));
+    const installed = [];
+    for (const file of files) if (await exists(join(rolesRoot, file))) installed.push(file);
+    if (installed.length === 0) {
+      note(`${label} Mission Control roles are not installed`);
+      continue;
+    }
+    const stale = [];
+    for (const file of files) {
+      const target = join(rolesRoot, file);
+      if (!(await exists(target)) || !(await readFile(join(packageRoot, "agents", id, file))).equals(await readFile(target))) stale.push(file);
+    }
+    if (stale.length) fail(`${label} Mission Control roles differ from this release: ${stale.join(", ")}`);
+    else pass(`${label} Mission Control roles are current`);
   }
 
   const agentsPath = join(codexHome, "AGENTS.md");
@@ -367,6 +478,8 @@ async function writeUpdaterFiles() {
     schema_version: 1,
     repository,
     codex_home: codexHome,
+    home: userHome,
+    agents: agentsSpec,
     npx_path: resolveNpx(),
   };
 
@@ -596,7 +709,7 @@ async function schedulerEnabled() {
   return false;
 }
 
-async function writeInstallState(skillCount, releaseTag) {
+async function writeInstallState(skillCount, releaseTag, targets, codex) {
   if (dryRun) return;
   await mkdir(toolkitStateRoot, { recursive: true });
   await writeFile(
@@ -606,6 +719,9 @@ async function writeInstallState(skillCount, releaseTag) {
         schema_version: 1,
         release: releaseTag,
         skill_count: skillCount,
+        agents: agentsSpec,
+        skill_roots: targets.map((target) => target.skillsRoot),
+        codex_integration: codex,
         updated_at: new Date().toISOString(),
       },
       null,
@@ -654,9 +770,15 @@ async function showAutoUpdateStatus() {
 async function setup() {
   const version = await readPackageVersion();
   const releaseTag = sourceRelease || `v${version}`;
-  const skills = await installAllSkills();
-  const agentChanges = await installMissionControl({ includeSkill: false });
-  await writeInstallState(skills.names.length, releaseTag);
+  const { targets, codex } = await resolveTargets({
+    spec: agentsSpec,
+    home: userHome,
+    codexHome,
+    codexExplicit: Boolean(codexHomeArg || process.env.CODEX_HOME),
+  });
+  const skills = await installAllSkills(targets);
+  const agentChanges = (codex ? await installMissionControl({ includeSkill: false }) : 0) + (await installNativeRoles(targets));
+  await writeInstallState(skills.names.length, releaseTag, targets, codex);
 
   if (!noAutoUpdate) {
     if (scheduled) {
@@ -666,9 +788,11 @@ async function setup() {
     }
   }
 
-  console.log(
-    `Chara's Toolkit ${releaseTag} synchronized: ${skills.names.length} skills and 6 Mission Control agents.`,
-  );
+  console.log(`Chara's Toolkit ${releaseTag} synchronized: ${skills.names.length} skills for ${targets.length} target(s).`);
+  for (const target of targets) {
+    console.log(`  - ${target.label}: ${target.skillsRoot}${target.rolesRoot ? ` (Mission Control roles in ${target.rolesRoot})` : ""}`);
+  }
+  if (codex) console.log(`  - Codex integration: 6 Mission Control agents in ${join(codexHome, "agents")}`);
   if (skills.changed || agentChanges) {
     console.log(`Changed surfaces: ${skills.changed + agentChanges}`);
   } else {
@@ -677,15 +801,17 @@ async function setup() {
   if (!dryRun && (skills.changed || agentChanges) && (await exists(backupRoot))) {
     console.log(`Previous files backed up to ${backupRoot}`);
   }
-  console.log("Start a fresh Codex task to load updated skills and agents.");
+  console.log("Start a fresh agent session to load the updated skills.");
 }
 
 function help() {
   console.log(`Chara's Toolkit installer
 
 Usage:
-  chara setup
-      Full setup when installed globally; codex-toolkit remains a compatibility alias.
+  chara setup [--agents auto|<id,id,...>]
+      Install all toolkit skills for your agents; codex-toolkit remains a compatibility alias.
+      auto (default): the standard ~/.agents/skills plus every detected agent, and the
+      Codex integration when Codex is present.
 
   chara mission-control check
       Inspect the active Codex integration.
@@ -704,7 +830,11 @@ Usage:
   npx --yes github:cmdr-chara/codex-toolkit auto-update remove
 
 Options:
-  --codex-home <path>   Override CODEX_HOME / ~/.codex.
+  --agents <list>       auto, or a comma list of: agents (standard, read by Codex, Cline,
+                        Warp, Zed, Pi), codex, claude-code, cursor, gemini-cli,
+                        github-copilot, opencode, windsurf, droid, kiro-cli, roo, goose.
+  --home <path>         Base directory for agent skill folders (default: your home).
+  --codex-home <path>   Override CODEX_HOME / ~/.codex for the Codex integration.
   --no-auto-update      Setup without registering the updater.
   --dry-run             Show intended writes/scheduler actions without changing anything.
 

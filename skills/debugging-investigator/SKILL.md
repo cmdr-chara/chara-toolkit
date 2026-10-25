@@ -1,6 +1,6 @@
 ---
 name: debugging-investigator
-description: Diagnose a concrete failure through reproduction, hypotheses, causal tracing, and falsification. Use when observed behavior is wrong and the cause is uncertain.
+description: Diagnose a concrete failure through reproduction, hypotheses, causal tracing, and falsification. Use when observed behavior is wrong and the cause is uncertain. Not for proactive bug hunting, planned migrations, or feature design.
 ---
 
 # Debugging Investigator
@@ -39,7 +39,7 @@ Resolve the exact symptom, expected behavior, environment/candidate identity, ti
 
 ## Handoffs and interaction boundaries
 
-Use `bug-finder` before this skill only when there is no known symptom yet. Hand migrations to evolution, security-first analysis to `security-review`, platform implementation to the relevant builder, substantial completion to `unlazy`, and final ship judgment to `verification-and-release`.
+Use `bug-finder` before this skill only when there is no known symptom yet. Hand migrations to `codebase-evolution-controller`, security-first analysis to `security-review`, platform implementation to the relevant builder, substantial completion to `completion-proof`, and final ship judgment to `verification-and-release`.
 
 ## Failure handling
 

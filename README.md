@@ -13,13 +13,13 @@
   <img src=".github/assets/charas-toolkit-readme-hero.png" width="900" alt="Chara's Toolkit — Inspect. Change. Prove." />
 </p>
 
-Chara's Toolkit gives coding agents focused instructions for understanding repositories, finding bugs, changing code safely, and proving that a change works. Each skill is a self-contained `SKILL.md` folder that can be installed in a compatible Agent Skills client. The full Codex integration adds routing, six optional Mission Control roles, and release-based updates.
+Chara's Toolkit gives coding agents focused instructions for understanding repositories, finding bugs, changing code safely, and proving that a change works. Each skill is a self-contained `SKILL.md` folder in the open Agent Skills format, so it works with Codex, Claude Code, Cursor, Gemini CLI, GitHub Copilot, and other compatible agents. Six optional Mission Control roles for delegating work to subagents work on every agent, and Codex users also get toolkit routing.
 
 ## Choose your setup
 
 ### Full toolkit
 
-Requires **Node.js 18+** and a configured **Codex** installation for the complete installer and routing layer.
+Requires **Node.js 18+**.
 
 ```sh
 npx --yes github:cmdr-chara/chara-toolkit setup
@@ -27,10 +27,13 @@ npx --yes github:cmdr-chara/chara-toolkit setup
 
 This installs:
 
-- all 22 skills;
-- six optional Mission Control roles;
-- workflow routing and the managed `AGENTS.md` instructions;
+- all 22 skills into the standard `~/.agents/skills` folder (read by Codex, Cline, Warp, Zed, Pi, and other agents that follow the standard);
+- the same skills into every other agent it finds on your machine: Claude Code (`~/.claude/skills`), Cursor, Gemini CLI, GitHub Copilot, OpenCode, Windsurf, Factory Droid, Kiro CLI, Roo Code, and Goose;
+- six optional Mission Control roles as native subagents for Codex, Claude Code (`~/.claude/agents`), and Gemini CLI (`~/.gemini/agents`); every other agent gets them as role cards inside the delegation skill;
+- for Codex: workflow routing and the managed `AGENTS.md` instructions;
 - a user-level updater that follows published GitHub releases.
+
+Choose agents explicitly with `--agents`, for example `--agents claude-code,cursor` or `--agents codex`. Earlier releases installed skills into `~/.codex/skills`, which Codex now treats as deprecated; setup moves the toolkit's copies from there into the backup folder so Codex does not list them twice, and leaves your own skills alone.
 
 Prefer a global command?
 
@@ -49,7 +52,7 @@ Browse the catalog:
 npx skills add https://github.com/cmdr-chara/chara-toolkit --list
 ```
 
-Install one skill for a compatible client at user level. Replace `codex` with the client adapter you use:
+Install one skill for a compatible agent at user level. Replace `codex` with the agent you use (for example `claude-code` or `cursor`):
 
 ```sh
 npx skills add https://github.com/cmdr-chara/chara-toolkit \
@@ -60,13 +63,13 @@ This uses the portable `SKILL.md` format. It does not install the full toolkit r
 
 ## Start using it
 
-After a full setup, inspect the installation:
+Start a **new session** in your agent and describe the result you want. The agent picks the smallest relevant skill from its description; you usually do not need to name one.
+
+Codex users can inspect the Codex integration with:
 
 ```sh
 npx --yes github:cmdr-chara/chara-toolkit mission-control check
 ```
-
-Then start a **new Codex task** and describe the result you want. The router chooses the smallest relevant specialist; you usually do not need to name a skill.
 
 ```text
 Find important bugs in this repository, fix them, and verify the changes.
@@ -96,7 +99,7 @@ Your project's `AGENTS.md` remains higher priority than general toolkit guidance
 | `codebase-improvement-planner` | Discover and rank evidence-backed repository improvements. |
 | `documentation-synchronizer` | Keep user, developer, API, migration, and operations docs aligned with code. |
 | `verification-and-release` | Decide what must be verified and whether an integrated change is ready to ship. |
-| `unlazy` | Track completion gates and prevent missing deliverables on substantial work. |
+| `completion-proof` | Prove substantial scoped work is actually finished: done contract, coverage accounting, final-candidate rechecks, and evidence-bound claims. |
 | `toolchain-preflight` | Resolve local shell, runtime, package-manager, and browser blockers. |
 | `typescript-quality-enforcer` | Improve TypeScript and JavaScript type safety and lint discipline. |
 | `production-web-builder` | Build or audit production web interfaces. |
@@ -117,7 +120,7 @@ The [PR review protocol](skills/review-and-refactor-code/references/pr-review-pr
 
 This is a skill upgrade, not an automatically installed review bot, enforced GitHub protection, or human approval. The existing security and release specialists retain their responsibilities.
 
-The machine-readable catalog is in [`skills/llms.txt`](skills/llms.txt). The six optional roles are `architect-writer`, `builder-writer`, `investigator-reader`, `patcher-writer`, `pathfinder-reader`, and `sentinel-reader`.
+The machine-readable catalog is in [`skills/llms.txt`](skills/llms.txt). The six optional roles are `architect-writer`, `builder-writer`, `investigator-reader`, `patcher-writer`, `pathfinder-reader`, and `sentinel-reader`. Read-only roles are enforced by a tool allowlist in Claude Code and Gemini CLI; in Codex and other agents they are enforced by instructions, because Codex custom agents inherit the parent session's sandbox.
 
 ## What works where
 
@@ -125,7 +128,8 @@ The machine-readable catalog is in [`skills/llms.txt`](skills/llms.txt). The six
 | --- | --- | --- |
 | Individual `SKILL.md` folders | Included | Installable in compatible clients |
 | Natural-language routing across the toolkit | Codex integration | Client selects installed skills |
-| Mission Control roles and workflow orchestration | Codex integration | Not included |
+| Mission Control roles | Native in Codex, Claude Code, Gemini CLI; role cards elsewhere | Role cards with `delegate-with-mission-cards` |
+| Workflow orchestration | Codex integration | Not included |
 | Toolkit updater and managed `AGENTS.md` block | Codex integration | Not included |
 
 The skill folders provide instructions, references, and scripts. They do not grant runtime permissions, API keys, or network access.
@@ -152,7 +156,7 @@ chara auto-update remove
 chara auto-update install
 ```
 
-Use `--codex-home /path/to/codex` when Codex uses a non-default home. The setup preserves instructions outside its managed `AGENTS.md` block and backs up managed files before replacement.
+Use `--agents <list>` to choose agents, `--home /path` to install under a different home folder, and `--codex-home /path/to/codex` when Codex uses a non-default home. The setup preserves instructions outside its managed `AGENTS.md` block and backs up managed files before replacement.
 
 ## Documentation
 
@@ -162,8 +166,8 @@ Use `--codex-home /path/to/codex` when Codex uses a non-default home. The setup 
 - [Automatic updates](docs/auto-update.md) · [Enterprise deployment](docs/enterprise-deployment.md)
 - [Application verification](docs/project-verification.md) · [Destructive-operation safety](docs/destructive-operations-safety.md)
 - [Evaluations](evaluations/README.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
-- [Security reporting](SECURITY.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
+- [Security reporting](SECURITY.md)
 
 ## License
 
-[MIT](LICENSE) © 2026 cmdr-chara. Third-party sources, modifications, and preserved license notices are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+[MIT](LICENSE) © 2026 cmdr-chara. All skills, references, scripts, and bundled lint rules are original work.

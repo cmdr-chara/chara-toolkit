@@ -29,11 +29,13 @@ async function fixture(t, modifications = {}) {
   await writeFile(trustedKeyPath, publicKey.export({ type: 'spki', format: 'pem' }));
   const args = ['--policy', policyPath, '--signature', signaturePath, '--trusted-key', trustedKeyPath];
   const home = join(directory, 'codex-home');
-  return { policy, directory, home, args, policyPath, signaturePath, trustedKeyPath };
+  const userHome = join(directory, 'user-home');
+  const skillsRoot = join(userHome, '.agents', 'skills');
+  return { policy, directory, home, userHome, skillsRoot, args, policyPath, signaturePath, trustedKeyPath };
 }
 
 function run(command, f, extra = []) {
-  return spawnSync(process.execPath, [toolkit, command, ...f.args, '--codex-home', f.home, ...extra],
+  return spawnSync(process.execPath, [toolkit, command, ...f.args, '--codex-home', f.home, '--home', f.userHome, ...extra],
     { encoding: 'utf8', timeout: 40000 });
 }
 
@@ -67,17 +69,17 @@ test('managed install is signed, update-disabled, verifiable, and resistant to r
   result = run('enterprise-setup', f);
   assert.equal(result.status, 0, result.stderr);
   assert.match(await readFile(join(f.home, 'AGENTS.md'), 'utf8'), /Keep the original rule/);
-  assert.equal((await verifyInstalled({ root, codexHome: f.home })).skills, 22);
+  assert.equal((await verifyInstalled({ root, codexHome: f.home, skillsRoot: f.skillsRoot })).skills, 22);
   result = run('enterprise-check', f);
   assert.equal(result.status, 0, result.stderr);
   const unauthorized = spawnSync(process.execPath, [toolkit, 'setup', '--no-auto-update',
-    '--codex-home', f.home], { encoding: 'utf8' });
+    '--codex-home', f.home, '--home', f.userHome], { encoding: 'utf8' });
   assert.notEqual(unauthorized.status, 0);
   assert.match(unauthorized.stderr, /managed installation/);
   const marker = JSON.parse(await readFile(join(f.home, '.codex-toolkit-managed.json')));
   assert.equal(marker.policy_sha256.length, 64);
   assert.equal(marker.release, f.policy.release);
-  await writeFile(join(f.home, 'skills', 'security-review', 'SKILL.md'), 'corrupt');
+  await writeFile(join(f.skillsRoot, 'security-review', 'SKILL.md'), 'corrupt');
   result = run('enterprise-check', f);
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Installed skill differs/);

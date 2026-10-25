@@ -125,6 +125,10 @@ const args = [
   "--codex-home",
   config.codex_home,
 ];
+// Configs written before agent-neutral setup have neither field; setup then
+// uses its defaults (the real home and automatic agent detection).
+if (typeof config.home === "string" && config.home) args.push("--home", config.home);
+if (typeof config.agents === "string" && config.agents) args.push("--agents", config.agents);
 
 if (dryRun) {
   console.log(JSON.stringify({ executable: config.npx_path, args, release: tag, commit }, null, 2));

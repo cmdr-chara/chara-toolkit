@@ -1,6 +1,6 @@
 {
   "name": "@cmdr-chara/charas-toolkit",
-  "version": "0.9.6",
+  "version": "0.10.0",
   "description": "Chara's Toolkit: 22 portable engineering skills, six optional Codex agents, safe workflows and verified delivery",
   "repository": {
     "type": "git",
@@ -46,8 +46,7 @@
     "CHANGELOG.md",
     "LICENSE",
     "SECURITY.md",
-    "README.md",
-    "THIRD_PARTY_NOTICES.md"
+    "README.md"
   ],
   "engines": {
     "node": ">=18"

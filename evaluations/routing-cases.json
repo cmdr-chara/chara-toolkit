@@ -828,21 +828,21 @@
         },
         {
           "id": "typescript-quality-enforcer-p2",
-          "prompt": "We want to adopt anti-slop in this existing TypeScript monorepo. Measure the current debt, decide which rule families should come first, and stop for approval before installing or changing lint policy.",
+          "prompt": "We want to adopt the chara-lint Oxlint rules in this existing TypeScript monorepo. Measure the current debt, decide which rule families should come first, and stop for approval before installing or changing lint policy.",
           "expected": "activate",
-          "reason": "Explicit anti-slop adoption with audit-first staged rollout is owned by the quality enforcer."
+          "reason": "Explicit chara-lint adoption with audit-first staged rollout is owned by the quality enforcer."
         },
         {
           "id": "typescript-quality-enforcer-p3",
-          "prompt": "I approve the exact assertion-safety stage you proposed. Install the vendored anti-slop runtime if needed, enable only that stage, remediate violations without suppressions or type laundering, and verify lint, typecheck, and focused tests.",
+          "prompt": "I approve the exact assertion-safety stage you proposed. Install the bundled chara-lint plugin if needed, enable only that stage, remediate violations without suppressions or type laundering, and verify lint, typecheck, and focused tests.",
           "expected": "activate",
           "reason": "Explicit approval advances a bounded TypeScript enforcement stage to execution."
         },
         {
           "id": "typescript-quality-enforcer-p4",
-          "prompt": "Migrate our existing local anti-slop copy to the toolkit's pinned vendor baseline, preserve project-specific rule changes and attribution, and show the configuration and verification diff instead of overwriting blindly.",
+          "prompt": "Replace our existing local Oxlint plugin copy with the toolkit's chara-lint rules, preserve project-specific rule changes, and show the configuration and verification diff instead of overwriting blindly.",
           "expected": "activate",
-          "reason": "Existing anti-slop migration and provenance-preserving policy integration are part of this skill."
+          "reason": "Migrating an existing TypeScript lint-plugin copy with a reviewed diff is part of this skill."
         }
       ],
       "negative": [
@@ -866,6 +866,20 @@
           "expected": "do_not_activate",
           "route_to": "debugging-investigator",
           "reason": "A concrete observed failure with unknown cause requires causal debugging before quality-policy remediation."
+        },
+        {
+          "id": "typescript-quality-enforcer-n4",
+          "prompt": "Our Python service is full of Any and unchecked casts. Tighten mypy to strict mode in stages and clean up the escape hatches.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "The skill is scoped to JavaScript/TypeScript; Python type-safety work belongs to the general review/refactor owner."
+        },
+        {
+          "id": "typescript-quality-enforcer-n5",
+          "prompt": "Set up stricter linting and static analysis for our Flutter app's Dart code and fix the warnings it finds.",
+          "expected": "do_not_activate",
+          "route_to": "flutter-production-builder",
+          "reason": "Dart lint policy belongs to the Flutter specialist, not the JavaScript/TypeScript quality enforcer."
         }
       ]
     }

@@ -1,13 +1,13 @@
 ---
 name: delegate-with-mission-cards
-description: Delegate independent, bounded work to specialized reader and writer subagents with explicit ownership and parent verification. Use when parallel work can be scoped and verified independently.
+description: Delegate independent, bounded work to specialized reader and writer subagents with explicit ownership and parent verification. Use when parallel work can be scoped and verified independently. Not for tiny, tightly coupled, or still-undefined work.
 ---
 
 # Mission Control
 
 Delegate execution, not accountability. The parent owns decomposition, sequencing, decisions, integration, verification, and the final answer.
 
-Mission Control is intentionally **model-agnostic**. Its roles do not pin a model or reasoning effort; they use the active Codex/runtime configuration.
+Mission Control works on any agent. Its six roles are defined once as neutral role cards in `references/roles/`; roles never pin a model or reasoning effort, so they use whatever the active session runs.
 
 ## Delegation gate
 
@@ -17,25 +17,36 @@ Keep work in the parent when it is small, tightly coupled, destructive, primaril
 
 ## Choose the lightest capable role
 
-| Role | Use for |
-| --- | --- |
-| `pathfinder-reader` | Fast discovery and narrow fact gathering |
-| `investigator-reader` | Debugging, research, tracing, reviews, and comparisons |
-| `sentinel-reader` | High-consequence read-only security, privacy, migration, architecture, policy, or contract review |
-| `patcher-writer` | Tiny isolated reversible changes |
-| `builder-writer` | Normal bounded implementation across code, tests, docs, config, and other workspace artifacts |
-| `architect-writer` | High-consequence cross-cutting implementation, migrations, and security hardening |
+| Role | Access | Use for |
+| --- | --- | --- |
+| `pathfinder-reader` | read-only | Fast discovery and narrow fact gathering |
+| `investigator-reader` | read-only | Debugging, research, tracing, reviews, and comparisons |
+| `sentinel-reader` | read-only | High-consequence security, privacy, migration, architecture, policy, or contract review |
+| `patcher-writer` | owned write scope | Tiny isolated reversible changes |
+| `builder-writer` | owned write scope | Normal bounded implementation across code, tests, docs, config, and other workspace artifacts |
+| `architect-writer` | owned write scope | High-consequence cross-cutting implementation, migrations, and security hardening |
 
 Escalate by **risk and complexity**, not by task length or prestige.
 
-## Runtime portability
+## Dispatch on any agent
 
-- The shipped role TOMLs deliberately omit `model` and `model_reasoning_effort`.
-- The active Codex/runtime configuration chooses the model and reasoning behavior.
-- User or organization model policy remains authoritative.
-- If a runtime exposes named custom roles, select the matching role.
-- If named roles are unavailable, do not pretend a profile was applied. Keep the same mission card and safety boundary in the parent or an available generic subagent, and report the degraded dispatch.
-- Role identity is about permissions, scope, and execution behavior—not a specific model family.
+Use the strongest mechanism the current agent offers, in this order:
+
+1. **Native role.** If the agent has the role installed under its own name (Codex custom agent, Claude Code subagent, Gemini CLI subagent), dispatch to it.
+2. **Generic subagent.** If the agent can start subagents but the role is not installed, start a generic one and give it the role card from `references/roles/<role>.md` followed by the mission card.
+3. **In the parent.** If the agent has no subagents, carry out the mission yourself, one at a time, following the role card's access rule and stop conditions.
+
+Report which mechanism was used. Never claim a named role or a restriction was applied when the runtime did not apply it.
+
+How strictly read-only roles are enforced depends on the agent:
+
+| Agent | Read-only enforcement |
+| --- | --- |
+| Claude Code, Gemini CLI | Tool allowlist in the installed role: write tools are unavailable |
+| Codex | Instructions only: custom agents inherit the parent session's sandbox |
+| Generic subagent or parent | Instructions only |
+
+When enforcement is instructions-only and the mission is high-consequence, verify afterwards that the reader changed nothing (for example `git status`) before accepting its handoff. User or organization model and permission policy remains authoritative.
 
 ## Mission ledger
 

@@ -10,7 +10,7 @@ These operations fit the normal skill boundary when the user owns or is authoriz
 - remove C2PA/Content Credentials when the user explicitly asks to remove that metadata from their own artifact;
 - remove EXIF/XMP or document properties within the approved metadata scope;
 - clean supported HTML/Markdown/document metadata without rewriting substantive content;
-- rebuild a supported container only when the service reports that the required format tooling is available and the visible-content invariants can be checked afterwards.
+- rebuild a supported container only when the required format tooling is available and the visible-content invariants can be checked afterwards.
 
 Inspection must precede sanitation. Re-inspection must follow it when the target finding matters.
 
@@ -22,7 +22,7 @@ Pause or obtain renewed approval before:
 - removing accessibility, licensing, copyright, color-profile, geospatial, timestamp, workflow, or document-management metadata that may have legitimate downstream value;
 - rebuilding a PDF or office container when the rebuild can alter signatures, forms, attachments, bookmarks, annotations, rendering, or other structure;
 - replacing the original file in place when a separate cleaned copy is possible;
-- applying a capability whose output semantics are not visible in `/capabilities` or `/openapi.json`.
+- applying a tool or configured service whose output semantics are undocumented or unverified for this format.
 
 State the expected loss or uncertainty instead of hiding it behind a generic “clean” label.
 

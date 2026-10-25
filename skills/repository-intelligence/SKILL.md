@@ -1,6 +1,6 @@
 ---
 name: repository-intelligence
-description: Map repository architecture, ownership, dependencies, change impact, and edit conflicts. Use when the task needs evidence about what exists or what a proposed change can affect.
+description: Map repository architecture, ownership, dependencies, change impact, and edit conflicts. Use when the task needs evidence about what exists or what a proposed change can affect. Not for implementing changes or diagnosing a runtime failure.
 ---
 
 # Repository Intelligence
@@ -44,7 +44,7 @@ Treat scanner output as evidence leads, not ownership truth.
 
 ## Handoffs and interaction boundaries
 
-Hand parallelization to `multi-agent-work-coordinator`, unknown-defect hunting to `bug-finder`, concrete failures to `debugging-investigator`, migrations to evolution, security-first questions to `security-review`, and implementation to the owning specialist.
+Hand parallelization to `multi-agent-work-coordinator`, unknown-defect hunting to `bug-finder`, concrete failures to `debugging-investigator`, migrations to `codebase-evolution-controller`, security-first questions to `security-review`, and implementation to the owning specialist.
 
 ## Failure handling
 

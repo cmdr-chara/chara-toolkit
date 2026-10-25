@@ -1,6 +1,6 @@
 ---
 name: production-web-builder
-description: Build or audit production web interfaces across architecture, data, interaction, accessibility, performance, security, and browser behavior. Use when web implementation quality is the main decision.
+description: Build or audit production web interfaces across architecture, data, interaction, accessibility, performance, security, and browser behavior. Use when web implementation quality is the main decision. Not for visual direction alone, screenshot rebuilds, or framework upgrades.
 ---
 
 # Production Web Builder
@@ -37,7 +37,7 @@ Verify its signals manually.
 
 1. **Map execution and trust.** Identify server/edge/client/build-time ownership, caching, authentication/authorization, assets, CSP/security headers, and deployment limits.
 2. **Model behavior first.** Define initial/loading/empty/error/retry/offline/stale/unauthorized states, mutation semantics, navigation, focus, and recovery.
-3. **Choose architecture conditionally.** Read `references/package-selection.md` and the dated ecosystem reference only when a dependency/framework decision is material.
+3. **Choose architecture conditionally.** Read `references/package-selection.md` only when a dependency/framework decision is material; it ends with how to verify current versions and advisories.
 4. **Implement semantic boundaries.** Prefer native semantics and explicit component/data ownership. Keep invalid state combinations unrepresentable where practical.
 5. **Implement data/forms safely.** Validate untrusted input at the server boundary, authorize protected operations, define cache/invalidation ownership, preserve recoverable form input, and control duplicate effects.
 6. **Apply responsive/a11y behavior.** Test intermediate widths, zoom, long/localized content, input modes, reduced motion, focus, and semantic interaction.

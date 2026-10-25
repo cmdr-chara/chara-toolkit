@@ -1,6 +1,6 @@
 ---
 name: codebase-improvement-planner
-description: Discover and prioritize evidence-backed improvements when no specific change has been chosen. Use for open-ended requests to improve, modernize, simplify, harden, or clean up a repository.
+description: Discover and prioritize evidence-backed improvements when no specific change has been chosen. Use for open-ended requests to improve, modernize, simplify, harden, or clean up a repository. Not for a known bug or an already chosen migration, refactor, or fix.
 ---
 
 # Codebase Improvement Planner
@@ -47,12 +47,12 @@ Resolve the repository root, working-tree state, user goal, protected contracts,
 - `optimize-codebase-performance` owns measured bottlenecks.
 - `codebase-evolution-controller` owns migrations and upgrades.
 - `debugging-investigator` owns concrete failures with unknown causes.
-- Platform builders own implementation once a platform-specific improvement is selected.
+- `production-web-builder`, `flutter-production-builder`, and `expo-react-native-builder` own implementation once a platform-specific improvement is selected.
 - `verification-and-release` owns integrated ship judgment.
 
 ## Failure handling
 
-If evidence is too weak to rank safely, narrow the claim, request or gather the missing evidence, or hand off to repository intelligence. Keep uncertain candidates explicitly labeled instead of promoting them by intuition.
+If evidence is too weak to rank safely, narrow the claim, request or gather the missing evidence, or hand off to `repository-intelligence`. Keep uncertain candidates explicitly labeled instead of promoting them by intuition.
 
 ## Stop conditions
 

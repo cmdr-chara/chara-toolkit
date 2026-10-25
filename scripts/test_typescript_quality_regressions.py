@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Run focused regressions for the TypeScript quality inventory and local anti-slop patches."""
+"""Run focused regressions for the TypeScript quality inventory.
+
+The chara-lint rules are covered by scripts/test_chara_lint.mjs against a real Oxlint binary.
+"""
 from __future__ import annotations
 
 import argparse
@@ -23,23 +26,6 @@ def load_inventory(pack_root: Path) -> ModuleType:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
-
-
-def assert_vendor_patch_shapes(pack_root: Path) -> None:
-    rules = pack_root / "skills" / "typescript-quality-enforcer" / "assets" / "anti-slop" / "rules"
-
-    unknown_parameters = (rules / "no-unknown-parameters.ts").read_text(encoding="utf-8")
-    if 'type.type === "TSUnionType"' not in unknown_parameters or "type.types.some(resolvesToUnknown)" not in unknown_parameters:
-        raise AssertionError("no-unknown-parameters must detect unknown-dominated union annotations")
-
-    safety = (rules / "require-safety-comment-for-type-assertion.ts").read_text(encoding="utf-8")
-    if r"/\bSAFETY\s*:\s*\S/u" not in safety:
-        raise AssertionError("SAFETY comments must require non-whitespace justification text")
-
-    aliases = (rules / "no-unknown-type-aliases.ts").read_text(encoding="utf-8")
-    for token in ("TSTypeAliasDeclaration(node)", '"TSModuleBlock"', "aliasesVisibleFrom"):
-        if token not in aliases:
-            raise AssertionError(f"no-unknown-type-aliases is missing lexical alias handling token {token!r}")
 
 
 def run_inventory_regression(pack_root: Path) -> None:
@@ -114,7 +100,6 @@ def main() -> int:
         parser.error("root must be a directory")
 
     run_inventory_regression(pack_root)
-    assert_vendor_patch_shapes(pack_root)
     print("TypeScript quality regressions: PASS")
     return 0
 
