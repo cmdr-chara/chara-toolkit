@@ -1,6 +1,6 @@
 ---
 name: toolchain-preflight
-description: Resolve local shell, runtime, package-manager, browser, quoting, or encoding blockers before retrying the real task. Use when the execution path itself is unknown or broken.
+description: Resolve local shell, runtime, package-manager, browser, quoting, or encoding blockers before retrying the real task. Use when the execution path itself is unknown or broken. Not for application bugs or planned runtime migrations.
 ---
 
 # Toolchain Preflight
@@ -37,7 +37,7 @@ Resolve repository instructions, working-tree/user state, OS/shell, documented c
 
 ## Handoffs and interaction boundaries
 
-Application failures go to `debugging-investigator`; planned version transitions to evolution; browser/app implementation to the owning builder; final integrated evidence to `verification-and-release`.
+Application failures go to `debugging-investigator`; planned version transitions to `codebase-evolution-controller`; browser/app implementation to the owning builder; final integrated evidence to `verification-and-release`.
 
 ## Failure handling
 

@@ -24,4 +24,4 @@ For independent long-running activities, use a step with id and background: true
 
 Measure before/after elapsed feedback, number of billed jobs, CPU and memory contention, and failure isolation. On a small runner, competing CPU-intensive steps can run *slower*. Preserve explicit permissions and all required checks; never use continue-on-error to conceal an asynchronous failure.
 
-Sources: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax and https://github.blog/changelog/2026-06-25-actions-steps-can-now-be-run-in-parallel/
+Source: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax (confirm the parallel-step keys are available on your runner before use).

@@ -1,6 +1,6 @@
 ---
 name: mobile-architecture-director
-description: Choose a mobile architecture among Flutter, Expo/React Native, native, and other viable options. Use when platform choice or mobile architecture direction is unresolved.
+description: Choose a mobile architecture among Flutter, Expo/React Native, native, and other viable options. Use when platform choice or mobile architecture direction is unresolved. Not for building an app whose stack is already chosen.
 ---
 
 # Mobile Architecture Director
@@ -28,7 +28,7 @@ Resolve product journeys, target platforms/devices, team skills, native/API requ
 
 1. **Define must-have gates.** Record platform/API/store/security/offline/accessibility constraints and explicit disqualifiers.
 2. **Model the product architecture.** Identify shared domain/data logic, native integrations, UI/platform-specific behavior, background work, and distribution boundaries.
-3. **Compare viable options.** Use `references/platform-decision-matrix-2026-07-17.md`; include Flutter, Expo/RN, separate native, and other relevant approaches rather than forcing all options.
+3. **Compare viable options.** Use `references/platform-decision-matrix.md` and verify its current-facts checklist; include Flutter, Expo/RN, separate native, and other relevant approaches rather than forcing all options.
 4. **Weight criteria.** Score only criteria that matter to this product and show the weights so the result is inspectable.
 5. **Prototype uncertainty.** Define proof spikes for critical unknowns such as native SDKs, background work, performance, accessibility, build/signing, or offline durability.
 6. **Test sensitivity.** Re-run the decision when plausible weight changes or proof-spike results could flip it.

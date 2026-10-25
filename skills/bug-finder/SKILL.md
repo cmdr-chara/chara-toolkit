@@ -1,6 +1,6 @@
 ---
 name: bug-finder
-description: Hunt for previously unknown correctness defects by deriving invariants and proving or retiring candidates. Use for proactive bug discovery without a specific known symptom.
+description: Hunt for previously unknown correctness defects by deriving invariants and proving or retiring candidates. Use for proactive bug discovery without a specific known symptom. Not for a known failure, a PR review, or security-only review.
 ---
 
 # Bug Finder
@@ -43,7 +43,7 @@ Resolve repository/candidate identity, hunt scope, architecture boundaries when 
 
 ## Handoffs and interaction boundaries
 
-Repository intelligence may supply boundaries. Security-only findings go to `security-review`. Known root causes go directly to the owning implementation specialist. Substantial accepted remediation may use `unlazy`; integrated release judgment belongs to `verification-and-release`.
+`repository-intelligence` may supply boundaries. Security-only findings go to `security-review`. Known root causes go directly to the owning implementation specialist. Substantial accepted remediation may use `completion-proof`; integrated release judgment belongs to `verification-and-release`.
 
 ## Failure handling
 

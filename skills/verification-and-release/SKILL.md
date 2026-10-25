@@ -1,6 +1,6 @@
 ---
 name: verification-and-release
-description: Design risk-based verification and judge release readiness from traceable evidence. Use when deciding what must be proven or whether an integrated change can ship.
+description: Design risk-based verification and judge release readiness from traceable evidence. Use when deciding what must be proven or whether an integrated change can ship. Not for implementing features or diagnosing unknown failures.
 ---
 
 # Verification and Release
@@ -44,7 +44,7 @@ Record command, candidate, environment, pass/fail/skip/flaky state, and relevant
 
 ## Handoffs and interaction boundaries
 
-Return missing feature checks to the owning builder, unknown failures to `debugging-investigator`, migration/rollback gaps to evolution, security-first code questions to `security-review`, and documentation gaps to documentation synchronization.
+Return missing feature checks to the owning builder, unknown failures to `debugging-investigator`, migration/rollback gaps to `codebase-evolution-controller`, security-first code questions to `security-review`, and documentation gaps to `documentation-synchronizer`.
 
 ## Failure handling
 

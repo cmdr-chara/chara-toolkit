@@ -16,9 +16,9 @@ npx --yes github:cmdr-chara/codex-toolkit setup
 
 `setup` does four things:
 
-1. installs every toolkit skill into the active Codex home;
-2. installs the six Mission Control agents;
-3. installs the toolkit workflow catalog and synchronizes a managed routing block in the global Codex `AGENTS.md`;
+1. installs every toolkit skill into the standard `~/.agents/skills` folder and every detected agent;
+2. installs the six Mission Control roles as native subagents for Codex, Claude Code, and Gemini CLI when they are present;
+3. for Codex, installs the toolkit workflow catalog and synchronizes a managed routing block in the global Codex `AGENTS.md`;
 4. registers a user-level scheduled updater.
 
 The updater checks GitHub's **latest published Release** for `cmdr-chara/codex-toolkit`.
@@ -77,6 +77,10 @@ To install the full toolkit without registering a scheduler:
 ```sh
 npx --yes github:cmdr-chara/codex-toolkit setup --no-auto-update
 ```
+
+## Agents and home folder
+
+Setup installs skills for every detected agent (see the [portability guide](portable-skills.md)). The scheduled updater remembers the `--agents` choice and the `--home` folder, so each update re-detects agents and picks up an agent installed later. Updater configs written by earlier releases have neither field and use the defaults: your real home and automatic detection.
 
 ## Custom Codex home
 

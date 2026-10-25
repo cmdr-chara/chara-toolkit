@@ -2,6 +2,10 @@
 
 Chara's Toolkit ships deterministic *decision-boundary probes*, not precomputed claims of agent superiority. A paired comparison uses actual Codex JSONL output from the same prompt, model, and CLI build.
 
+## Coverage
+
+`evaluations/behavioral-cases.json` holds 33 decision-boundary probes across 15 skills: three for each of `bug-finder`, `codebase-improvement-planner`, `documentation-synchronizer`, `expo-react-native-builder`, `flutter-production-builder`, `mobile-architecture-director`, `optimize-codebase-performance`, `repository-intelligence`, and `toolchain-preflight`, and one each for six others. Each probe is a self-contained prompt whose correct answer depends on a rule the skill teaches, checked by case-insensitive phrases in the final reply and, for read-only decisions, by zero file changes. A full paired run is 66 model runs; use `--case` to pilot a subset.
+
 ## Capture
 
 Prepare two distinct CODEX_HOME directories using the same runtime/model configuration. The baseline has no toolkit routing/skills; the candidate has the intended toolkit revision. Configure authentication separately: the script never copies credentials or modifies either home. Disable unrelated custom instructions and external tools so the comparison is meaningful.

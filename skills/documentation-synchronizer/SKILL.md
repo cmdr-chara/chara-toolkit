@@ -1,6 +1,6 @@
 ---
 name: documentation-synchronizer
-description: Update documentation to match code, API, schema, configuration, deployment, or operational changes. Use when implementation changes create documentation drift.
+description: Update documentation to match code, API, schema, configuration, deployment, or operational changes. Use when implementation changes create documentation drift. Not for marketing copy or documenting behavior that does not exist.
 ---
 
 # Documentation Synchronizer
@@ -17,11 +17,14 @@ Do not trigger for unrelated marketing copy, invented product behavior, or as a 
 
 Resolve the implementation diff/change set, authoritative behavior/contracts, audiences, release/version context, repository working tree, generated docs ownership, and protected user work.
 
-For a read-only drift scan:
+For a read-only drift scan, give it the change set, either a Git base ref or explicit files:
 
 ```sh
-python skills/documentation-synchronizer/scripts/doc_drift_scan.py . --format markdown
+python skills/documentation-synchronizer/scripts/doc_drift_scan.py . --base origin/main --format markdown
+python skills/documentation-synchronizer/scripts/doc_drift_scan.py . --files src/api/routes.ts config/app.yaml --format markdown
 ```
+
+It lists the changed files (deleted ones included) and, for each documentation surface they may affect (API reference, configuration, runbooks, architecture), the files that point to it.
 
 Verify candidate matches against the real change.
 
@@ -43,7 +46,7 @@ Verify candidate matches against the real change.
 
 ## Handoffs and interaction boundaries
 
-Behavior ambiguity goes back to the owning implementation specialist. Migration semantics go to evolution, security-sensitive docs to `security-review`, and release-blocking documentation evidence to `verification-and-release`.
+Behavior ambiguity goes back to the owning implementation specialist. Migration semantics go to `codebase-evolution-controller`, security-sensitive docs to `security-review`, and release-blocking documentation evidence to `verification-and-release`.
 
 ## Failure handling
 

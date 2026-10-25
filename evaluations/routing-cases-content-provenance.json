@@ -25,7 +25,7 @@
         },
         {
           "id": "content-provenance-hygiene-p4",
-          "prompt": "Before cleaning this user-owned PDF, query the configured provenance service capabilities and tell me whether the current deployment can inspect and rebuild the container safely.",
+          "prompt": "Before cleaning this user-owned PDF, check which local inspection tools can read its metadata and tell me whether the container can be rebuilt safely.",
           "expected": "activate",
           "reason": "Runtime capability sufficiency for provenance sanitation is owned by this skill."
         }
@@ -47,62 +47,62 @@
         },
         {
           "id": "content-provenance-hygiene-n3",
-          "prompt": "The local metadata service now corrupts some PDFs after cleaning. Reproduce the failure, find the cause, and design a regression test.",
+          "prompt": "Our PDF metadata cleaning script now corrupts some PDFs. Reproduce the failure, find the cause, and design a regression test.",
           "expected": "do_not_activate",
           "route_to": "debugging-investigator",
-          "reason": "A concrete service failure with an unknown cause is a causal debugging task."
+          "reason": "A concrete tool failure with an unknown cause is a causal debugging task."
         }
       ]
     },
     {
-      "skill": "unlazy",
+      "skill": "completion-proof",
       "positive": [
         {
-          "id": "unlazy-p1",
-          "prompt": "Use an explicit gate ledger for this substantial task. I want every requested deliverable completed and every final count re-measured before you say it is done.",
+          "id": "completion-proof-p1",
+          "prompt": "Write an explicit definition of done for this substantial, already-scoped task. I want every requested deliverable proven on the final version and every number in your summary re-measured before you say it is finished.",
           "expected": "activate",
-          "reason": "The user explicitly requests evidence-backed completion discipline rather than ordinary best-effort execution."
+          "reason": "The user explicitly requests an evidence-backed done contract and claim audit rather than ordinary best-effort execution."
         },
         {
-          "id": "unlazy-p2",
-          "prompt": "Do not stop at 80 percent. Turn these twelve already-defined migration follow-ups into measurable completion gates, finish every authorized item, and report any genuine blocker instead of silently dropping it.",
+          "id": "completion-proof-p2",
+          "prompt": "Do not stop at 80 percent. Track these twelve already-defined migration follow-ups one by one, finish every authorized item, and report any genuine blocker with its owner instead of silently dropping it.",
           "expected": "activate",
-          "reason": "The domain work is already defined; the primary requested control is exhaustive gate-based follow-through."
+          "reason": "The domain work is already defined; the primary requested control is coverage accounting with visible blocked items."
         },
         {
-          "id": "unlazy-p3",
-          "prompt": "Apply unlazy discipline to this long documentation cleanup: prove that all in-scope files were enumerated, all stale terms were checked, and the final report's file counts are measured from the final tree.",
+          "id": "completion-proof-p3",
+          "prompt": "Use completion-proof for this long documentation cleanup: enumerate every in-scope file with a reproducible query, show each one was handled or excluded, rerun the stale-term search on the final tree, and compute the final file counts from it.",
           "expected": "activate",
-          "reason": "Explicit unlazy invocation plus exhaustive-scope and final-claim audit requirements."
+          "reason": "Explicit invocation plus a population roster, a closure check, and final-claim measurement."
         },
         {
-          "id": "unlazy-p4",
-          "prompt": "Build a natural-joint depth tree for these already-approved deliverables, give each leaf observable gates, add integration gates, and do not call the parent complete just because the leaves say they passed.",
+          "id": "completion-proof-p4",
+          "prompt": "These three approved deliverables were each reported done by separate agents. Do not trust their reports: re-verify each one on the merged result, add checks for how they work together, and only then say whether the whole task is complete.",
           "expected": "activate",
-          "reason": "Directly requests the adapted Depth Tree and branch-gate completion model."
+          "reason": "Upgrading reported completion into fresh receipts and adding seam clauses for the combined result is completion proof, not coordination or release judgment."
         }
       ],
       "negative": [
         {
-          "id": "unlazy-n1",
+          "id": "completion-proof-n1",
           "prompt": "What is the capital of Portugal?",
           "expected": "do_not_activate",
           "route_to": "no-skill",
-          "reason": "A simple factual answer does not need a completion ledger."
+          "reason": "A simple factual answer does not need a done contract."
         },
         {
-          "id": "unlazy-n2",
+          "id": "completion-proof-n2",
           "prompt": "We have not chosen a mobile stack. Decide whether Flutter or Expo fits this product and explain the tradeoffs.",
           "expected": "do_not_activate",
           "route_to": "mobile-architecture-director",
           "reason": "The unresolved domain decision belongs to the mobile architecture specialist; completion discipline cannot decide it."
         },
         {
-          "id": "unlazy-n3",
+          "id": "completion-proof-n3",
           "prompt": "All implementation work is integrated. Decide whether this release candidate can ship to production today.",
           "expected": "do_not_activate",
           "route_to": "verification-and-release",
-          "reason": "Final release readiness remains owned by verification-and-release even if task gates are complete."
+          "reason": "Final release readiness remains owned by verification-and-release even if every done-contract clause is proven."
         }
       ]
     },

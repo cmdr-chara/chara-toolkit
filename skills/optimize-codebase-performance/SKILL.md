@@ -1,6 +1,6 @@
 ---
 name: optimize-codebase-performance
-description: Measure and improve a named performance bottleneck while preserving correctness. Use when reducing latency, CPU, memory, I/O, rendering cost, startup time, or infrastructure cost.
+description: Measure and improve a named performance bottleneck while preserving correctness. Use when reducing latency, CPU, memory, I/O, rendering cost, startup time, or infrastructure cost. Not for unmeasured cleanup, correctness bugs, or migrations.
 ---
 
 # Optimize Codebase Performance
@@ -37,7 +37,7 @@ Resolve the critical path, target metric, representative workload, environment, 
 
 ## Handoffs and interaction boundaries
 
-Use repository intelligence for unclear hot paths, debugging for incorrect behavior, evolution for version/contract transitions, platform builders for broader product work, `security-review` if a performance change crosses a security boundary, and `verification-and-release` for final ship judgment.
+Use `repository-intelligence` for unclear hot paths, `debugging-investigator` for incorrect behavior, `codebase-evolution-controller` for version/contract transitions, a platform builder (`production-web-builder`, `flutter-production-builder`, or `expo-react-native-builder`) for broader product work, `security-review` if a performance change crosses a security boundary, and `verification-and-release` for final ship judgment.
 
 ## Failure handling
 

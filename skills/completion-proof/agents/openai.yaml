@@ -1,0 +1,4 @@
+interface:
+  display_name: "Completion Proof"
+  short_description: "Prove a scoped task is truly done before claiming it"
+  default_prompt: "Use $completion-proof to derive a done contract for this already-scoped task, account for every covered item, re-verify the final candidate, and report COMPLETE only when each required clause has fresh evidence; otherwise report BLOCKED with what remains."

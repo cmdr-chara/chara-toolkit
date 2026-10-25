@@ -304,6 +304,9 @@ def contains_surface(doc_result: dict[str, Any], surface: str) -> bool:
 def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
     paths = build_fixtures(workspace)
     fixtures = paths["fixtures"]
+    write_text(fixtures / "provenance/note.md", "clean line\nhidden\u200bspace and \u202eoverride\n")
+    write_text(fixtures / "provenance/plain.md", "nothing hidden here\n")
+    write_json(fixtures / "design/tokens.json", {"color": {"text": {"$value": "#111827"}}, "spacing": {"sm": "8px", "md": "16px"}})
     before = fixture_digest(fixtures)
     py = sys.executable
 
@@ -317,6 +320,8 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
         "flutter_inventory": pack_root / "skills/flutter-production-builder/scripts/flutter_project_inventory.py",
         "expo_inventory": pack_root / "skills/expo-react-native-builder/scripts/expo_project_inventory.py",
         "typescript_quality_inventory": pack_root / "skills/typescript-quality-enforcer/scripts/typescript_quality_inventory.py",
+        "text_invisibles": pack_root / "skills/content-provenance-hygiene/scripts/inspect_text_invisibles.py",
+        "measure_tokens": pack_root / "skills/screenshot-to-interface/scripts/measure_tokens.py",
     }
     missing = [str(path) for path in scripts.values() if not path.is_file()]
     if missing:
@@ -365,8 +370,16 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
     commands.append(run_command("flutter_inventory", [py, str(scripts["flutter_inventory"]), str(paths["flutter"]), "--format", "json"], {0}))
     commands.append(run_command("expo_inventory", [py, str(scripts["expo_inventory"]), str(paths["expo"]), "--format", "json"], {0}))
     commands.append(run_command("typescript_quality_inventory", [py, str(scripts["typescript_quality_inventory"]), str(paths["repo"]), "--format", "json"], {0}))
+    commands.append(run_command("text_invisibles", [py, str(scripts["text_invisibles"]), str(fixtures / "provenance"), "--format", "json"], {1}))
+    commands.append(run_command("text_invisibles_clean", [py, str(scripts["text_invisibles"]), str(fixtures / "provenance/plain.md"), "--format", "json"], {0}))
+    token_runs = [
+        run_command("measure_contrast", [py, str(scripts["measure_tokens"]), "contrast", "#111827", "#ffffff", "#9ca3af", "#ffffff"], {0}),
+        run_command("measure_colors", [py, str(scripts["measure_tokens"]), "colors", "--tokens", str(fixtures / "design/tokens.json"), "#121828", "#ff00ff"], {0}),
+        run_command("measure_scale", [py, str(scripts["measure_tokens"]), "scale", "16", "32", "48", "--dpr", "2"], {0}),
+    ]
+    commands.extend(token_runs)
 
-    parsed = {item.name: parse_json_output(item) for item in commands}
+    parsed = {item.name: parse_json_output(item) for item in commands if not item.name.startswith("measure_")}
     assertions: list[str] = []
 
     def check(condition: bool, label: str) -> None:
@@ -405,6 +418,15 @@ def execute(pack_root: Path, as_of: str, workspace: Path) -> dict[str, Any]:
     check(quality_counts["unsafe_record"] >= 1, "TypeScript quality inventory detects unsafe dictionary signal")
     check(quality_counts["reflect_get"] >= 1, "TypeScript quality inventory detects reflection signal")
     check("Heuristic text signals only" in ts_quality["disclaimer"], "TypeScript quality inventory labels heuristic evidence limits")
+
+    invisibles = parsed["text_invisibles"]
+    check({f["kind"] for f in invisibles["findings"]} == {"zero-width", "bidi-control"}, "invisible scanner reports zero-width and bidi controls")
+    check(all(f["file"].endswith("note.md") for f in invisibles["findings"]), "invisible scanner reports only the affected file")
+    check(parsed["text_invisibles_clean"]["findings"] == [], "invisible scanner passes clean text")
+    contrast, colors, scale = (run.stdout for run in token_runs)
+    check("17.74:1" in contrast and "2.54:1 | FAIL" in contrast, "token helper computes WCAG contrast and flags failures")
+    check("| color.text | #111827 |" in colors and "no match: log deviation" in colors, "token helper snaps near colors and flags distant ones")
+    check("Proposed base unit: 8px" in scale, "token helper prefers the coarsest well-fitting base unit")
 
     after = fixture_digest(fixtures)
     check(before == after, "all helper executions preserve fixture inputs byte-for-byte")

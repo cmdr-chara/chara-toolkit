@@ -25,11 +25,11 @@
 - role-specific dispatch wording;
 - per-agent execution inside the approved mission.
 
-Model and reasoning selection are **runtime-owned**, not Mission-Control-owned. Shipped agent profiles intentionally inherit the active Codex configuration.
+Model and reasoning selection are **runtime-owned**, not Mission-Control-owned. Shipped role files intentionally inherit the active session's model on every agent.
 
 ## Runtime fallback
 
-If named custom roles are unavailable, keep the same mission card and ownership contract in the parent or an available generic subagent. Do not claim that a named role, sandbox, model, or reasoning profile was applied when the runtime did not expose it.
+If named custom roles are unavailable, give an available generic subagent the role card from `delegate-with-mission-cards/references/roles/` plus the same mission card and ownership contract, or keep the mission in the parent. Do not claim that a named role, sandbox, model, or reasoning profile was applied when the runtime did not expose it.
 
 ## Prohibitions
 

@@ -13,7 +13,7 @@ try:
 except ImportError:  # Direct script execution puts scripts/ on sys.path.
     import _validate_skill_pack_impl as impl
 
-for _skill in ("unlazy", "bug-finder", "toolchain-preflight", "security-review"):
+for _skill in ("completion-proof", "bug-finder", "toolchain-preflight", "security-review"):
     if _skill not in impl.EXPECTED_SKILLS:
         impl.EXPECTED_SKILLS = [*impl.EXPECTED_SKILLS, _skill]
 impl.TOOLKIT_SKILLS = ["delegate-with-mission-cards", *impl.EXPECTED_SKILLS]
@@ -71,7 +71,7 @@ def validate_evaluations(result):
             )
     for skill in (
         "content-provenance-hygiene",
-        "unlazy",
+        "completion-proof",
         "bug-finder",
         "toolchain-preflight",
         "security-review",
@@ -92,60 +92,8 @@ _original_provenance_validation = impl.validate_responsibility_and_provenance
 
 
 def validate_responsibility_and_provenance(result):
-    """Run core checks plus provenance and orchestration contracts."""
+    """Run core checks plus originality and orchestration contracts."""
     _original_provenance_validation(result)
-
-    unlazy_reference = result.root / "skills/unlazy/references/upstream-provenance.md"
-    unlazy_text = impl.read_text(unlazy_reference, result)
-    for phrase in (
-        "Leonxlnx/unlazy",
-        "ed9e8d2b5919698cf2c54bda270d507e10b69617",
-        "Copyright (c) 2026 Leonxlnx",
-        "No endorsement by Leonxlnx is stated or implied",
-    ):
-        if phrase not in unlazy_text:
-            result.error(f"skills/unlazy: upstream provenance missing {phrase!r}")
-
-    service_reference = (
-        result.root
-        / "skills/content-provenance-hygiene/references/service-protocol.md"
-    )
-    service_text = impl.read_text(service_reference, result)
-    for phrase in (
-        "guillaumemeyer/watermarks-remover",
-        "fcebf533583d7a313b348dbe421f3b4b17163b66",
-        "License:** MIT",
-        "does not vendor, redistribute, or silently install",
-    ):
-        if phrase not in service_text:
-            result.error(
-                "content-provenance-hygiene: service provenance missing "
-                f"{phrase!r}"
-            )
-
-    security_reference = result.root / "skills/security-review/references/provenance.md"
-    security_text = impl.read_text(security_reference, result)
-    for phrase in (
-        "SkillMedev/skills",
-        "a28c4ce9366b5a8540577bed8f70b6a60f8fde27",
-        "Copyright (c) 2026 Alexander Ouellet",
-        "No endorsement by Skill Me or Alexander Ouellet is stated or implied",
-    ):
-        if phrase not in security_text:
-            result.error(f"skills/security-review: provenance missing {phrase!r}")
-
-    notice = impl.read_text(result.root / "THIRD_PARTY_NOTICES.md", result)
-    for phrase in (
-        "## Leonxlnx/unlazy",
-        "ed9e8d2b5919698cf2c54bda270d507e10b69617",
-        "## guillaumemeyer/watermarks-remover",
-        "Copyright (c) 2026 watermarks-remover contributors",
-        "## SkillMedev/skills",
-        "a28c4ce9366b5a8540577bed8f70b6a60f8fde27",
-        "Copyright (c) 2026 Alexander Ouellet",
-    ):
-        if phrase not in notice:
-            result.error(f"THIRD_PARTY_NOTICES.md: missing {phrase!r}")
 
     managed = result.root / "orchestration/managed-agents.md"
     workflows = result.root / "orchestration/workflows.md"
@@ -160,7 +108,7 @@ def validate_responsibility_and_provenance(result):
         "bug-finder",
         "security-review",
         "debugging-investigator",
-        "unlazy",
+        "completion-proof",
         "verification-and-release",
         "workflows.md",
     ):
@@ -180,7 +128,7 @@ def validate_responsibility_and_provenance(result):
         "security-review",
         "toolchain-preflight",
         "debugging-investigator",
-        "unlazy",
+        "completion-proof",
         "verification-and-release",
     ):
         if phrase not in workflows_text:

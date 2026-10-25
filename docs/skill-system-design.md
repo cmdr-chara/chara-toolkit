@@ -12,7 +12,7 @@ The target toolkit is intentionally compact and already includes `delegate-with-
 
 ## Progressive disclosure
 
-Core skills avoid volatile version numbers. Current ecosystem observations are isolated in dated reference files under the relevant implementation skill. This permits refreshes without rewriting stable reasoning and safety rules.
+Skills contain no volatile version numbers, release lines, or dated snapshots. Package and platform references give durable selection criteria and end with a checklist for verifying the current state (registry, changelog, advisories, project commands) at decision time, following Anthropic's guidance against time-sensitive skill content. The validator rejects dated reference files under `skills/`.
 
 ## No runtime `shared/` folder
 
@@ -27,18 +27,9 @@ The brief permits `shared/` only for genuinely shared material. It is intentiona
 
 Scripts exist only for deterministic inspection, overlap detection, report aggregation, drift heuristics, and validation. They are read-only, standard-library Python, path-bounded, and network-free. No script performs package installation, Git cleanup, code generation, or automatic source edits.
 
-## Design-source adaptation
+## Original authorship
 
-`product-design-director` and `screenshot-to-interface` use original wording and a new information architecture. Adapted concepts are limited to:
-
-- infer context before selecting an aesthetic;
-- calibrate direction through explicit axes rather than a default look;
-- resist repetitive template-like compositions and meaningless visual chrome;
-- audit an existing interface before changing it;
-- treat a visual reference as an evidence source and verify fidelity iteratively;
-- run a preflight review before declaring visual work complete.
-
-These ideas are integrated with product-state modeling, accessibility, responsive behavior, provenance, asset handling, component boundaries, and evidence contracts not present as a cohesive system in the source. No substantial source prose or implementation code was copied. The required MIT notice is preserved in `THIRD_PARTY_NOTICES.md` and per-skill provenance references.
+Every skill, reference, script, and bundled lint rule in the pack is original work released under the toolkit's MIT license. Earlier releases adapted some concepts and vendored one lint runtime from third-party MIT projects; the first release after 0.9.6 replaced that material with independent rewrites. The lint runtime was rebuilt through a clean-room process: one pass recorded only observable rule behavior, and a separate pass implemented new rules from that behavioral description without access to the previous source. `CHANGELOG.md` keeps the historical record, and the skill-pack validator rejects reintroduced third-party notices or upstream markers.
 
 ## Four implementation batches
 

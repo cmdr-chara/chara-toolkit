@@ -1,5 +1,14 @@
 # Improvement Ranking Rubric
 
+## Contents
+
+- Candidate record
+- Magnitude
+- Priority dimensions
+- Recommendation rule
+- Reject or downgrade weak candidates
+- Example backlog shape
+
 Use this rubric after a candidate has enough repository evidence to be admitted. Keep **change magnitude** separate from **priority** so a large idea does not automatically outrank a smaller, higher-return improvement.
 
 ## Candidate record

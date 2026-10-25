@@ -1,6 +1,6 @@
 ---
 name: multi-agent-work-coordinator
-description: Plan safe parallel work across independently ownable resources with dependency ordering and exclusive write ownership. Use when multiple bounded work items can proceed independently.
+description: Plan safe parallel work across independently ownable resources with dependency ordering and exclusive write ownership. Use when multiple bounded work items can proceed independently. Not for exploring an unknown problem or small, tightly coupled work.
 ---
 
 # Multi-Agent Work Coordinator
@@ -43,7 +43,7 @@ python skills/multi-agent-work-coordinator/scripts/ownership_check.py <work-grap
 
 ## Handoffs and interaction boundaries
 
-For repository work, `repository-intelligence` supplies unclear architecture/ownership boundaries. `delegate-with-mission-cards` selects and dispatches portable Mission Control roles. Domain specialists own technical or subject-matter decisions. `unlazy` may track substantial completion; `verification-and-release` owns final software ship judgment.
+For repository work, `repository-intelligence` supplies unclear architecture/ownership boundaries. `delegate-with-mission-cards` selects and dispatches portable Mission Control roles. Domain specialists own technical or subject-matter decisions. `completion-proof` may prove substantial completion; `verification-and-release` owns final software ship judgment.
 
 ## Failure handling
 

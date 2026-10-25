@@ -43,4 +43,4 @@ Avoid last-write-wins unless product semantics and clock/version authority make 
 - Drift: typed/reactive relational queries, migrations, and offline complexity that justify code generation/runtime.
 - Filesystem: large blobs, with metadata and lifecycle stored separately.
 
-Always verify current platform/package constraints in the dated ecosystem reference.
+Verify current platform and package constraints with the checklist in `package-selection.md`.

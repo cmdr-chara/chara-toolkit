@@ -51,7 +51,6 @@ MISSION_CONTROL_ROUTES = {
 REQUIRED_ROOT = [
     "README.md",
     "LICENSE",
-    "THIRD_PARTY_NOTICES.md",
     "docs/responsibility-matrix.md",
     "docs/research-ledger.md",
     "docs/skill-system-design.md",
@@ -105,29 +104,7 @@ MD_LINK_RE = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 DATED_RE = re.compile(r"-(\d{4}-\d{2}-\d{2})\.md$")
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
-ANTI_SLOP_RULE_FILES = {
-    "no-chained-type-assertions.ts",
-    "no-conditional-empty-object-spread.ts",
-    "no-known-value-widening.ts",
-    "no-module-mocking.ts",
-    "no-object-parameters.ts",
-    "no-reflect-apply.ts",
-    "no-reflect-get.ts",
-    "no-runtime-typeof.ts",
-    "no-shape-in-symbol-names.ts",
-    "no-unknown-parameters.ts",
-    "no-unknown-returns.ts",
-    "no-unknown-type-aliases.ts",
-    "no-unsafe-dictionary-type.ts",
-    "no-widen-then-assert.ts",
-    "require-safety-comment-for-type-assertion.ts",
-}
-ANTI_SLOP_SHARED_FILES = {
-    "dictionary-types.ts",
-    "lexical-type-parameters.ts",
-    "reflect-method.ts",
-}
-ANTI_SLOP_REVISION = "446268e5d15baa968eaec669ff65358d36ae6259"
+CHARA_LINT_RULE_COUNT = 15
 
 
 @dataclass
@@ -247,13 +224,30 @@ def validate_mission_control(result: Result) -> None:
             result.error(f"{rel(path, result.root)}: name must match filename stem {name!r}")
         if not str(data.get("description", "")).strip():
             result.error(f"{rel(path, result.root)}: Mission Control role needs a non-empty description")
-        if data.get("sandbox_mode") != expected_sandbox:
-            result.error(
-                f"{rel(path, result.root)}: expected sandbox {expected_sandbox!r}, "
-                f"got {data.get('sandbox_mode')!r}"
-            )
-        if not str(data.get("developer_instructions", "")).strip():
+        # Codex ignores sandbox_mode in custom agent files; access lives in the instructions.
+        if "sandbox_mode" in data:
+            result.error(f"{rel(path, result.root)}: sandbox_mode has no effect in Codex custom agents; state access in the role card")
+        instructions = str(data.get("developer_instructions", "")).strip()
+        if not instructions:
             result.error(f"{rel(path, result.root)}: Mission Control role needs developer_instructions")
+        elif not instructions.startswith(f"Access: {expected_sandbox.replace('workspace-write', 'write only')}"):
+            result.error(f"{rel(path, result.root)}: developer_instructions must open with the {expected_sandbox} access rule")
+
+        card = result.root / "skills" / "delegate-with-mission-cards" / "references" / "roles" / f"{name}.md"
+        if not card.is_file():
+            result.error(f"{rel(card, result.root)}: missing neutral role card")
+        elif f"\naccess: {expected_sandbox}\n" not in read_text(card, result):
+            result.error(f"{rel(card, result.root)}: role card must declare access: {expected_sandbox}")
+        for agent, read_only_marker in (("claude-code", "tools: Read, Grep, Glob"), ("gemini-cli", "  - read_file")):
+            native = result.root / "agents" / agent / f"{name}.md"
+            if not native.is_file():
+                result.error(f"{rel(native, result.root)}: missing generated {agent} role")
+                continue
+            text = read_text(native, result)
+            if f"\nname: {name}\n" not in text:
+                result.error(f"{rel(native, result.root)}: name must be {name!r}")
+            if (expected_sandbox == "read-only") != (read_only_marker in text):
+                result.error(f"{rel(native, result.root)}: tool allowlist does not match {expected_sandbox} access")
         for field_name in ("model", "model_reasoning_effort", "model_provider", "service_tier"):
             if field_name in data:
                 result.error(
@@ -575,47 +569,31 @@ def parse_label_date(text: str, label: str) -> date | None:
         return None
 
 
-def validate_dated_references(result: Result, max_age_days: int) -> None:
-    dated: list[Path] = []
-    for path in result.root.rglob("*.md"):
-        match = DATED_RE.search(path.name)
-        if not match:
-            continue
-        dated.append(path)
-        file_date = date.fromisoformat(match.group(1))
-        text = read_text(path, result)
-        checked = parse_label_date(text, "Information checked")
-        next_review = parse_label_date(text, "Next review")
-        if checked != file_date:
-            result.error(f"{rel(path, result.root)}: filename date and Information checked date must match")
-        if checked and (result.as_of - checked).days > max_age_days:
-            result.error(f"{rel(path, result.root)}: dated evidence is {(result.as_of - checked).days} days old (limit {max_age_days})")
-        if checked and checked > result.as_of:
-            result.error(f"{rel(path, result.root)}: Information checked is after --as-of")
-        if not next_review:
-            result.error(f"{rel(path, result.root)}: missing parseable Next review date")
-        elif next_review < result.as_of:
-            result.error(f"{rel(path, result.root)}: Next review {next_review} has passed as of {result.as_of}")
-        urls = URL_RE.findall(text)
-        if len(urls) < 3:
-            result.error(f"{rel(path, result.root)}: dated reference needs at least three primary source URLs")
+# Skills hold durable guidance only. Version, package, and platform facts go
+# stale, so skills give selection criteria plus a checklist for verifying the
+# current state at decision time (Anthropic skill-authoring guidance).
+DURABLE_SELECTION_GUIDES = {
+    "skills/production-web-builder/references/package-selection.md": ("choose", "avoid", "verify current state"),
+    "skills/expo-react-native-builder/references/package-selection.md": ("choose", "avoid", "verify current state"),
+    "skills/flutter-production-builder/references/package-selection.md": ("choose", "avoid", "verify current state"),
+    "skills/mobile-architecture-director/references/platform-decision-matrix.md": ("option comparison", "weighted criteria", "prototype", "disqualifier", "verify current platform facts"),
+}
 
-        low = text.lower()
-        if "ecosystem" in path.name:
-            required = [
-                "compatibility", "maintenance", "license", "security/deprecation",
-                "runtime/build cost", "built-in", "choose when", "avoid when", "sources",
-            ]
-            for term in required:
-                if term not in low:
-                    result.error(f"{rel(path, result.root)}: ecosystem matrix missing field/concept {term!r}")
-        if "platform-decision-matrix" in path.name:
-            for term in ("option comparison", "weighted criteria", "prototype", "disqualifier", "source urls"):
-                if term not in low:
-                    result.error(f"{rel(path, result.root)}: platform matrix missing {term!r}")
+
+def validate_dated_references(result: Result, max_age_days: int) -> None:
+    dated = [path for path in (result.root / "skills").rglob("*.md") if DATED_RE.search(path.name)]
+    for path in dated:
+        result.error(f"{rel(path, result.root)}: skills must not ship dated snapshots; use durable criteria plus a verification checklist")
     result.metrics["dated_references"] = len(dated)
-    if len(dated) != 4:
-        result.error(f"expected four dated ecosystem/platform references, found {len(dated)}")
+    for relative, terms in DURABLE_SELECTION_GUIDES.items():
+        path = result.root / relative
+        if not path.is_file():
+            result.error(f"{relative}: missing durable selection guide")
+            continue
+        low = read_text(path, result).lower()
+        for term in terms:
+            if term not in low:
+                result.error(f"{relative}: selection guide missing {term!r}")
 
     ledger = result.root / "docs/research-ledger.md"
     if ledger.is_file():
@@ -719,6 +697,39 @@ def validate_evaluations(result: Result) -> None:
     result.metrics["negative_trigger_cases"] = negative_total
 
 
+# Every shipped file is original work under the toolkit's own MIT license.
+# These markers identify third-party projects whose material was replaced by
+# original rewrites; CHANGELOG.md keeps the historical record.
+FORMER_UPSTREAM_MARKERS = (
+    "Leonxlnx",
+    "taste-skill",
+    "SkillMedev",
+    "watermarks-remover",
+    "dmmulroy",
+    "Dillon Mulroy",
+    "Alexander Ouellet",
+)
+ORIGINALITY_EXEMPT = {"CHANGELOG.md"}
+
+
+def validate_originality(result: Result) -> None:
+    if (result.root / "THIRD_PARTY_NOTICES.md").exists():
+        result.error("THIRD_PARTY_NOTICES.md: the toolkit ships only original work; remove the notice or the third-party material")
+    for path in sorted(result.root.rglob("*")):
+        relative = rel(path, result.root)
+        if not path.is_file() or relative.startswith((".git/", "node_modules/")) or "/node_modules/" in relative:
+            continue
+        if relative in ORIGINALITY_EXEMPT or relative.startswith("scripts/_validate_skill_pack_impl.py"):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        for marker in FORMER_UPSTREAM_MARKERS:
+            if marker in text:
+                result.error(f"{relative}: references former upstream material {marker!r}; ship only original work")
+
+
 def validate_responsibility_and_provenance(result: Result) -> None:
     matrix = result.root / "docs/responsibility-matrix.md"
     if matrix.is_file():
@@ -730,29 +741,7 @@ def validate_responsibility_and_provenance(result: Result) -> None:
             if header not in text:
                 result.error(f"docs/responsibility-matrix.md: missing column {header!r}")
 
-    notice = result.root / "THIRD_PARTY_NOTICES.md"
-    if notice.is_file():
-        text = read_text(notice, result)
-        required = [
-            "Copyright (c) 2026 Leonxlnx",
-            "Permission is hereby granted, free of charge",
-            "THE SOFTWARE IS PROVIDED \"AS IS\"",
-            "skills/taste-skill/SKILL.md",
-            "skills/redesign-skill/SKILL.md",
-            "skills/image-to-code-skill/SKILL.md",
-            "skills/product-design-director/SKILL.md",
-            "skills/screenshot-to-interface/SKILL.md",
-            "No endorsement by Leonxlnx is stated or implied",
-            "Meaningful modifications include",
-            "Copyright (c) 2026 Dillon Mulroy",
-            "dmmulroy/anti-slop",
-            "skills/typescript-quality-enforcer/assets/anti-slop/",
-            ANTI_SLOP_REVISION,
-            "No endorsement by Dillon Mulroy is stated or implied",
-        ]
-        for phrase in required:
-            if phrase not in text:
-                result.error(f"THIRD_PARTY_NOTICES.md: missing required notice/provenance text {phrase!r}")
+    validate_originality(result)
 
     ps_installer = result.root / "scripts" / "install-mission-control.ps1"
     if ps_installer.is_file():
@@ -775,44 +764,40 @@ def validate_responsibility_and_provenance(result: Result) -> None:
                 result.error(f"LICENSE: missing target toolkit MIT text {phrase!r}")
 
 
-def validate_typescript_quality_vendor(result: Result) -> None:
+def validate_typescript_quality_plugin(result: Result) -> None:
     skill_root = result.root / "skills" / "typescript-quality-enforcer"
-    asset_root = skill_root / "assets" / "anti-slop"
-    rules_root = asset_root / "rules"
-    shared_root = asset_root / "shared"
-    expected_top = {"LICENSE", "index.ts", "rules", "shared"}
-    if not asset_root.is_dir():
-        result.error("typescript-quality-enforcer: missing vendored anti-slop asset")
+    plugin_root = skill_root / "assets" / "chara-lint"
+    if not plugin_root.is_dir():
+        result.error("typescript-quality-enforcer: missing bundled chara-lint plugin")
         return
-    actual_top = {path.name for path in asset_root.iterdir()}
-    if actual_top != expected_top:
-        result.error(
-            "typescript-quality-enforcer: anti-slop top-level asset set differs from pinned runtime: "
-            f"expected {sorted(expected_top)!r}, got {sorted(actual_top)!r}"
-        )
-    if not rules_root.is_dir() or {path.name for path in rules_root.iterdir() if path.is_file()} != ANTI_SLOP_RULE_FILES:
-        result.error("typescript-quality-enforcer: vendored anti-slop rule set is incomplete or unexpected")
-    if not shared_root.is_dir() or {path.name for path in shared_root.iterdir() if path.is_file()} != ANTI_SLOP_SHARED_FILES:
-        result.error("typescript-quality-enforcer: vendored anti-slop shared helper set is incomplete or unexpected")
-
-    upstream_license = read_text(asset_root / "LICENSE", result)
-    for phrase in ("MIT License", "Copyright (c) 2026 Dillon Mulroy", "Permission is hereby granted"):
-        if phrase not in upstream_license:
-            result.error(f"typescript-quality-enforcer: vendored anti-slop LICENSE missing {phrase!r}")
-
-    provenance = read_text(skill_root / "references" / "upstream-provenance.md", result)
-    for phrase in ("dmmulroy/anti-slop", ANTI_SLOP_REVISION, "Copyright (c) 2026 Dillon Mulroy", "assets/anti-slop/LICENSE"):
-        if phrase not in provenance:
-            result.error(f"typescript-quality-enforcer: upstream provenance missing {phrase!r}")
+    for required in ("index.mjs", "README.md", "LICENSE"):
+        if not (plugin_root / required).is_file():
+            result.error(f"typescript-quality-enforcer: chara-lint missing {required}")
+    rule_files = sorted(path.stem for path in (plugin_root / "rules").glob("*.mjs"))
+    if len(rule_files) != CHARA_LINT_RULE_COUNT:
+        result.error(f"typescript-quality-enforcer: chara-lint should ship {CHARA_LINT_RULE_COUNT} rules, found {len(rule_files)}")
+    index = read_text(plugin_root / "index.mjs", result)
+    readme = read_text(plugin_root / "README.md", result)
+    for rule in rule_files:
+        if f'"{rule}"' not in index:
+            result.error(f"typescript-quality-enforcer: chara-lint rule {rule} is not registered in index.mjs")
+        if f"`{rule}`" not in readme:
+            result.error(f"typescript-quality-enforcer: chara-lint rule {rule} is not documented in README.md")
+    if "Copyright (c) 2026 cmdr-chara" not in read_text(plugin_root / "LICENSE", result):
+        result.error("typescript-quality-enforcer: chara-lint LICENSE must be the toolkit's own MIT license")
+    for path in plugin_root.rglob("*"):
+        if path.is_file() and path.suffix in {".ts", ".js", ".cjs"}:
+            result.error(f"typescript-quality-enforcer: chara-lint ships only .mjs sources, found {rel(path, result.root)}")
 
     skill = read_text(skill_root / "SKILL.md", result)
-    for term in ("anti-slop", "laundering", "AWAITING_APPROVAL", "current primary sources"):
+    for term in ("chara-lint", "laundering", "AWAITING_APPROVAL", "current primary sources", "JavaScript/TypeScript"):
         if term.lower() not in skill.lower():
             result.error(f"typescript-quality-enforcer: workflow missing enforcement concept {term!r}")
     if not (skill_root / "scripts" / "install.mjs").is_file():
-        result.error("typescript-quality-enforcer: missing non-overwriting vendored-runtime installer")
-    result.metrics["anti_slop_rule_files"] = len(ANTI_SLOP_RULE_FILES)
-    result.metrics["anti_slop_shared_files"] = len(ANTI_SLOP_SHARED_FILES)
+        result.error("typescript-quality-enforcer: missing non-overwriting plugin installer")
+    if not (result.root / "scripts" / "test_chara_lint.mjs").is_file():
+        result.error("scripts/test_chara_lint.mjs: missing chara-lint fixture suite")
+    result.metrics["chara_lint_rules"] = len(rule_files)
 
 
 def extract_paragraphs(body: str) -> Iterable[str]:
@@ -916,11 +901,11 @@ def write_report(result: Result, target: Path) -> None:
         f"- Positive trigger cases: {result.metrics.get('positive_trigger_cases', 0)}",
         f"- Negative trigger cases: {result.metrics.get('negative_trigger_cases', 0)}",
         f"- Python files compiled: {result.metrics.get('python_files_compiled', 0)}",
-        f"- Dated references: {result.metrics.get('dated_references', 0)}",
+        f"- Dated references in skills: {result.metrics.get('dated_references', 0)} (must be 0)",
         f"- Research source URLs: {result.metrics.get('research_source_urls', 0)}",
         f"- Local links checked: {result.metrics.get('local_links_checked', 0)}",
         f"- Duplicated long paragraphs: {result.metrics.get('duplicated_long_paragraphs', 0)}",
-        f"- anti-slop rules: {result.metrics.get('anti_slop_rule_files', 0)}",
+        f"- chara-lint rules: {result.metrics.get('chara_lint_rules', 0)}",
         "",
         "## Metrics",
         "",
@@ -939,7 +924,7 @@ def write_report(result: Result, target: Path) -> None:
     lines += [
         "## Interpretation",
         "",
-        "A structural pass confirms pack shape, routing/evaluation coverage, local resources, dated-evidence fields, script syntax/safety heuristics, vendored anti-slop provenance, and licensing text. It does not replace model-routing trials, real repository integration, browser/device tests, current registry/advisory checks, external-service capability checks, or store review.",
+        "A structural pass confirms pack shape, routing/evaluation coverage, local resources, the absence of dated snapshots in skills, script syntax/safety heuristics, the bundled chara-lint plugin, originality markers, and licensing text. It does not replace model-routing trials, real repository integration, browser/device tests, current registry/advisory checks, external-service capability checks, or store review.",
         "",
     ]
     target.write_text("\n".join(lines), encoding="utf-8")
@@ -997,7 +982,7 @@ def main() -> int:
     validate_dated_references(result, args.max_reference_age)
     validate_evaluations(result)
     validate_responsibility_and_provenance(result)
-    validate_typescript_quality_vendor(result)
+    validate_typescript_quality_plugin(result)
     validate_duplication(result)
     validate_catalog(result, descriptions)
     validate_conditional_decisions(result)

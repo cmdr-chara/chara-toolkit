@@ -21,12 +21,15 @@ npx --yes github:cmdr-chara/chara-toolkit setup
 
 Il comando installa:
 
-- le skill nella cartella `skills` della home di Codex;
-- i sei ruoli Mission Control nella cartella `agents`;
-- il catalogo dei workflow e un blocco di istruzioni nel file globale `AGENTS.md`;
+- le 22 skill nella cartella standard `~/.agents/skills`, letta da Codex, Cline, Warp, Zed, Pi e dagli altri agenti che seguono lo standard;
+- le stesse skill in ogni altro agente trovato sul computer: Claude Code (`~/.claude/skills`), Cursor, Gemini CLI, GitHub Copilot, OpenCode, Windsurf, Factory Droid, Kiro CLI, Roo Code e Goose;
+- i sei ruoli Mission Control come subagent nativi per Codex, Claude Code (`~/.claude/agents`) e Gemini CLI (`~/.gemini/agents`); gli altri agenti li ricevono come schede di ruolo dentro la skill di delega;
+- per Codex: il catalogo dei workflow e un blocco di istruzioni nel file globale `AGENTS.md`;
 - un processo pianificato per gli aggiornamenti.
 
-La home predefinita è `~/.codex`; il comando rispetta anche `CODEX_HOME`. Le istruzioni personali fuori dal blocco gestito vengono mantenute. I file gestiti modificati vengono salvati in `backups` prima della sostituzione.
+Per scegliere gli agenti usa `--agents`, per esempio `--agents claude-code,cursor`. Le versioni precedenti installavano le skill in `~/.codex/skills`, che Codex ora considera deprecata: il setup sposta le copie del toolkit da lì alla cartella dei backup, così Codex non le mostra due volte, e lascia stare le skill create da te.
+
+La home di Codex predefinita è `~/.codex`; il comando rispetta anche `CODEX_HOME`. Le istruzioni personali fuori dal blocco gestito vengono mantenute. I file gestiti modificati vengono salvati in `backups` prima della sostituzione.
 
 Gli aggiornamenti pianificati seguono le **release pubblicate su GitHub**. Non installano automaticamente ogni nuovo commit di `main`.
 
@@ -126,13 +129,13 @@ Per vedere le skill disponibili:
 npx skills add https://github.com/cmdr-chara/chara-toolkit --list
 ```
 
-Per installare soltanto `repository-intelligence` in Codex a livello utente:
+Per installare soltanto `repository-intelligence` a livello utente (sostituisci `codex` con il tuo agente, per esempio `claude-code` o `cursor`):
 
 ```sh
 npx skills add https://github.com/cmdr-chara/chara-toolkit --skill repository-intelligence -g -a codex
 ```
 
-Questa modalità non aggiunge il routing globale, i ruoli Mission Control o l'updater del toolkit. Le skill sono riutilizzabili anche in client compatibili con Agent Skills; l'integrazione completa resta specifica di Codex. Vedi la [guida alla portabilità](portable-skills.md).
+Questa modalità non aggiunge il routing globale, i ruoli Mission Control o l'updater del toolkit. Le skill funzionano con ogni agente compatibile con Agent Skills; solo il routing in `AGENTS.md` è specifico di Codex. Vedi la [guida alla portabilità](portable-skills.md).
 
 ## Se qualcosa non funziona
 
@@ -151,4 +154,4 @@ Questa modalità non aggiunge il routing globale, i ruoli Mission Control o l'up
 - [Prevenzione degli errori ricorrenti](recurring-agent-errors.md)
 - [Valutazioni](../evaluations/README.md), [benchmark comportamentali](../evaluations/behavioral-benchmark.md) e [benchmark degli outcome](../evaluations/outcome-benchmarks.md)
 - [Ricerca sulle skill](independent-skill-research-2026-10.md) e [nomi e compatibilità](branding-migration.md)
-- [Contribuire](../CONTRIBUTING.md), [changelog](../CHANGELOG.md), [licenza](../LICENSE) e [crediti](../THIRD_PARTY_NOTICES.md)
+- [Contribuire](../CONTRIBUTING.md), [changelog](../CHANGELOG.md) e [licenza](../LICENSE)
