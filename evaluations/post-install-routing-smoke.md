@@ -27,6 +27,12 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | R19 | Hunt this repository for important correctness bugs we do not know about yet. Derive invariants, inspect high-risk lifecycle/concurrency/persistence boundaries, and prove or retire concrete candidates rather than listing code smells. | `bug-finder` |
 | R20 | This Windows task is blocked by a policy-blocked npm shim, nested native-command quoting failures, and an unknown browser executable. Resolve one supported local invocation before retrying the build and browser check. | `toolchain-preflight` |
 | R21 | Review these tenant-scoped invoice endpoints and signed attachment fetches for authorization bypass, SSRF, unsafe input handling, and realistic security regressions. | `security-review` |
+| R22 | Add this packet encoder to the already-selected Rust crate, preserve its public signatures and byte input domain, and verify the supported feature/toolchain configurations. | `rust-engineering` |
+| R23 | Implement this Kotlin module feature using the existing coroutine, source-set, JVM and consumer contracts. | `kotlin-engineering` |
+| R24 | Add the specified async Python helper while preserving expected errors, cleanup, interpreter support and the installed API. | `python-engineering` |
+| R25 | Implement this C++ header/library change under its lifetime, ABI, language-standard and exception requirements. | `cpp-engineering` |
+| R26 | Implement the specified Swift module or native bridge while preserving ARC, isolation and supported target contracts. | `swift-engineering` |
+| R27 | Add this Go service or CLI behavior using the existing module, context, error and resource lifecycle contracts. | `go-engineering` |
 
 ## High-risk overlaps
 
@@ -47,11 +53,18 @@ Run each prompt in a fresh Codex task after installing the pack. Do not name a s
 | O13 | We do not have a known provider bug. Hunt for one, prove the strongest candidate, and only then determine the causal chain for that confirmed failure. | `bug-finder` then `debugging-investigator` |
 | O14 | The repository test command cannot start because the shell shim is blocked; first establish a supported invocation, then investigate the reproducible stale-total failure that appears once the tests run. | `toolchain-preflight` then `debugging-investigator` |
 | O15 | Review a refactor that changes tenant authorization. Security exploitability is primary; ordinary structural cleanup comes after the trust-boundary review. | `security-review` then `review-and-refactor-code` |
+| O16 | Review this Rust PR without edits; after a specific explained fix is approved, implement it without changing the public API or supported inputs. | `review-and-refactor-code` then `rust-engineering` only for the authorized implementation |
+| O17 | Plan a deployed Python-to-Rust service transition with rollback, then implement its bounded byte-processing stage. | `codebase-evolution-controller` then `rust-engineering` |
+| O18 | Review this Kotlin PR without editing; after a concrete explained fix is authorized, implement only that stage. | `review-and-refactor-code` then `kotlin-engineering` |
+| O19 | A Go service calls a Python helper; the supplied remedy changes only the helper. | `python-engineering` |
+| O20 | Implement a C++-only ownership correction in a bridge consumed by unchanged Rust code. | `cpp-engineering` |
+| O21 | Upgrade Swift language mode and SDK in stages, then implement the defined local native bridge stage. | `codebase-evolution-controller` then `swift-engineering` |
+| O22 | A Go worker leaks for an unknown reason; establish its cause, then implement the bounded remedy. | `debugging-investigator` then `go-engineering` |
 
 ## Acceptance
 
-- Pass all 21 primary routes.
-- Pass at least thirteen of fifteen overlap sequences with no incorrect co-primary activation.
+- Pass all 27 primary routes.
+- Pass at least twenty of twenty-two overlap sequences with no incorrect co-primary activation.
 - Treat a missing skill, stale display label, or wrong primary route as a failure even if the eventual answer is plausible.
 - If a case fails, record client version, installed skill path, selected skills, and rationale; fix metadata or trigger boundaries, then rerun only the failed case and its nearest overlap case.
 

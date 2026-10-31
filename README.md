@@ -2,7 +2,7 @@
 
 **Better engineering, any agent.**
 
-22 engineering skills for coding agents, with optional workflow tooling for Codex.
+28 engineering skills for coding agents, with optional workflow tooling for Codex.
 
 [Guida in italiano](docs/guida-italiano.md)
 
@@ -27,7 +27,7 @@ npx --yes github:cmdr-chara/chara-toolkit setup
 
 This installs:
 
-- all 22 skills into the standard `~/.agents/skills` folder (read by Codex, Cline, Warp, Zed, Pi, and other agents that follow the standard);
+- all 28 skills into the standard `~/.agents/skills` folder (read by Codex, Cline, Warp, Zed, Pi, and other agents that follow the standard);
 - the same skills into every other agent it finds on your machine: Claude Code (`~/.claude/skills`), Cursor, Gemini CLI, GitHub Copilot, OpenCode, Windsurf, Factory Droid, Kiro CLI, Roo Code, and Goose;
 - six optional Mission Control roles as native subagents for Codex, Claude Code (`~/.claude/agents`), and Gemini CLI (`~/.gemini/agents`); every other agent gets them as role cards inside the delegation skill;
 - for Codex: workflow routing and the managed `AGENTS.md` instructions;
@@ -102,6 +102,12 @@ Your project's `AGENTS.md` remains higher priority than general toolkit guidance
 | `completion-proof` | Prove substantial scoped work is actually finished: done contract, coverage accounting, final-candidate rechecks, and evidence-bound claims. |
 | `toolchain-preflight` | Resolve local shell, runtime, package-manager, and browser blockers. |
 | `typescript-quality-enforcer` | Improve TypeScript and JavaScript type safety and lint discipline. |
+| `rust-engineering` | Implement bounded Rust changes and ports with API, ownership, compatibility, and supported-configuration evidence. |
+| `kotlin-engineering` | Implement Kotlin libraries/apps and ports, with conditional coroutines/Flow, Android/Compose, and KMP guidance. |
+| `python-engineering` | Implement Python modules, services, bots, scripts, and ports with API, resource, environment, and packaging evidence. |
+| `cpp-engineering` | Implement C++ changes and ports with lifetime/ABI contracts, native build checks, and conditional Qt/QML guidance. |
+| `swift-engineering` | Implement Swift packages and native bridges with ARC/isolation contracts and conditional Apple/Metal checks. |
+| `go-engineering` | Implement Go packages, services, CLIs, and ports with context, goroutine, error, and module contracts. |
 | `production-web-builder` | Build or audit production web interfaces. |
 | `screenshot-to-interface` | Reconstruct maintainable interfaces from visual references. |
 | `product-design-director` | Define UX, visual direction, accessibility, and responsive behavior. |
@@ -119,6 +125,15 @@ Use `review-and-refactor-code` with a specific PR or diff. It now adjusts review
 The [PR review protocol](skills/review-and-refactor-code/references/pr-review-protocol.md) defines the workflow. The [opt-in policy guide](skills/review-and-refactor-code/references/review-policy-template.md) includes a `REVIEW.md` example and adoption guidance. Chara's Toolkit itself now includes [`REVIEW.md`](REVIEW.md) and a [pull-request template](.github/PULL_REQUEST_TEMPLATE.md).
 
 This is a skill upgrade, not an automatically installed review bot, enforced GitHub protection, or human approval. The existing security and release specialists retain their responsibilities.
+
+### Language implementation and review
+
+Use `rust-engineering` for a Rust crate change or a bounded port after Rust is selected. It preserves consumer APIs and the supported input domain, examines ownership and cancellation where relevant, and selects checks from the crate's declared toolchain, features, and targets. Detailed guidance loads only when needed. Rust reviews use the existing reviewer with its [Rust checklist](skills/review-and-refactor-code/references/rust-review.md); operational migrations remain with the evolution specialist.
+
+Kotlin, Python, C++, Swift, and Go have the same implementation/review ownership split, with their own runtime and compatibility guidance. Kotlin does not imply Android, Swift does not imply an Apple-only module, and C++ does not imply Qt. Framework references load only for the changed boundary. JavaScript/TypeScript and Flutter/Dart remain covered by the existing web/mobile and type-quality specialists. A language mention alone does not override review, debugging, migration, or release ownership.
+
+The [Rust evaluation guide](evaluations/rust-engineering.md) defines implementation and review probes with independent acceptance criteria. Structural validation and individual probes do not establish a comparative model-quality improvement.
+The [language evaluation guide](evaluations/language-engineering.md) covers the additional five routes and keeps executable probes, source-level observations, and unavailable platform checks distinct.
 
 The machine-readable catalog is in [`skills/llms.txt`](skills/llms.txt). The six optional roles are `architect-writer`, `builder-writer`, `investigator-reader`, `patcher-writer`, `pathfinder-reader`, and `sentinel-reader`. Read-only roles are enforced by a tool allowlist in Claude Code and Gemini CLI; in Codex and other agents they are enforced by instructions, because Codex custom agents inherit the parent session's sandbox.
 

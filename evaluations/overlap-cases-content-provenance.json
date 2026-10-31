@@ -43,6 +43,27 @@
       "anti_route": "Do not treat shell policy as the application's root cause, and do not keep preflight active once the supported test command runs."
     },
     {
+      "id": "overlap-rust-engineering-review",
+      "prompt": "Review a Rust parser PR for regressions without editing. If I later approve a specific explained fix, implement that fix without renaming APIs or changing accepted inputs.",
+      "expected_sequence": ["review-and-refactor-code", "rust-engineering"],
+      "primary_decision": "The reviewer owns finding admission and remains read-only; Rust implementation starts only when the concrete fix is authorized.",
+      "anti_route": "Do not trigger the implementation specialist merely because the review contains Rust, or treat a review request as edit authority."
+    },
+    {
+      "id": "overlap-rust-engineering-transition",
+      "prompt": "Migrate our live Python service to Rust with rollback and a compatibility window. Once the transition stage is defined, implement only its bounded byte-processing module in Rust.",
+      "expected_sequence": ["codebase-evolution-controller", "rust-engineering"],
+      "primary_decision": "Evolution owns consumers, rollout, and retirement criteria; Rust Engineering owns the bounded implementation handed over with those constraints.",
+      "anti_route": "Do not bypass the transition contract by treating a whole service replacement as a local port."
+    },
+    {
+      "id": "overlap-rust-engineering-debugging",
+      "prompt": "Our Rust task leaks a permit when cancelled, but we do not yet know where. Reproduce and explain it, then implement the established fix and verify the affected state transitions.",
+      "expected_sequence": ["debugging-investigator", "rust-engineering"],
+      "primary_decision": "Diagnosis establishes the failing lifecycle boundary before the Rust implementation stage.",
+      "anti_route": "Do not start runtime redesign or add Send bounds as a speculative remedy for an unexplained failure."
+    },
+    {
       "id": "overlap-security-review-01",
       "prompt": "Review this PR. Most of it is a refactor, but the changed authorization helper now decides whether users can access other tenants' invoices. Focus on whether the new trust boundary is exploitable, then hand any non-security structural cleanup back to normal review.",
       "expected_sequence": [
@@ -51,6 +72,134 @@
       ],
       "primary_decision": "Security exploitability of the changed authorization boundary is primary; ordinary structural findings are secondary.",
       "anti_route": "Do not let general refactor review dilute or replace the security-first authorization analysis."
+    },
+    {
+      "id": "overlap-kotlin-engineering-review",
+      "prompt": "Review the defined kotlin change without editing, then implement only a specific explained fix after it is authorized.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "kotlin-engineering"
+      ],
+      "primary_decision": "The reviewer admits findings; the language specialist receives a bounded authorized implementation with its protected contracts.",
+      "anti_route": "Do not turn the source language into implementation authority during a review-only stage."
+    },
+    {
+      "id": "overlap-kotlin-engineering-transition",
+      "prompt": "Plan a staged production transition to kotlin with compatibility and rollback, then implement its defined local package stage.",
+      "expected_sequence": [
+        "codebase-evolution-controller",
+        "kotlin-engineering"
+      ],
+      "primary_decision": "Evolution owns staged consumer/deployment compatibility; the language specialist owns the bounded implementation stage.",
+      "anti_route": "Do not treat a whole product replacement as a local port or remove compatibility paths early."
+    },
+    {
+      "id": "overlap-python-engineering-review",
+      "prompt": "Review the defined python change without editing, then implement only a specific explained fix after it is authorized.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "python-engineering"
+      ],
+      "primary_decision": "The reviewer admits findings; the language specialist receives a bounded authorized implementation with its protected contracts.",
+      "anti_route": "Do not turn the source language into implementation authority during a review-only stage."
+    },
+    {
+      "id": "overlap-python-engineering-transition",
+      "prompt": "Plan a staged production transition to python with compatibility and rollback, then implement its defined local package stage.",
+      "expected_sequence": [
+        "codebase-evolution-controller",
+        "python-engineering"
+      ],
+      "primary_decision": "Evolution owns staged consumer/deployment compatibility; the language specialist owns the bounded implementation stage.",
+      "anti_route": "Do not treat a whole product replacement as a local port or remove compatibility paths early."
+    },
+    {
+      "id": "overlap-cpp-engineering-review",
+      "prompt": "Review the defined cpp change without editing, then implement only a specific explained fix after it is authorized.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "cpp-engineering"
+      ],
+      "primary_decision": "The reviewer admits findings; the language specialist receives a bounded authorized implementation with its protected contracts.",
+      "anti_route": "Do not turn the source language into implementation authority during a review-only stage."
+    },
+    {
+      "id": "overlap-cpp-engineering-transition",
+      "prompt": "Plan a staged production transition to cpp with compatibility and rollback, then implement its defined local package stage.",
+      "expected_sequence": [
+        "codebase-evolution-controller",
+        "cpp-engineering"
+      ],
+      "primary_decision": "Evolution owns staged consumer/deployment compatibility; the language specialist owns the bounded implementation stage.",
+      "anti_route": "Do not treat a whole product replacement as a local port or remove compatibility paths early."
+    },
+    {
+      "id": "overlap-swift-engineering-review",
+      "prompt": "Review the defined swift change without editing, then implement only a specific explained fix after it is authorized.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "swift-engineering"
+      ],
+      "primary_decision": "The reviewer admits findings; the language specialist receives a bounded authorized implementation with its protected contracts.",
+      "anti_route": "Do not turn the source language into implementation authority during a review-only stage."
+    },
+    {
+      "id": "overlap-swift-engineering-transition",
+      "prompt": "Plan a staged production transition to swift with compatibility and rollback, then implement its defined local package stage.",
+      "expected_sequence": [
+        "codebase-evolution-controller",
+        "swift-engineering"
+      ],
+      "primary_decision": "Evolution owns staged consumer/deployment compatibility; the language specialist owns the bounded implementation stage.",
+      "anti_route": "Do not treat a whole product replacement as a local port or remove compatibility paths early."
+    },
+    {
+      "id": "overlap-go-engineering-review",
+      "prompt": "Review the defined go change without editing, then implement only a specific explained fix after it is authorized.",
+      "expected_sequence": [
+        "review-and-refactor-code",
+        "go-engineering"
+      ],
+      "primary_decision": "The reviewer admits findings; the language specialist receives a bounded authorized implementation with its protected contracts.",
+      "anti_route": "Do not turn the source language into implementation authority during a review-only stage."
+    },
+    {
+      "id": "overlap-go-engineering-transition",
+      "prompt": "Plan a staged production transition to go with compatibility and rollback, then implement its defined local package stage.",
+      "expected_sequence": [
+        "codebase-evolution-controller",
+        "go-engineering"
+      ],
+      "primary_decision": "Evolution owns staged consumer/deployment compatibility; the language specialist owns the bounded implementation stage.",
+      "anti_route": "Do not treat a whole product replacement as a local port or remove compatibility paths early."
+    },
+    {
+      "id": "overlap-kotlin-flutter-stage",
+      "prompt": "Implement a Flutter feature, including an already-defined Kotlin-only native plugin stage. Preserve Flutter behavior and hand over the bounded Android code with explicit contracts.",
+      "expected_sequence": [
+        "flutter-production-builder",
+        "kotlin-engineering"
+      ],
+      "primary_decision": "Flutter owns feature integration; Kotlin owns only the handed-over native implementation stage.",
+      "anti_route": "Do not classify the whole Flutter feature as Kotlin work or reopen mobile platform selection."
+    },
+    {
+      "id": "overlap-python-go-helper",
+      "prompt": "A Go service invokes a Python helper. The cause and exact remedy are established in the helper, and no Go source or wire changes are requested. Implement the helper remedy.",
+      "expected_sequence": [
+        "python-engineering"
+      ],
+      "primary_decision": "The owned implementation is the Python helper; the caller's language does not take over.",
+      "anti_route": "Do not load Go implementation merely because a Go process launches the changed helper."
+    },
+    {
+      "id": "overlap-cpp-rust-bridge",
+      "prompt": "Implement this specified C++ ownership correction in a bridge consumed by an unchanged Rust crate. Preserve its ABI and only edit the C++ side.",
+      "expected_sequence": [
+        "cpp-engineering"
+      ],
+      "primary_decision": "C++ owns the changed native lifetime boundary and checks the Rust consumer contract.",
+      "anti_route": "Do not rewrite the Rust caller or make both language skills co-primary."
     }
   ]
 }

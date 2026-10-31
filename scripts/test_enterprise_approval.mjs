@@ -69,7 +69,7 @@ test('managed install is signed, update-disabled, verifiable, and resistant to r
   result = run('enterprise-setup', f);
   assert.equal(result.status, 0, result.stderr);
   assert.match(await readFile(join(f.home, 'AGENTS.md'), 'utf8'), /Keep the original rule/);
-  assert.equal((await verifyInstalled({ root, codexHome: f.home, skillsRoot: f.skillsRoot })).skills, 22);
+  assert.equal((await verifyInstalled({ root, codexHome: f.home, skillsRoot: f.skillsRoot })).skills, 28);
   result = run('enterprise-check', f);
   assert.equal(result.status, 0, result.stderr);
   const unauthorized = spawnSync(process.execPath, [toolkit, 'setup', '--no-auto-update',

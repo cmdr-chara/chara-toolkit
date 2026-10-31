@@ -1,0 +1,4 @@
+interface:
+  display_name: "Go Engineering"
+  short_description: "Implement Go with concurrency and API evidence"
+  default_prompt: "Use $go-engineering to implement this Go change while preserving cancellation, error, and build contracts."

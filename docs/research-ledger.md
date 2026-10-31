@@ -94,3 +94,44 @@ This is a targeted follow-up, not a claim that the unchanged package rows have b
 | https://developers.openai.com/codex/subagents | Codex custom agent file schema | Required `name`, `description`, `developer_instructions`; `sandbox_mode` in a custom agent file does not override the parent session, so read-only roles are instruction-enforced in Codex. | 2026-10-25 |
 | https://code.claude.com/docs/en/sub-agents | Claude Code subagent frontmatter | `~/.claude/agents/*.md` with `name`, `description`, optional `tools` allowlist and `model: inherit`; read-only roles use a write-free allowlist. | 2026-10-25 |
 | https://geminicli.com/docs/core/subagents/ | Gemini CLI subagent frontmatter and tool names | `~/.gemini/agents/*.md` with `name`, `description`, `kind: local`, optional `tools` list; read-only roles list only read and search tools. | 2026-10-25 |
+
+## Original Rust implementation guidance — 2026-10-31
+
+The user requested an original Rust capability after discussing another public skill pack. That comparison supplied problem statements, not reusable source material. The new instructions, examples, and evaluation tasks were written independently; no external skill files or fixtures were imported into this repository. The design uses one Rust implementation owner and extends the existing review owner to preserve toolkit boundaries. This is not a claim of a blind clean-room authoring process or a measured superiority result.
+
+| Primary source inspected | Decision informed | Checked |
+| --- | --- | --- |
+| https://rust-lang.github.io/api-guidelines/checklist.html | Evaluate API conventions against consumer needs; avoid treating common traits or threading bounds as universal mandates. | 2026-10-31 |
+| https://doc.rust-lang.org/cargo/reference/semver.html | Protect source/behavior compatibility, including trait bounds and public-field access. | 2026-10-31 |
+| https://doc.rust-lang.org/cargo/reference/features.html | Verify supported configurations; an invalid all-features build does not replace separate backend evidence. | 2026-10-31 |
+| https://doc.rust-lang.org/cargo/reference/rust-version.html | Treat declared compiler support as a testable contract. | 2026-10-31 |
+| https://doc.rust-lang.org/cargo/commands/cargo-test.html | Distinguish selected target tests, doctests, compilation, and execution. | 2026-10-31 |
+| https://doc.rust-lang.org/cargo/reference/build-scripts.html | Compilation can execute project build code; command names do not grant a read-only boundary. | 2026-10-31 |
+| https://rust-lang.github.io/async-book/part-guide/more-async-await.html | Trace blocking, suspension, cancellation, and task ownership against the actual executor. | 2026-10-31 |
+| https://doc.rust-lang.org/std/sync/struct.Mutex.html | Poisoning is advisory; recovery and failure propagation need invariant-specific reasoning. | 2026-10-31 |
+| https://doc.rust-lang.org/reference/behavior-considered-undefined.html | Soundness findings require a violated requirement and reachable path, not a documentation heuristic. | 2026-10-31 |
+| https://doc.rust-lang.org/nomicon/ffi.html | Inspect ABI, foreign-resource ownership, and unwind behavior explicitly. | 2026-10-31 |
+| https://doc.rust-lang.org/std/primitive.i64.html | Verify integer range and arithmetic choices against the port's accepted domain. | 2026-10-31 |
+| https://doc.rust-lang.org/std/string/struct.String.html | Preserve distinctions between arbitrary bytes and UTF-8 text. | 2026-10-31 |
+
+These are scoped source checks for authoring durable guidance. Target toolchain, framework, interpreter, and platform support must still be checked in the repository using the skill. Evaluation fixtures, observed probe results, and comparative experiments remain separate.
+
+## Additional language implementation guidance — 2026-10-31
+
+The user selected Kotlin, Python, C++, Swift, and Go after an authorized inventory of repository metadata, tracked source and build manifests. The retained domains are coroutine/KMP/mobile work, async services and tools, native C++/Qt/QML, Swift/native rendering, and Go services/CLIs. Private repository names, manifests, and code are not part of this public research record. No third-party skill prose, code, tests or assets were imported; every new instruction and fixture is original material under the existing toolkit license.
+
+| Primary documentation inspected | Decision informed | Checked |
+| --- | --- | --- |
+| https://kotlinlang.org/docs/java-interop.html ; https://kotlinlang.org/docs/coroutines-cancellation.html | Kotlin/Java/nullability contracts and cancellation propagation without speculative API/runtime changes. | 2026-10-31 |
+| https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/ ; https://developer.android.com/develop/ui/compose/side-effects | Stream/state behavior, effect ownership and lifecycle-specific evidence. | 2026-10-31 |
+| https://kotlinlang.org/docs/multiplatform/multiplatform-discover-project.html ; https://kotlinlang.org/docs/native-target-support.html ; https://docs.gradle.org/current/userguide/java_library_plugin.html | Source-set/target/host and module dependency-visibility contracts. | 2026-10-31 |
+| https://docs.python.org/3/library/typing.html ; https://docs.python.org/3/library/exceptions.html ; https://docs.python.org/3/library/asyncio-task.html | Runtime data validation, exception identity, cancellation, task and cleanup behavior. | 2026-10-31 |
+| https://packaging.python.org/en/latest/specifications/pyproject-toml/ ; https://docs.python.org/3/library/importlib.html ; https://docs.python.org/3/library/subprocess.html | Interpreter/build/import boundaries, installed artifacts, and process lifetime. | 2026-10-31 |
+| https://eel.is/c++draft/basic.life ; https://eel.is/c++draft/vector.modifiers ; https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource | C++ lifetime, invalidation, ownership and consumer/ABI evidence. | 2026-10-31 |
+| https://cmake.org/cmake/help/latest/command/target_compile_features.html ; https://doc.qt.io/qt-6/threads-qobject.html ; https://clang.llvm.org/docs/AddressSanitizer.html | Target-scoped builds, Qt object/event-loop ownership and bounded instrumentation evidence. | 2026-10-31 |
+| https://docs.swift.org/swift-book/documentation/the-swift-programming-language/automaticreferencecounting/ ; https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/ | Swift lifetime, capture, isolation, suspension and task contracts; official Swift book source was used where the rendered site was dynamic. | 2026-10-31 |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0306-actors.md ; https://developer.apple.com/documentation/metal/resource-synchronization | Actor reentrancy and API-specific native/GPU synchronization evidence; dynamic Apple pages required official indexed content. | 2026-10-31 |
+| https://go.dev/ref/mod ; https://go.dev/doc/toolchain ; https://pkg.go.dev/cmd/cgo#hdr-Passing_pointers | Module/workspace/toolchain selection and native pointer boundaries. | 2026-10-31 |
+| https://pkg.go.dev/context ; https://go.dev/ref/mem ; https://go.dev/doc/articles/race_detector ; https://pkg.go.dev/errors ; https://pkg.go.dev/net/http | Go cancellation/completion, shared state, error identity, HTTP resources and runtime-check limits. | 2026-10-31 |
+
+The authoring review is scoped to durable decisions, not a guarantee about every SDK, interpreter or compiler. Resolve effective project settings and current official runtime/framework contracts at use time. Language probe observations are in the evaluation guide and do not establish a matched performance advantage.

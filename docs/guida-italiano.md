@@ -2,7 +2,7 @@
 
 [Torna al README](../README.md)
 
-Chara's Toolkit raccoglie 22 skill per gli agenti di programmazione: istruzioni specializzate per analizzare repository, correggere bug, rivedere codice, creare interfacce e verificare le modifiche. L'integrazione completa con Codex aggiunge la scelta del workflow, sei ruoli opzionali per i sottoagenti e gli aggiornamenti automatici.
+Chara's Toolkit raccoglie 28 skill per gli agenti di programmazione: istruzioni specializzate per analizzare repository, correggere bug, rivedere codice, creare interfacce e verificare le modifiche. L'integrazione completa con Codex aggiunge la scelta del workflow, sei ruoli opzionali per i sottoagenti e gli aggiornamenti automatici.
 
 ## 1. Installa
 
@@ -21,7 +21,7 @@ npx --yes github:cmdr-chara/chara-toolkit setup
 
 Il comando installa:
 
-- le 22 skill nella cartella standard `~/.agents/skills`, letta da Codex, Cline, Warp, Zed, Pi e dagli altri agenti che seguono lo standard;
+- le 28 skill nella cartella standard `~/.agents/skills`, letta da Codex, Cline, Warp, Zed, Pi e dagli altri agenti che seguono lo standard;
 - le stesse skill in ogni altro agente trovato sul computer: Claude Code (`~/.claude/skills`), Cursor, Gemini CLI, GitHub Copilot, OpenCode, Windsurf, Factory Droid, Kiro CLI, Roo Code e Goose;
 - i sei ruoli Mission Control come subagent nativi per Codex, Claude Code (`~/.claude/agents`) e Gemini CLI (`~/.gemini/agents`); gli altri agenti li ricevono come schede di ruolo dentro la skill di delega;
 - per Codex: il catalogo dei workflow e un blocco di istruzioni nel file globale `AGENTS.md`;

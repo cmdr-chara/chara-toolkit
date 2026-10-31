@@ -80,7 +80,11 @@ repository-intelligence? → owning specialist
                          → verification-and-release?
 ```
 
-Typical owning specialists include `production-web-builder`, `flutter-production-builder`, `expo-react-native-builder`, `codebase-evolution-controller`, or another domain workflow available in the environment.
+Typical owning specialists include `production-web-builder`, `flutter-production-builder`, `expo-react-native-builder`, `rust-engineering`, `codebase-evolution-controller`, or another domain workflow available in the environment.
+
+For bounded Rust implementation or a local source-language port with Rust already chosen, use `rust-engineering`. Rust PR reviews stay with `review-and-refactor-code` and its conditional Rust checklist. A service replacement, compiler/edition transition, or compatibility rollout stays with `codebase-evolution-controller`; it may hand an implementation stage to `rust-engineering` with the source domain, consumer constraints, and stage acceptance criteria. Language alone does not change the primary owner.
+
+Other bounded implementation owners are `kotlin-engineering`, `python-engineering`, `cpp-engineering`, `swift-engineering`, and `go-engineering`. They cover the selected language and conditional runtime/framework details, not every task containing that language. General review/refactor keeps its language checklists; debugging keeps unknown causes; evolution keeps support-version and deployed-product transitions. A platform builder can hand a defined native/helper stage to one language specialist, then resume feature integration. For mixed repositories, select the changed contract and keep one primary owner at a time.
 
 ## Improve an existing codebase
 

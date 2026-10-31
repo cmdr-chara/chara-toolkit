@@ -1,7 +1,7 @@
 {
   "name": "@cmdr-chara/charas-toolkit",
-  "version": "0.10.0",
-  "description": "Chara's Toolkit: 22 portable engineering skills, six optional Codex agents, safe workflows and verified delivery",
+  "version": "1.0.0",
+  "description": "Chara's Toolkit: 28 portable engineering skills, six optional Codex agents, safe workflows and verified delivery",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cmdr-chara/codex-toolkit.git"

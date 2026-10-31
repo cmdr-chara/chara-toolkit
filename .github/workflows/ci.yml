@@ -93,8 +93,14 @@ jobs:
           EOF
 
           node bin/toolkit.mjs setup --no-auto-update --home "$temp_user"
-          test "$(find "$temp_user/.agents/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
-          test "$(find "$temp_user/.claude/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 22
+          test "$(find "$temp_user/.agents/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 28
+          test "$(find "$temp_user/.claude/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)" -eq 28
+          cmp skills/rust-engineering/SKILL.md "$temp_user/.agents/skills/rust-engineering/SKILL.md"
+          cmp skills/rust-engineering/references/porting-contract.md "$temp_user/.claude/skills/rust-engineering/references/porting-contract.md"
+          for skill in kotlin-engineering python-engineering cpp-engineering swift-engineering go-engineering; do
+            cmp "skills/$skill/SKILL.md" "$temp_user/.agents/skills/$skill/SKILL.md"
+            cmp "skills/$skill/agents/openai.yaml" "$temp_user/.claude/skills/$skill/agents/openai.yaml"
+          done
           test ! -e "$temp_home/skills"
           test "$(find "$temp_home/agents" -maxdepth 1 -name '*.toml' | wc -l)" -eq 6
           ! grep -R -E '^(model|model_reasoning_effort|model_provider|service_tier)[[:space:]]*=' "$temp_home/agents"

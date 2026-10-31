@@ -20,3 +20,9 @@ completion-proof: Evidence-bound completion for substantial scoped tasks using a
 bug-finder: Evidence-backed hunting for previously unknown correctness defects using explicit invariants, high-risk surface prioritization, bounded proof/falsification, and clean handoff to causal debugging or the owning specialist.
 toolchain-preflight: Narrow local execution-path resolution for unknown or broken shells, runtimes, package-manager shims, native quoting, browser capability, and text encoding before retrying builds, tests, scripts, or browser checks.
 security-review: Focused security code review across trust boundaries, authorization, untrusted input, secrets, file/network handling, and business-logic abuse.
+rust-engineering: Bounded Rust crate implementation and source-language ports with explicit API, ownership, runtime, compatibility, and configuration-specific verification contracts.
+kotlin-engineering: Bounded Kotlin implementation and ports, with conditional coroutine/Flow, Android/Compose, and multiplatform build guidance and separate host/device evidence.
+python-engineering: Python modules, services, bots, scripts, and local ports with callable/data compatibility, cancellation/resource ownership, interpreter, import, and packaging evidence.
+cpp-engineering: Bounded C++ implementation and ports with lifetime/ABI contracts, target-scoped native build and sanitizer checks, and conditional Qt/QML ownership guidance.
+swift-engineering: Swift packages, native bridges, and local ports with API/ARC/isolation contracts and conditional Apple-platform and Metal rendering evidence.
+go-engineering: Bounded Go packages, services, CLIs, and ports with owned goroutines, context/error/resource contracts, and module/tag/cgo-specific verification.

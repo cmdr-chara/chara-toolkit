@@ -462,6 +462,47 @@
       ]
     },
     {
+      "id": "rust-port-domain-contract",
+      "skill": "rust-engineering",
+      "prompt": "A Python module's documented API accepts arbitrary bytes, insertion-ordered duplicate records, and integers beyond u64. Its Rust port decodes all bytes as UTF-8, uses a HashMap, and truncates integers to u64. The developer calls these exotic cases and lists them in porting notes; no domain change was authorized. Is this port compatible? State the deciding action without editing files.",
+      "checks": [
+        { "kind": "final_contains", "value": "contract" },
+        { "kind": "final_contains", "value": "bytes" },
+        { "kind": "max_file_changes", "value": 0 }
+      ]
+    },
+    {
+      "id": "rust-supported-feature-matrix",
+      "skill": "rust-engineering",
+      "prompt": "A Rust crate officially supports either backend-a or backend-b, and compile_error rejects enabling both. CI also promises a no-default-features build and the declared MSRV. Only the default backend was tested on the newest compiler. Which verification claims are supported, and what should run next? Do not install anything or change the feature policy.",
+      "checks": [
+        { "kind": "final_contains", "value": "backend" },
+        { "kind": "final_contains", "value": "MSRV" },
+        { "kind": "final_contains", "value": "no-default-features" },
+        { "kind": "max_file_changes", "value": 0 }
+      ]
+    },
+    {
+      "id": "rust-thread-affine-api",
+      "skill": "rust-engineering",
+      "prompt": "Implementing a small feature in an existing Rust GUI uses an Rc-backed thread-affine handle and a public set_enabled(bool) method relied on by callers. A suggested cleanup adds Send bounds, replaces Rc with Arc, and changes the bool to an enum. The feature request authorizes no API or threading changes. Decide which contracts must be preserved; answer only.",
+      "checks": [
+        { "kind": "final_contains", "value": "preserv" },
+        { "kind": "final_contains", "value": "thread" },
+        { "kind": "max_file_changes", "value": 0 }
+      ]
+    },
+    {
+      "id": "rust-review-comment-is-not-ub",
+      "skill": "review-and-refactor-code",
+      "prompt": "Review this Rust change without editing. An unsafe block lacks a SAFETY comment, but no violated validity, aliasing, lifetime, or threading requirement has been identified. May the report call this proven undefined behavior? State what evidence is missing and distinguish documentation from soundness.",
+      "checks": [
+        { "kind": "final_contains", "value": "evidence" },
+        { "kind": "final_contains", "value": "documentation" },
+        { "kind": "max_file_changes", "value": 0 }
+      ]
+    },
+    {
       "id": "preflight-app-failure-handoff",
       "skill": "toolchain-preflight",
       "prompt": "After fixing a broken shell shim, make test now runs and fails with an AssertionError in test_invoice_total. Should toolchain preflight keep working on it?",
@@ -469,6 +510,291 @@
         {
           "kind": "final_contains",
           "value": "application"
+        }
+      ]
+    },
+    {
+      "id": "kotlin-cancellation-fallback",
+      "skill": "kotlin-engineering",
+      "prompt": "A Kotlin suspend API wraps load() in runCatching and returns a cached result for every failure. Its contract requires caller cancellation to propagate. Does the fallback preserve cancellation, and what must the implementation account for? Answer only.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "CancellationException"
+        },
+        {
+          "kind": "final_contains",
+          "value": "propag"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "kotlin-stateflow-event-contract",
+      "skill": "kotlin-engineering",
+      "prompt": "A Kotlin UI mutates a mutable list inside the current StateFlow value, then assigns the same value. The task requires consumers to observe the changed state. Can equal-value suppression and in-place mutation be ignored? Explain the contract; no edits.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "StateFlow"
+        },
+        {
+          "kind": "final_contains",
+          "value": "equal"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "kotlin-host-ios-evidence",
+      "skill": "kotlin-engineering",
+      "prompt": "The Android host tests pass for a Kotlin Multiplatform music player on Linux, but no iOS framework or playback test ran. Can we claim iOS runtime behavior was verified? State which evidence is still needed without installing anything.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "iOS"
+        },
+        {
+          "kind": "final_contains",
+          "value": "host"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "python-cancellation-contract",
+      "skill": "python-engineering",
+      "prompt": "A Python async handler catches BaseException and returns None for any loader failure. The caller requires cancellation to propagate and an acquired slot to be released. What outcomes must the implementation preserve? Answer only.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "cancel"
+        },
+        {
+          "kind": "final_contains",
+          "value": "cleanup"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "python-hints-runtime-boundary",
+      "skill": "python-engineering",
+      "prompt": "A Python API accepts decoded JSON and annotates its input as a typed record, but performs no runtime parsing or validation. May it treat the external value as proven valid merely because type checking passed? Explain without editing.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "runtime"
+        },
+        {
+          "kind": "final_contains",
+          "value": "validation"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "python-installed-artifact-gap",
+      "skill": "python-engineering",
+      "prompt": "Tests pass from a Python source checkout, but nobody built or installed the distribution and its package-data configuration changed. What claim is supported, and which artifact-level check is missing? Answer only.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "source"
+        },
+        {
+          "kind": "final_contains",
+          "value": "installed"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "cpp-view-lifetime",
+      "skill": "cpp-engineering",
+      "prompt": "A proposed C++ API returns a string_view into a local string that is destroyed when the function returns. Successful compilation is offered as proof. Assess the lifetime contract and necessary remedy without executing invalid accesses.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "lifetime"
+        },
+        {
+          "kind": "final_contains",
+          "value": "owner"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "cpp-qt-thread-affinity",
+      "skill": "cpp-engineering",
+      "prompt": "A Qt C++ media callback on a worker directly mutates a GUI object. The application builds, and a screenshot looks correct once. What event-loop and thread contract needs verification before calling the implementation correct? Answer only.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "thread"
+        },
+        {
+          "kind": "final_contains",
+          "value": "Qt"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "cpp-sanitizer-coverage",
+      "skill": "cpp-engineering",
+      "prompt": "One C++ unit test passed under AddressSanitizer. The code also has untested plugin and device paths. Can the report claim absence of undefined behavior everywhere? State the evidence limit without edits.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "coverage"
+        },
+        {
+          "kind": "final_contains",
+          "value": "sanitizer"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "swift-actor-reentrancy",
+      "skill": "swift-engineering",
+      "prompt": "A Swift actor reads a generation, awaits a loader, then writes state without checking whether a newer request ran while suspended. The requested feature is latest-request-wins. Does actor serialization establish that whole operation's ordering? Answer only.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "await"
+        },
+        {
+          "kind": "final_contains",
+          "value": "actor"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "swift-sendable-suppression",
+      "skill": "swift-engineering",
+      "prompt": "A Swift build reports an isolation violation, and a suggested implementation adds unchecked Sendable solely to silence it. The resource's ownership and synchronization are unknown. What contract must be established before proceeding? No edits.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "Sendable"
+        },
+        {
+          "kind": "final_contains",
+          "value": "isolation"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "swift-metal-host-proof",
+      "skill": "swift-engineering",
+      "prompt": "A portable Swift helper compiled on Linux. The changed product also uses AppKit and a Metal renderer, but no Apple SDK build, launch or frame capture ran. May we claim Apple UI and GPU rendering work? State the evidence gap.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "Metal"
+        },
+        {
+          "kind": "final_contains",
+          "value": "GPU"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "go-context-join",
+      "skill": "go-engineering",
+      "prompt": "A Go worker receives a context cancellation signal. Its caller immediately reports all goroutines stopped, without observing any completion or joining them. What does cancellation establish, and what must be observed for shutdown? Answer only.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "cancel"
+        },
+        {
+          "kind": "final_contains",
+          "value": "wait"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "go-typed-nil-error",
+      "skill": "go-engineering",
+      "prompt": "A Go API returns error. It places a nil pointer of a custom error type into that interface and expects callers to see err == nil. Is that success contract preserved? Explain without edits.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "nil"
+        },
+        {
+          "kind": "final_contains",
+          "value": "interface"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "go-race-logical-evidence",
+      "skill": "go-engineering",
+      "prompt": "Go race tests passed on the default build tags. No shutdown-order or deadlock tests ran, and another backend uses different tags. Can the implementation report all concurrent behavior verified? State limitations.",
+      "checks": [
+        {
+          "kind": "final_contains",
+          "value": "race"
+        },
+        {
+          "kind": "final_contains",
+          "value": "deadlock"
+        },
+        {
+          "kind": "max_file_changes",
+          "value": 0
         }
       ]
     }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Engineering"
+  short_description: "Implement Swift changes with target and lifetime checks"
+  default_prompt: "Use $swift-engineering to implement this Swift change against its API, lifetime, concurrency, and supported-target contracts."
