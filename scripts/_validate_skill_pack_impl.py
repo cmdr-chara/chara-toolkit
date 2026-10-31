@@ -6,13 +6,12 @@ import argparse
 import ast
 import hashlib
 import json
-import os
 import re
 import sys
 import tomllib
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 from typing import Iterable
 from urllib.parse import unquote
