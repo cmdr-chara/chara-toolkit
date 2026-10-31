@@ -1,0 +1,4 @@
+interface:
+  display_name: "C++ Engineering"
+  short_description: "Implement C++ with lifetime and ABI evidence"
+  default_prompt: "Use $cpp-engineering to implement this C++ change within its ownership, ABI, and supported build contracts."

@@ -13,7 +13,11 @@ try:
 except ImportError:  # Direct script execution puts scripts/ on sys.path.
     import _validate_skill_pack_impl as impl
 
-for _skill in ("completion-proof", "bug-finder", "toolchain-preflight", "security-review"):
+for _skill in (
+    "completion-proof", "bug-finder", "toolchain-preflight", "security-review",
+    "rust-engineering", "kotlin-engineering", "python-engineering",
+    "cpp-engineering", "swift-engineering", "go-engineering",
+):
     if _skill not in impl.EXPECTED_SKILLS:
         impl.EXPECTED_SKILLS = [*impl.EXPECTED_SKILLS, _skill]
 impl.TOOLKIT_SKILLS = ["delegate-with-mission-cards", *impl.EXPECTED_SKILLS]
@@ -75,6 +79,12 @@ def validate_evaluations(result):
         "bug-finder",
         "toolchain-preflight",
         "security-review",
+        "rust-engineering",
+        "kotlin-engineering",
+        "python-engineering",
+        "cpp-engineering",
+        "swift-engineering",
+        "go-engineering",
     ):
         if not any(
             isinstance(case.get("expected_sequence"), list)

@@ -211,6 +211,72 @@
       ]
     },
     {
+      "skill": "rust-engineering",
+      "positive": [
+        {
+          "id": "rust-engineering-p1",
+          "prompt": "Add a bounded packet encoder to this existing Rust library. Keep its public error type and minimum compiler support, and verify the byte-level cases.",
+          "expected": "activate",
+          "reason": "The requested decision is a bounded Rust implementation with explicit consumer constraints."
+        },
+        {
+          "id": "rust-engineering-p2",
+          "prompt": "Port this small Python byte-grouping routine into the already-selected Rust crate. Preserve its supported inputs, output order, and error categories; deployment is out of scope.",
+          "expected": "activate",
+          "reason": "A source-language port with an already-decided target and no rollout transition is bounded Rust implementation."
+        },
+        {
+          "id": "rust-engineering-p3",
+          "prompt": "Implement cancellation cleanup for this Rust worker using our existing executor. The failing test and cause are supplied; keep the thread-affine client on its current thread.",
+          "expected": "activate",
+          "reason": "The cause is already explained and the task is implementation under an existing runtime contract."
+        },
+        {
+          "id": "rust-engineering-p4",
+          "prompt": "Implement this specified Rust wrapper around the C buffer handle. Match the supplied ownership and ABI contract and add focused native boundary tests.",
+          "expected": "activate",
+          "reason": "The user requests a bounded foreign-boundary implementation with known requirements."
+        }
+      ],
+      "negative": [
+        {
+          "id": "rust-engineering-n1",
+          "prompt": "Review this Rust PR for introduced regressions. Report findings only; do not edit any files.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "Rust language alone does not displace the general review owner; its Rust reference supplies the relevant checks."
+        },
+        {
+          "id": "rust-engineering-n2",
+          "prompt": "The Rust worker sometimes hangs on shutdown. Reproduce it and determine the cause before proposing a fix.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "An unknown causal chain belongs to the debugging specialist."
+        },
+        {
+          "id": "rust-engineering-n3",
+          "prompt": "Replace the deployed Python service with Rust across three teams. Plan mixed-version compatibility, rollout, rollback, and retirement of the old service.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "The central decision is a staged operational transition rather than a local implementation port."
+        },
+        {
+          "id": "rust-engineering-n4",
+          "prompt": "Our JavaScript project uses a Rust-based bundler. Strengthen the application's TypeScript type safety without changing the bundler.",
+          "expected": "do_not_activate",
+          "route_to": "typescript-quality-enforcer",
+          "reason": "Mentioning a Rust dependency does not make the requested TS/JS policy task Rust implementation."
+        },
+        {
+          "id": "rust-engineering-n5",
+          "prompt": "Upgrade our Rust workspace to the next edition and a newer minimum compiler, then migrate downstream crates with a compatibility plan.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "An edition/toolchain and consumer transition belongs to the evolution owner."
+        }
+      ]
+    },
+    {
       "skill": "security-review",
       "positive": [
         {
@@ -259,6 +325,301 @@
           "expected": "do_not_activate",
           "route_to": "debugging-investigator",
           "reason": "A concrete known failure with uncertain cause belongs to causal debugging."
+        }
+      ]
+    },
+    {
+      "skill": "kotlin-engineering",
+      "positive": [
+        {
+          "id": "kotlin-engineering-p1",
+          "prompt": "Implement a Kotlin cache API in this existing JVM library while preserving its Java callers and coroutine cancellation behavior.",
+          "expected": "activate",
+          "reason": "A bounded Kotlin implementation with known consumer contracts."
+        },
+        {
+          "id": "kotlin-engineering-p2",
+          "prompt": "Add this specified playback control to the existing Compose Multiplatform app. Keep its state ownership and Android/iOS source-set boundaries.",
+          "expected": "activate",
+          "reason": "The platform is selected and the requested work is Kotlin implementation."
+        },
+        {
+          "id": "kotlin-engineering-p3",
+          "prompt": "Apply the supplied explained cleanup fix to this Kotlin Flow callback adapter and verify cancellation and callback disposal.",
+          "expected": "activate",
+          "reason": "The causal mechanism is supplied; implementing its bounded remedy is the remaining task."
+        },
+        {
+          "id": "kotlin-engineering-p4",
+          "prompt": "Port this small parsing module into the already-selected Kotlin library without changing accepted values, error categories, or ordering.",
+          "expected": "activate",
+          "reason": "A bounded implementation port with a decided target language."
+        }
+      ],
+      "negative": [
+        {
+          "id": "kotlin-engineering-n1",
+          "prompt": "Review this Kotlin PR for introduced regressions without editing.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "A review-only request retains the general review owner."
+        },
+        {
+          "id": "kotlin-engineering-n2",
+          "prompt": "A Kotlin worker intermittently hangs during shutdown; reproduce it and identify the cause before editing.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "A specific symptom still needs causal diagnosis."
+        },
+        {
+          "id": "kotlin-engineering-n3",
+          "prompt": "Upgrade Kotlin, AGP, Gradle and Compose together across our applications with compatibility and rollback stages.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "The requested decision is an ecosystem/toolchain transition."
+        },
+        {
+          "id": "kotlin-engineering-n4",
+          "prompt": "Implement this screen in the existing Flutter app. An unchanged Kotlin plugin supplies Bluetooth data.",
+          "expected": "do_not_activate",
+          "route_to": "flutter-production-builder",
+          "reason": "The requested implementation is Flutter; a Kotlin dependency mention does not transfer ownership."
+        }
+      ]
+    },
+    {
+      "skill": "python-engineering",
+      "positive": [
+        {
+          "id": "python-engineering-p1",
+          "prompt": "Add this Python CLI command using the package's existing entry point, dependency policy and exit-code conventions.",
+          "expected": "activate",
+          "reason": "A bounded Python CLI implementation."
+        },
+        {
+          "id": "python-engineering-p2",
+          "prompt": "Implement the supplied fix to our async Python bot so cancellation propagates and acquired resources are released.",
+          "expected": "activate",
+          "reason": "An explained lifecycle fix requires Python implementation."
+        },
+        {
+          "id": "python-engineering-p3",
+          "prompt": "Extend this Python package's importable API without changing keyword argument behavior, documented exceptions or supported interpreters.",
+          "expected": "activate",
+          "reason": "The task is Python module/API implementation under known compatibility constraints."
+        },
+        {
+          "id": "python-engineering-p4",
+          "prompt": "Port this small source routine into Python, retaining byte inputs, missing-versus-null distinctions and the supported number range.",
+          "expected": "activate",
+          "reason": "A decided local Python port requires a semantic implementation."
+        }
+      ],
+      "negative": [
+        {
+          "id": "python-engineering-n1",
+          "prompt": "Review this Python PR and report only newly introduced behavior regressions. Do not edit.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "Finding admission is owned by the general reviewer."
+        },
+        {
+          "id": "python-engineering-n2",
+          "prompt": "Our Python service sometimes duplicates jobs after retries; reproduce it and establish why.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "The cause of a concrete failure remains unknown."
+        },
+        {
+          "id": "python-engineering-n3",
+          "prompt": "Migrate our Python deployment to a newer interpreter and framework release, preserving old clients and rollback.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "An interpreter/deployment transition is migration work."
+        },
+        {
+          "id": "python-engineering-n4",
+          "prompt": "Strengthen TypeScript type safety in our app; it happens to run a small unchanged Python helper.",
+          "expected": "do_not_activate",
+          "route_to": "typescript-quality-enforcer",
+          "reason": "The selected work is TS/JS type policy rather than Python implementation."
+        }
+      ]
+    },
+    {
+      "skill": "cpp-engineering",
+      "positive": [
+        {
+          "id": "cpp-engineering-p1",
+          "prompt": "Implement this C++ binary-buffer routine under the current C++ standard and exported header contract, with explicit bounds and lifetime checks.",
+          "expected": "activate",
+          "reason": "A bounded native implementation with an established language and interface."
+        },
+        {
+          "id": "cpp-engineering-p2",
+          "prompt": "Add the specified C++ worker-to-QML update to our existing Qt application, preserving QObject ownership and event-loop shutdown.",
+          "expected": "activate",
+          "reason": "The requested implementation is a C++/Qt boundary."
+        },
+        {
+          "id": "cpp-engineering-p3",
+          "prompt": "Apply this already-explained C++ lifetime fix without changing plugin ABI or raising the language standard.",
+          "expected": "activate",
+          "reason": "The remaining decision is a scoped C++ remedy."
+        },
+        {
+          "id": "cpp-engineering-p4",
+          "prompt": "Port this bounded numeric routine into the chosen C++ library while preserving valid ranges, overflow policy and error behavior.",
+          "expected": "activate",
+          "reason": "A source-language implementation port with a decided C++ target."
+        }
+      ],
+      "negative": [
+        {
+          "id": "cpp-engineering-n1",
+          "prompt": "Review this C++ diff for introduced memory-lifetime regressions; do not rewrite it.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "A defined review remains with the review specialist."
+        },
+        {
+          "id": "cpp-engineering-n2",
+          "prompt": "The C++ process crashes unpredictably at startup. Reproduce the failure and identify the causal chain.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "An unexplained crash needs causal investigation."
+        },
+        {
+          "id": "cpp-engineering-n3",
+          "prompt": "Migrate the project to a new compiler, standard library ABI and Qt major version with a staged compatibility plan.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "The central decision is a native toolchain/framework transition."
+        },
+        {
+          "id": "cpp-engineering-n4",
+          "prompt": "Implement this function in the existing C-only translation unit and keep it compatible with our C compiler.",
+          "expected": "do_not_activate",
+          "route_to": "no-skill",
+          "reason": "The C++ implementation skill must not impose C++ on C source."
+        }
+      ]
+    },
+    {
+      "skill": "swift-engineering",
+      "positive": [
+        {
+          "id": "swift-engineering-p1",
+          "prompt": "Implement this portable Swift module API while keeping its public argument labels, error behavior and supported compiler.",
+          "expected": "activate",
+          "reason": "A bounded Swift module change with stable consumers."
+        },
+        {
+          "id": "swift-engineering-p2",
+          "prompt": "Add the approved Swift AppKit callback bridge with the specified ownership and main-thread requirements.",
+          "expected": "activate",
+          "reason": "The request is a known native Swift implementation boundary."
+        },
+        {
+          "id": "swift-engineering-p3",
+          "prompt": "Implement the explained Swift-to-Metal buffer lifetime correction and verify the relevant renderer resource paths.",
+          "expected": "activate",
+          "reason": "An established rendering integration fix needs a Swift implementation."
+        },
+        {
+          "id": "swift-engineering-p4",
+          "prompt": "Port this bounded source function into Swift without silently changing byte/text, ordering or overflow behavior.",
+          "expected": "activate",
+          "reason": "A local port whose target language is already selected."
+        }
+      ],
+      "negative": [
+        {
+          "id": "swift-engineering-n1",
+          "prompt": "Review this Swift PR for introduced regressions without editing the source.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "Review findings remain with the existing reviewer."
+        },
+        {
+          "id": "swift-engineering-n2",
+          "prompt": "A Swift actor-based service occasionally publishes stale values; reproduce it and determine why.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "The observed wrong behavior has an unresolved cause."
+        },
+        {
+          "id": "swift-engineering-n3",
+          "prompt": "Upgrade all Swift targets to a new language mode and SDK, adjust deployment minimums and stage downstream migration.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "A compiler/SDK and consumer transition is evolution work."
+        },
+        {
+          "id": "swift-engineering-n4",
+          "prompt": "Implement this Rust GPUI component; an unchanged Swift tool captures reference images.",
+          "expected": "do_not_activate",
+          "route_to": "rust-engineering",
+          "reason": "The implementation target is Rust, and Swift is only an unchanged tool."
+        }
+      ]
+    },
+    {
+      "skill": "go-engineering",
+      "positive": [
+        {
+          "id": "go-engineering-p1",
+          "prompt": "Add this metrics endpoint to the existing Go service, using its caller contexts, resource policy and test setup.",
+          "expected": "activate",
+          "reason": "A bounded Go service implementation."
+        },
+        {
+          "id": "go-engineering-p2",
+          "prompt": "Implement the explained goroutine cleanup fix while preserving the public error and cancellation contracts.",
+          "expected": "activate",
+          "reason": "The causal issue is already known; Go implementation is required."
+        },
+        {
+          "id": "go-engineering-p3",
+          "prompt": "Add the specified Go CLI operation without changing module support, standard streams or exit behavior.",
+          "expected": "activate",
+          "reason": "A bounded command implementation with established policy."
+        },
+        {
+          "id": "go-engineering-p4",
+          "prompt": "Port this small source module into the chosen Go package with stable output order, errors and input domains.",
+          "expected": "activate",
+          "reason": "A local Go implementation port."
+        }
+      ],
+      "negative": [
+        {
+          "id": "go-engineering-n1",
+          "prompt": "Review this Go PR for actionable introduced defects, without editing.",
+          "expected": "do_not_activate",
+          "route_to": "review-and-refactor-code",
+          "reason": "General review retains finding admission and edit authority."
+        },
+        {
+          "id": "go-engineering-n2",
+          "prompt": "Our Go service leaks goroutines for an unknown reason. Reproduce and trace the source of the leak.",
+          "expected": "do_not_activate",
+          "route_to": "debugging-investigator",
+          "reason": "Unknown-cause lifecycle failure is diagnostic work."
+        },
+        {
+          "id": "go-engineering-n3",
+          "prompt": "Raise the Go support version, upgrade dependencies and change our deployed module layout with rollback.",
+          "expected": "do_not_activate",
+          "route_to": "codebase-evolution-controller",
+          "reason": "Toolchain/module/deployment migration is the primary task."
+        },
+        {
+          "id": "go-engineering-n4",
+          "prompt": "Audit the Rust wrapper around a Go-based development tool; implement the supplied Rust-only change.",
+          "expected": "do_not_activate",
+          "route_to": "rust-engineering",
+          "reason": "The implementation boundary is Rust despite the Go tool mention."
         }
       ]
     }

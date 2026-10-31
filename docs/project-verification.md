@@ -45,7 +45,7 @@ Use --feature buy-item to run one mapped feature. The runner starts the declared
 
 The check detects changed *listed source files* through SHA-256 fingerprints, modified generated recipes, missing feature entries, and unexpected files. It does not know about newly created routes that are absent from the manifest. Periodically inspect routes, CLI commands, and production behavior for newly introduced features, then update and review the manifest. The generator refuses to overwrite existing output: move a reviewed replacement into place using your project's approved change procedure, preserving edits and backups.
 
-Generated files are ordinary Agent Skills files. Put them under an agent-supported project skill directory for clients that do not discover .agents/skills; do not change the toolkit's 22 global specialists.
+Generated files are ordinary Agent Skills files. Put them under an agent-supported project skill directory for clients that do not discover .agents/skills; do not change the toolkit's 28 global specialists.
 
 ## Runtime verification acceptance
 

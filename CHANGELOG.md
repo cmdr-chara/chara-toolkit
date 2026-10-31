@@ -1,6 +1,10 @@
-## Unreleased
+## 1.0.0 - 2026-10-31
 
-- No unreleased changes.
+- Add original `rust-engineering` guidance for bounded crate changes and source-language ports, with conditional API, ownership/runtime, unsafe/FFI, parity, and supported-configuration references.
+- Add a Rust checklist to the existing review specialist, preserving review, diagnosis, migration, and release ownership.
+- Extend routing, overlap, workflow, behavioral probes, catalogs, and isolated-install coverage for the Rust route. Evaluation expectations are distinct from observed runs and comparative performance claims.
+- Add original Kotlin, Python, C++, Swift, and Go implementation skills and self-contained language checklists for the existing reviewer. Framework guidance is conditional: Android/Compose/KMP, Qt/QML, and Apple/Metal retain their actual platform contracts.
+- Expand routing, workflows, behavioral cases, catalogs, and isolated-install coverage to 28 installable skills. Preserve review, causal debugging, migration, security, performance, and release ownership across mixed-language projects.
 
 ## 0.10.0 - 2026-10-25
 

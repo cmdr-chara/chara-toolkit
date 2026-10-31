@@ -4,7 +4,7 @@
 **Tagline:** Better engineering, any agent.  
 **CLI:** `chara` (`codex-toolkit` remains an alias)
 
-The toolkit began as **Codex Toolkit**. Its 22 Agent Skills are reusable across clients supporting the format; the installer and updater support many agents, Mission Control roles are native in Codex, Claude Code, and Gemini CLI, and the managed routing block remains Codex-specific. The brand does not claim equivalent functionality in other agent clients.
+The toolkit began as **Codex Toolkit**. Its 28 Agent Skills are reusable across clients supporting the format; the installer and updater support many agents, Mission Control roles are native in Codex, Claude Code, and Gemini CLI, and the managed routing block remains Codex-specific. The brand does not claim equivalent functionality in other agent clients.
 
 ## Transition sequence
 

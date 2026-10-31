@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kotlin Engineering"
+  short_description: "Implement Kotlin within runtime and platform contracts"
+  default_prompt: "Use $kotlin-engineering to implement this Kotlin change while preserving its API, lifetime, module, and platform contracts."

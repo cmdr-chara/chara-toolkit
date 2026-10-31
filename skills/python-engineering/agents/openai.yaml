@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Engineering"
+  short_description: "Implement Python with API and runtime evidence"
+  default_prompt: "Use $python-engineering to implement this Python change while preserving its public behavior, environment, and resource lifecycle."

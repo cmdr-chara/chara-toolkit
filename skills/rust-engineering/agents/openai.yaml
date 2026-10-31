@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Engineering"
+  short_description: "Implement Rust changes with contract evidence"
+  default_prompt: "Use $rust-engineering to implement this Rust change while preserving its API, supported configurations, and observable behavior."

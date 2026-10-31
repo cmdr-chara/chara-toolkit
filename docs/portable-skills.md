@@ -1,6 +1,6 @@
 # Agent Skills portability
 
-Chara's Toolkit's 22 SKILL.md folders use the open Agent Skills format. Read-only references and per-skill tools can be reused by any compatible agent with the appropriate language/runtime installed.
+Chara's Toolkit's 28 SKILL.md folders use the open Agent Skills format. Read-only references and per-skill tools can be reused by any compatible agent with the appropriate language/runtime installed.
 
 ## Full setup for every agent
 

@@ -63,7 +63,7 @@ From a locally staged, administrator-approved extracted package:
       --codex-home /managed/CODEX_HOME \
       --dry-run
 
-Drop `--dry-run` to perform the installation. It verifies approval before writes, preserves user-owned instruction content, installs the existing 22 skills and six agent roles, verifies the installed files, and records signed approval fingerprints.
+Drop `--dry-run` to perform the installation. It verifies approval before writes, preserves user-owned instruction content, installs the existing 28 skills and six agent roles, verifies the installed files, and records signed approval fingerprints.
 
 Managed installs are scoped to Codex: skills go to the standard `~/.agents/skills` folder that Codex reads (pass `--home /managed/user-home` to place it under another home), and roles and routing go to the managed Codex home. Use `enterprise-check` with the same `--home`. Other agents are not part of the signed managed install.
 

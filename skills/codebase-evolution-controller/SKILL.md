@@ -47,7 +47,7 @@ Verify the resulting signals against authoritative repository evidence.
 
 ## Handoffs and interaction boundaries
 
-Use `repository-intelligence` for unclear blast radius, `security-review` for security-first code assessment, `debugging-investigator` when a migration uncovers an unexplained failure, a platform builder (`production-web-builder`, `flutter-production-builder`, or `expo-react-native-builder`) for implementation details, `documentation-synchronizer` for migration docs, and `verification-and-release` for final ship judgment.
+Use `repository-intelligence` for unclear blast radius, `security-review` for security-first code assessment, `debugging-investigator` when a migration uncovers an unexplained failure, and `documentation-synchronizer` for migration docs. Bounded implementation can go to `production-web-builder`, `flutter-production-builder`, `expo-react-native-builder`, `rust-engineering`, `kotlin-engineering`, `python-engineering`, `cpp-engineering`, `swift-engineering`, or `go-engineering`, according to the changed boundary. Each stage inherits the transition's input-domain, consumer, and rollback constraints. `verification-and-release` retains final ship judgment.
 
 ## Failure handling
 

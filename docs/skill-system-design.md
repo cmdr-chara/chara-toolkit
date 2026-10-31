@@ -64,3 +64,17 @@ The production skills now use a thinner root/conditional-reference split. Discov
 The validator keeps the Agent Skills 1024-character description ceiling and 500-line body ceiling as hard safety limits, while adding earlier review warnings at 320 description characters, 180 root lines, and 1400 body words. These warning thresholds are toolkit heuristics, not OpenAI platform limits.
 
 The refresh also folds narrow MIT-licensed specialist techniques into existing owners rather than multiplying top-level routes. The only new production route is `security-review`, because security-focused code review has a distinct decision owner and was already an explicit handoff from review/refactor.
+
+## Rust implementation domain
+
+`rust-engineering` adds the missing owner for bounded Rust implementation and local ports after the target language is chosen. Review and refactoring stay with `review-and-refactor-code`, which has its own Rust reference and remains independently installable. Evolution retains deployed-service, compiler/edition, and compatibility-window transitions and can hand over a bounded Rust stage.
+
+The entrypoint states scope and completion constraints; conditional references cover APIs, ownership/runtime, unsafe/FFI, source parity, and supported-configuration evidence. No cross-skill runtime, copied guide digest, default lint-policy installer, or extra language-specific review route is required. Inputs and consumer contracts determine when a Rust idiom applies. The Rust material is independently authored from the task's requirements and official language/tool documentation; no external skill prose, examples, code, or evaluation fixtures were reused.
+
+## Additional language implementation owners
+
+Kotlin, Python, C++, Swift, and Go extend the same split between bounded implementation and general review. Their runtime models justify dedicated instructions: coroutine/Flow and source-set lifetimes, Python exceptions/imports/async packaging, native C++ object/ABI behavior, Swift ARC/isolation and native rendering, and Go goroutine/context/module contracts. The existing web/mobile builders and TypeScript quality owner retain their scopes.
+
+Framework references are conditional. Kotlin supports plain JVM code as well as Android/Compose/KMP, C++ supports native libraries as well as Qt/QML, and Swift supports portable modules as well as Apple/Metal. Five standalone review references live with the general reviewer, so a single installed reviewer does not depend on a sibling language skill. No shared runtime or automatic lint-policy installation is added. Mixed-language work hands over explicit stages with consumer constraints; one changed language does not seize ownership of an entire product.
+
+The new content and fixture tasks are original, based on verified primary documentation and the selected implementation domains. Evaluation records distinguish actual execution from source-level reasoning, unavailable runtimes, and matched comparative experiments.

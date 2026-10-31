@@ -124,3 +124,87 @@
 **Stop/escalate:**
 Stop when reportable findings have sufficient evidence and the fix owner is clear. Escalate a concrete unexplained runtime symptom to `debugging-investigator`, or a dependency/version transition to `codebase-evolution-controller`.
 
+## 22. `rust-engineering` — Port a bounded byte-processing module
+
+**Situation:** Rust has already been selected for a local processing crate. The user requests a small module port from Python, preserving arbitrary byte inputs and ordered output. The crate has a declared minimum compiler, optional mutually exclusive backends, and an existing public Rust API. Service rollout and old-service removal are excluded.
+
+**Inputs:** source revision and tests; accepted byte/integer domain; target crate and consumer signatures; working-tree state; compiler/edition/MSRV declarations; feature policy; safe baseline commands; authorized scope.
+
+**Expected workflow:** establish the observable source contract and important untested edges; preserve the provided Rust consumer interface; choose representations that retain ordering and byte values; implement a bounded change; compare source and Rust results on ordinary, boundary, invalid, and generated valid inputs; run the affected supported configurations and documentation examples; inspect the diff for unrelated API, lint, or lockfile changes.
+
+**Expected artifacts:** Rust implementation and focused tests; concise behavior/API mapping; authorized or unresolved differences; observed command outcomes with configuration and toolchain; explicit gaps. The implementation must not silently narrow the source domain or claim a deployment.
+
+**Verification:** byte sequences round-trip; output order and run splitting match the source; malformed/limit behavior remains explicit; caller compilation still works; supported backends are checked separately; unavailable minimum-compiler or foreign-target checks remain unverified. See [rust-engineering.md](rust-engineering.md) for reproducible fixture requests and independent acceptance criteria.
+
+**Stop/escalate:** retain the known input contract when a shortcut would narrow it; stop dependent design for an unresolved material domain question. Hand operational rollout to `codebase-evolution-controller`, unknown causal failures to `debugging-investigator`, and review-only requests to `review-and-refactor-code`. Missing tools do not authorize installation or a reduced support claim.
+
+## 23. `kotlin-engineering` — Implement cancellation-safe shared logic
+
+**Situation:** Kotlin is selected for an existing JVM or KMP module. A loader must preserve results, expose only its documented missing-item fallback, propagate cancellation, and balance per-invocation state. Android/Compose integration is included only when the changed path requires it.
+
+**Inputs:** source/callers, exception and lifecycle contracts, module/source-set boundaries, Kotlin/API/JVM settings, existing Gradle and test policy, working-tree state and supported targets.
+
+**Expected workflow:** establish observable results and errors; trace coroutine scope, interruption, and cleanup; implement within the existing module; use controlled suspension/failure tests; select actual repository tasks and distinguish host from target evidence.
+
+**Expected artifacts:** Kotlin implementation and focused tests, preserved API/module contracts, command outcomes, target gaps.
+
+**Verification:** success/error/cancellation identity and cleanup hold across suspension and overlap; supported callers compile where available; host success does not imply Android device or iOS behavior. Fixture request and independent checks are in [language-engineering.md](language-engineering.md).
+
+**Stop/escalate:** keep unknown causal failures with debugging, toolchain/platform transitions with evolution, and review-only work with the reviewer. Missing SDKs do not authorize downloads or removal of targets.
+
+## 24. `python-engineering` — Repair an async helper contract
+
+**Situation:** A Python helper used by a service must translate one expected absence, preserve other failures and cancellation, and release its own activity contribution on every finish.
+
+**Inputs:** callable/exception contract, supported interpreter and environment/import roots, safe test command, existing dependency and packaging policy, protected source state.
+
+**Expected workflow:** inspect input and effect boundaries, implement the accepted behavior without broad error suppression, coordinate interruption tests with events, verify import/consumer behavior, and identify untested installed-package/interpreter evidence.
+
+**Expected artifacts:** bounded implementation and meaningful tests, observed interpreter/environment and check outcomes, explicit packaging/platform gaps.
+
+**Verification:** result identity, allowed fallback, exception/cancellation propagation and overlapping cleanup are observed; annotations do not substitute for runtime validation; source-tree checks do not establish installed-artifact behavior.
+
+**Stop/escalate:** do not replace dependencies/environment or change interpreter support to make a local pass. Unknown root causes and deployment transitions retain their existing owners.
+
+## 25. `cpp-engineering` — Preserve capacity at native integer boundaries
+
+**Situation:** A C++ capacity object must preserve its public header/API and build standard while accepting every representable size value. Arithmetic boundaries must not turn a rejected request into a successful reservation.
+
+**Inputs:** target/header/callers, integer and failure guarantees, declared C++ standard, ABI/exception policy, native build/test setup and protected state.
+
+**Expected workflow:** specify observable reservation/release behavior; establish valid state and arithmetic/lifetime obligations; implement a bounded correction; exercise ordinary and maximum-value transitions through consumer code; run the selected native target.
+
+**Expected artifacts:** unchanged public surface, implementation and focused tests, build/configuration evidence and platform limits.
+
+**Verification:** accepted requests update usage exactly and rejected requests preserve it across edge sequences; required header use compiles; a sanitizer or host pass is never called universal UB/plugin/device proof. Qt/QML checks load only for a relevant framework boundary.
+
+**Stop/escalate:** ABI/compiler/framework transitions belong to evolution; unexplained crashes belong to debugging; C-only source does not become C++ work.
+
+## 26. `swift-engineering` — Prevent stale actor completions
+
+**Situation:** A selected Swift actor API awaits a loader. A newer invocation must supersede an older invocation even if the older one completes later. Existing error, package, and isolation contracts remain intact.
+
+**Inputs:** public actor/callers, latest-request semantics, language/tool and platform requirements, existing tests, actual compiler/SDK availability and protected source state.
+
+**Expected workflow:** identify the reentrant interval across suspension, implement the state invariant within the actor, preserve failure propagation, add controlled-completion tests, and distinguish static inspection from any available execution.
+
+**Expected artifacts:** bounded Swift implementation and test artifacts, source/isolation evidence, precise compilation/runtime gaps.
+
+**Verification:** a superseded success cannot overwrite a newer result, and thrown errors retain their contract. Swift package checks, Apple SDK builds, UI launch and GPU output are separate claims. An absent compiler is unverified execution, not a passing source-level test.
+
+**Stop/escalate:** no SDK/target increase or unchecked isolation escape to quiet diagnostics. Evolution owns support-mode transitions, review owns finding admission, and actual Apple/Metal execution gaps remain visible.
+
+## 27. `go-engineering` — Bound callback concurrency and release permits
+
+**Situation:** A Go gate admits bounded callback work, preserves caller context/error identity, and must return permits on success, failure and panic. Cancellation while waiting must not leak work or capacity.
+
+**Inputs:** module/workspace support, public API and context/lifetime contract, safe dependency-free fixture, build tags/platform/cgo selection and protected state.
+
+**Expected workflow:** identify permit/channel owner, cancellation checks and callback completion; implement within the existing module; arrange controlled waiting/cancellation and failure tests; run supported tests/vet/race checks with actual environment identity.
+
+**Expected artifacts:** bounded implementation and behavior tests, preserved module and error contracts, selected build evidence and limitations.
+
+**Verification:** callback cardinality/capacity, error/context identity, panic propagation and permit reuse hold under the exercised orderings; cancellation signaling is not confused with joined completion; a clean race run does not prove every schedule or tag/platform path.
+
+**Stop/escalate:** do not raise Go/module support, introduce dependencies, detach workers or change production state to manufacture a pass. Unknown leaks or races retain their diagnosis owner.
+

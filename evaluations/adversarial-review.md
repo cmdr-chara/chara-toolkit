@@ -48,3 +48,25 @@
 - **Policy vs enforcement:** `REVIEW.md`, PR templates and skills do not enforce branch protection, status checks or review approvals.
 
 These are new operating controls and expected adversarial outcomes, not evidence of improved live-model defect recall. Structural validation, PR CI and live routing evaluations must be reported separately.
+
+## Rust implementation boundaries — 2026-10-31
+
+- **Ownership collisions:** one new implementation route; Rust review remains with the existing reviewer and a self-contained Rust reference. Diagnosis, operational migrations, and release judgment retain their owners.
+- **Compatibility shortcuts:** established source inputs, ordering, integer ranges, and error behavior cannot be narrowed by calling them exotic or listing a divergence in notes. Missing contracts stop dependent design.
+- **Style-driven breaks:** bool setters, ownership types in public APIs, plain data, thread affinity, and framework signatures are judged against actual consumers. Implementation guidance does not authorize API redesign or global lint replacement.
+- **Proof inflation:** a missing safety comment is not a demonstrated soundness defect; a present comment or passing interpreter does not prove universal soundness. Poison recovery needs a protected-invariant argument.
+- **Invalid verification:** supported features/backends are checked separately when needed; host/latest-compiler checks do not establish target/MSRV support; all-targets tests omit doctests. Missing prerequisites remain visible.
+- **Execution boundary:** build scripts, procedural macros, and tests execute code under host controls. Offline dependency resolution does not make Cargo an execution sandbox.
+
+The Rust guide's fixture expectations and the behavioral cases are test definitions, not successful runs. Record any forward-test observations separately and reserve comparative claims for matched experiments.
+
+## Additional language ownership — 2026-10-31
+
+- **Language over-activation:** positive, negative and mixed-caller cases keep review, debugging, migrations and product integration with their owners. A C-only translation unit does not become a C++ implementation task.
+- **Platform assumptions:** Kotlin/JVM does not imply Android or KMP; portable Swift does not imply an Apple SDK; Qt/QML and Metal checks load only when their integration boundary changes.
+- **Convenient policy changes:** new dependency/runtime/language-mode requirements, exception conversions and blanket style rewrites need accepted scope rather than a local compiler preference.
+- **Lost lifecycle evidence:** cancellation differs from completion; state and resource outcomes must survive failure, suspension, panic/exception and shutdown on the relevant runtime.
+- **False confidence:** type hints, actor serialization, race detectors, sanitizers, host builds and screenshots have different proof limits. Missing Apple/native/platform execution remains explicit.
+- **Originality:** no external skill prose/code/fixtures or third-party notices are introduced. Source links identify technical documentation; they are not imported content.
+
+See the language evaluation guide for observed candidate probes. The decision-boundary corpus remains a collection of test definitions until actually run; text proxies and catalog selection do not establish installed-client invocation or improved model quality.

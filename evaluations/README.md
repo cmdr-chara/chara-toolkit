@@ -6,15 +6,17 @@ This suite tests routing, overlap resolution, complete workflows, resource integ
 
 ## Files
 
-- `routing-cases.json` plus `routing-cases-content-provenance.json`: 84 positive and 63 negative trigger cases—four positive and three negative per production skill.
+- `routing-cases.json` plus `routing-cases-content-provenance.json`: positive and negative trigger cases—at least four positive and three negative per production skill.
 - `overlap-cases.json` plus `overlap-cases-content-provenance.json`: adversarial prompts that require a primary skill or an explicit sequence/handoff rather than accidental multi-skill activation.
 - `workflow-scenarios.md` plus `workflow-scenarios-content-provenance.md`: one realistic end-to-end scenario per production skill with inputs, workflow, artifacts, verification, and stop conditions.
 - `adversarial-review.md`: self-review findings, corrections, and remaining refresh obligations.
 - `package-claim-review.md`: manual protocol for time-sensitive compatibility, maintenance, license, security, cost, and deprecation claims.
-- `post-install-routing-smoke.md`: a compact live-client check for all twenty-one production skill routes and the highest-risk overlaps.
+- `post-install-routing-smoke.md`: a compact live-client check for all twenty-seven production skill routes and the highest-risk overlaps.
+- `rust-engineering.md`: original Rust port/review fixtures with independent acceptance criteria and a separate observed-results record.
+- `language-engineering.md`: original Kotlin/Python/C++/Swift/Go probes with separate executable, static and unavailable-runtime evidence.
 - `mission-control-universal.json`: non-code and mixed-artifact Mission Control scenarios covering documents, research, data, and all six portable roles.
 
-The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, completion-proof, bug-finder, toolchain-preflight, and security-review routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
+The supplemental evaluation files keep the existing historical corpus stable while adding the content-provenance, completion-proof, bug-finder, toolchain-preflight, security-review, and language implementation routes. The structural validator reads the primary and supplemental files as one canonical evaluation set.
 
 ## Structural run
 
